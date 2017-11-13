@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!-- mybatis全局配置属性 -->
+    <settings>
+        <!-- 手动关闭延迟加载, 默认是采用延迟加载的方式 -->
+        <setting name="lazyLoadingEnabled" value="false"/>
+        <!-- 设置属性是按需进行加载 -->
+        <setting name="aggressiveLazyLoading" value="true"/>
+    </settings>
+
+
+    <!-- 加载映射文件, 采用包声明的方式
+         要求: 接口类与映射文件在同一级目录-->
+    <mappers>
+        <package name="com.huawei.cost.mapper"/>
+    </mappers>
+</configuration>

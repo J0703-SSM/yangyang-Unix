@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <!-- 声明输入验证的提供者是hibernate -->
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+    </bean>
+
+    <!-- 配置注解模型 -->
+    <mvc:annotation-driven validator="validator"/>
+
+    <!-- 注解扫描的根路径 -->
+    <context:component-scan base-package="com.huawei"/>
+
+    <!-- springmvc第一条: 将静态资源的处理交由web应用服务器处理,springmvc不处理 -->
+    <mvc:default-servlet-handler/>
+
+
+    <!--<mvc:resources mapping="images/**" location="/resource/images"/>-->
+    <!--<mvc:resources mapping="js/**" location="/resource/js"/>-->
+    <!--<mvc:resources mapping="styles/**" location="/resource/styles"/>-->
+
+    <!-- springmvc第二条: 配置视图解析规则 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!-- 配置视图解析的前缀 -->
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <!-- 配置视图解析的后缀 -->
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!-- 引入db属性文件 -->
+    <context:property-placeholder location="classpath:db.properties"/>
+
+    <!-- 1.配置数据源 -->
+    <bean id="dataSource"
+          class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${driver}"/>
+        <property name="jdbcUrl" value="${url}"/>
+        <property name="user" value="${username}"/>
+        <property name="password" value="${password}"/>
+    </bean>
+
+    <!-- 2.配置SqlSessionFactory -->
+    <bean id="sessionFactory"
+          class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 引入mybatis的配置文件 -->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
+
+    <!--&lt;!&ndash; 3.配置事物 &ndash;&gt;-->
+    <!--<bean id="transactionManager"-->
+          <!--class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
+        <!--<property name="dataSource" ref="dataSource"/>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash; 4.配置事物属性 &ndash;&gt;-->
+    <!--<tx:advice id="txAdvice" transaction-manager="transactionManager">-->
+        <!--<tx:attributes>-->
+            <!--<tx:method name="*"/>-->
+        <!--</tx:attributes>-->
+    <!--</tx:advice>-->
+
+    <!--&lt;!&ndash; 5.配置切面 &ndash;&gt;-->
+    <!--<aop:config>-->
+        <!--<aop:pointcut id="pointCut" expression="execution(* com.huawei.cost.mapper.*.*(..))"/>-->
+        <!--<aop:advisor advice-ref="txAdvice" pointcut-ref="pointCut"/>-->
+    <!--</aop:config>-->
+
+    <!-- 6.配置mybatis中的mapper接口自动扫描 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- mapper接口代理对象所在的包 -->
+        <property name="basePackage">
+            <value>com.huawei.cost.mapper</value>
+        </property>
+
+        <!-- 定义sessionFactory, 引用上面配置的工厂对象 -->
+        <property name="sqlSessionFactoryBeanName" value="sessionFactory"/>
+    </bean>
+
+    <!-- 配置拦截器 -->
+    <!--<mvc:interceptors>-->
+        <!--&lt;!&ndash; 拦截器执行的顺序依照下面的加入顺序执行 &ndash;&gt;-->
+        <!--<mvc:interceptor>-->
+            <!--&lt;!&ndash; 要拦截的请求路径 &ndash;&gt;-->
+            <!--<mvc:mapping path="/**"/>-->
+            <!--&lt;!&ndash; 拦截器所对应的类路径 &ndash;&gt;-->
+            <!--<bean class="com.huawei.cost.interceptor.LoginInterceptor"/>-->
+        <!--</mvc:interceptor>-->
+    <!--</mvc:interceptors>-->
+</beans>

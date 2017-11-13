@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huawei.cost.mapper.CostMapper">
+    <resultMap id="costMap" type="com.huawei.cost.domain.Cost">
+        <id column="cost_id" property="cost_id"/>
+        <result column="name" property="name"/>
+        <result column="base_duration" property="base_duration"/>
+        <result column="base_cost" property="base_cost"/>
+        <result column="unit_cost" property="unit_cost"/>
+        <result column="status" property="status"/>
+        <result column="descr" property="descr"/>
+        <result column="creatime" property="creatime"/>
+        <result column="startime" property="startime"/>
+        <result column="cost_type" property="cost_type"/>
+    </resultMap>
+
+    <select id="findCount"
+            parameterType="int"
+            resultType="int">
+        SELECT count(*) FROM cost
+    </select>
+
+    <select id="findAll"
+            parameterType="com.huawei.utils.PageBean"
+            resultMap="costMap">
+        SELECT * FROM cost limit #{pageSize} offset #{startIndex}
+    </select>
+
+
+    <insert id="save"
+            parameterType="com.huawei.cost.domain.Cost">
+        INSERT INTO cost (name,base_duration,base_cost,unit_cost,status,descr,creatime,cost_type)
+        VALUES (#{name},#{base_duration},#{base_cost},#{unit_cost},#{status},#{descr},#{creatime},#{cost_type})
+    </insert>
+
+    <update id="startCost"
+            parameterType="com.huawei.cost.domain.Cost">
+        UPDATE cost SET status = 1, startime = #{startime} WHERE cost_id = #{cost_id}
+    </update>
+
+    <delete id="deleteCost"
+            parameterType="int">
+        DELETE FROM cost WHERE cost_id = #{value}
+    </delete>
+
+    <select id="findSingle"
+            parameterType="int"
+            resultMap="costMap">
+        SELECT * FROM cost WHERE cost_id = #{value}
+    </select>
+
+    <update id="updateCost"
+            parameterType="com.huawei.cost.domain.Cost">
+        UPDATE cost
+        SET name=#{name}, base_duration = #{base_duration},base_cost = #{base_cost},unit_cost=#{unit_cost},descr = #{descr} ,cost_type = #{cost_type}
+        WHERE cost_id=#{cost_id}
+    </update>
+
+    <select id="findByCostOrder"
+            parameterType="com.huawei.utils.PageBean"
+            resultMap="costMap">
+        SELECT * FROM cost ORDER BY ${column} ${condition} limit #{pageSize} offset #{startIndex}
+    </select>
+
+</mapper>
