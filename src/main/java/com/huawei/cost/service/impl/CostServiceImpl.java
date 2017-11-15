@@ -3,7 +3,7 @@ package com.huawei.cost.service.impl;
 import com.huawei.cost.domain.Cost;
 import com.huawei.cost.mapper.CostMapper;
 import com.huawei.cost.service.CostService;
-import com.huawei.utils.PageBean;
+import com.huawei.base.utils.PageBean;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -32,6 +32,10 @@ public class CostServiceImpl implements CostService {
         List<Cost> costs = costMapper.findByCostOrder(pageBean);
         pageBean.setData(costs);
         return pageBean;
+    }
+
+    public Cost findByCost(Cost cost) {
+        return costMapper.findByCost(cost);
     }
 
     public int save(Cost cost) {

@@ -2,9 +2,19 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:aop="http://www.springframework.org/schema/aop"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
         <!-- 声明输入验证的提供者是hibernate -->
@@ -19,7 +29,6 @@
 
     <!-- springmvc第一条: 将静态资源的处理交由web应用服务器处理,springmvc不处理 -->
     <mvc:default-servlet-handler/>
-
 
     <!--<mvc:resources mapping="images/**" location="/resource/images"/>-->
     <!--<mvc:resources mapping="js/**" location="/resource/js"/>-->
@@ -75,9 +84,7 @@
     <!-- 6.配置mybatis中的mapper接口自动扫描 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <!-- mapper接口代理对象所在的包 -->
-        <property name="basePackage">
-            <value>com.huawei.cost.mapper</value>
-        </property>
+       <property name="basePackage" value="com.huawei.cost.mapper,com.huawei.user_admin.mapper"/>
 
         <!-- 定义sessionFactory, 引用上面配置的工厂对象 -->
         <property name="sqlSessionFactoryBeanName" value="sessionFactory"/>

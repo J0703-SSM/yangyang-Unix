@@ -1,6 +1,6 @@
-package com.huawei.cost.controller;
+package com.huawei.base.controller;
 
-import com.huawei.utils.VerifyCode;
+import com.huawei.base.utils.VerifyCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -16,10 +16,15 @@ import java.io.IOException;
 public class MainController {
 
     @RequestMapping("/")
-    public String login(){
-        return "login";
+    public String login(HttpServletRequest request){
+        request.getSession().invalidate();
+        return "index";
     }
 
+    /**
+     * 获取验证码图片以及值
+     * @throws IOException
+     */
     @RequestMapping("/getVerifyCode")
     public void getVerifyCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
         VerifyCode code = new VerifyCode();
@@ -31,21 +36,6 @@ public class MainController {
     @RequestMapping("/index")
     public String index() {
         return "index";
-    }
-
-    @RequestMapping("/role_list")
-    public String role_list() {
-        return "role/role_list";
-    }
-
-    @RequestMapping("/admin_list")
-    public String admin_list() {
-        return "admin/admin_list";
-    }
-
-    @RequestMapping("/cost_add")
-    public String cost_add(){
-        return "cost/cost_add";
     }
 
     @RequestMapping("/account_list")

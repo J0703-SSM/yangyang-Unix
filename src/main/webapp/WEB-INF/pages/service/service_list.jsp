@@ -32,16 +32,16 @@
         <!--Logo区域开始-->
         <div id="header">
             <img src="/resource/images/logo.png" alt="logo" class="left"/>
-            <a href="#">[退出]</a>            
+            <a href="/">[退出]</a>
         </div>
         <!--Logo区域结束-->
         <!--导航区域开始-->
         <div id="navi">                        
             <ul id="menu">
                 <li><a href="/index" class="index_off"></a></li>
-                <li><a href="/role_list" class="role_off"></a></li>
-                <li><a href="/admin_list" class="admin_off"></a></li>
-                <li><a href="/cost_list" class="fee_off"></a></li>
+                <li><a href="/admin/role_list" class="role_off"></a></li>
+                <li><a href="/admin/admin_list" class="admin_off"></a></li>
+                <li><a href="/cost/cost_list" class="fee_off"></a></li>
                 <li><a href="/account_list" class="account_off"></a></li>
                 <li><a href="/service_list" class="service_off"></a></li>
                 <li><a href="/bill_list" class="bill_off"></a></li>

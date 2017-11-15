@@ -1,4 +1,4 @@
-package com.huawei.utils;
+package com.huawei.base.utils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

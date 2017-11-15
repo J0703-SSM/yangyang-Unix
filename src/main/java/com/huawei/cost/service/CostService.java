@@ -1,9 +1,7 @@
 package com.huawei.cost.service;
 
 import com.huawei.cost.domain.Cost;
-import com.huawei.utils.PageBean;
-
-import java.util.List;
+import com.huawei.base.utils.PageBean;
 
 /**
  * Created by dllo on 17/11/11.
@@ -25,4 +23,6 @@ public interface CostService {
 
 
     PageBean<Cost> findByCostOrder(Integer pageNum, int pageSize, String condition,String column);
+
+    Cost findByCost(Cost cost);
 }

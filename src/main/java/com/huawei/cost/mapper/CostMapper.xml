@@ -22,11 +22,10 @@
     </select>
 
     <select id="findAll"
-            parameterType="com.huawei.utils.PageBean"
+            parameterType="com.huawei.base.utils.PageBean"
             resultMap="costMap">
         SELECT * FROM cost limit #{pageSize} offset #{startIndex}
     </select>
-
 
     <insert id="save"
             parameterType="com.huawei.cost.domain.Cost">
@@ -58,9 +57,15 @@
     </update>
 
     <select id="findByCostOrder"
-            parameterType="com.huawei.utils.PageBean"
+            parameterType="com.huawei.base.utils.PageBean"
             resultMap="costMap">
         SELECT * FROM cost ORDER BY ${column} ${condition} limit #{pageSize} offset #{startIndex}
+    </select>
+
+    <select id="findByCost"
+            parameterType="com.huawei.cost.domain.Cost"
+            resultMap="costMap">
+        SELECT * FROM cost WHERE name=#{name}
     </select>
 
 </mapper>

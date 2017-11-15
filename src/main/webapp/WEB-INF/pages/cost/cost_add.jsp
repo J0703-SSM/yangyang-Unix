@@ -11,51 +11,40 @@
     <script language="javascript" type="text/javascript">
         //保存结果的提示
         function showResult() {
-            var base_duration = $("#base_duration").val();
-            var base_cost = $("#base_cost").val();
-            var unit_cost = $("#unit_cost").val();
-            if (base_duration == '') {
-                base_duration = null;
-            }
-            if (base_cost == '') {
-                base_cost = null;
-            }
-            if (unit_cost == '') {
-                unit_cost = null;
-            }
             $.ajax({
                 type: "get",
-                url: "/addCost",
+                url: "/cost/addCost",
                 data: {
                     name: $("#name").val(),
                     cost_type: $("input:radio:checked").val(),
-                    base_duration: base_duration,
-                    base_cost: base_cost,
-                    unit_cost: unit_cost,
+                    base_duration: $("#base_duration").val(),
+                    base_cost: $("#base_cost").val(),
+                    unit_cost: $("#unit_cost").val(),
                     descr: $("#descr").val()
                 },
                 success: function (result) {
-                    if (result.errorCode > 0) {
-                        showResultDiv(true);
-                        window.setTimeout(showResultDiv(true), 3000);
-                    } else {
-                        $("#nameErr").html(result.map["name"]);
+                    if (result.errorCode == 1){
+                        $("#nameErr").html(result.map["name"].defaultMessage);
                         $("#base_durationErr").html(result.map["base_duration"]);
                         $("#base_costErr").html(result.map["base_cost"]);
                         $("#unit_costErr").html(result.map["unit_cost"]);
-                        $("#descrErr").html(result.map["descr"]);
+                        $("#descrErr").html(result.map["descr"].defaultMessage);
+                    }else {
+                        showResultDiv(result.success);
+                        window.setTimeout("showResultDiv(false);", 3000);
                     }
                 }
             })
-
         }
         function showResultDiv(flag) {
             var divResult = document.getElementById("save_result_info");
-            if (!flag)
+            if (!flag){
                 divResult.style.display = "block";
-            else
+            } else{
                 divResult.style.display = "none";
-            location.href = "/cost_list"
+                location.href = "/cost/cost_list"
+            }
+
         }
 
         //切换资费类型
@@ -90,22 +79,25 @@
                 inputArray[6].className = "width100";
             }
         }
+        function rollback() {
+            location.href="/cost/cost_list";
+        }
     </script>
 </head>
 <body>
 <!--Logo区域开始-->
 <div id="header">
     <img src="/resource/images/logo.png" alt="logo" class="left"/>
-    <a href="#">[退出]</a>
+    <a href="/">[退出]</a>
 </div>
 <!--Logo区域结束-->
 <!--导航区域开始-->
 <div id="navi">
     <ul id="menu">
         <li><a href="/index" class="index_off"></a></li>
-        <li><a href="/role_list" class="role_off"></a></li>
-        <li><a href="/admin_list" class="admin_off"></a></li>
-        <li><a href="/cost_list" class="fee_off"></a></li>
+        <li><a href="/admin/role_list" class="role_off"></a></li>
+        <li><a href="/admin/admin_list" class="admin_off"></a></li>
+        <li><a href="/cost/cost_list" class="fee_off"></a></li>
         <li><a href="/account_list" class="account_off"></a></li>
         <li><a href="/service_list" class="service_off"></a></li>
         <li><a href="/bill_list" class="bill_off"></a></li>
@@ -162,7 +154,7 @@
         </div>
         <div class="button_info clearfix">
             <input type="button" value="保存" class="btn_save" onclick="showResult();"/>
-            <input type="button" value="取消" class="btn_save"/>
+            <input type="button" value="取消" class="btn_save" onclick="rollback()"/>
         </div>
     </form>
 </div>

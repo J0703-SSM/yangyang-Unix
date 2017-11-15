@@ -1,7 +1,6 @@
 package com.huawei.cost.domain;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.Range;
 
 import java.sql.Timestamp;
 
@@ -13,11 +12,8 @@ public class Cost {
     private int cost_id;
     @Length(min = 1, max = 50, message = "100长度的字母、数字、汉字和下划线的组合")
     private String name;
-    @Range(min = 1, max = 600, message = "1-600之间的整数")
     private int base_duration;
-    @Range(min = 0, max = 100000, message = "0-99999.99之间的数值")
     private double base_cost;
-    @Range(min = 0, max = 100000, message = "0-99999.99之间的数值")
     private double unit_cost;
     private String status;
     @Length(min = 1, max = 100, message = "100长度的字母、数字、汉字和下划线的组合")
