@@ -1,4 +1,5 @@
 ﻿<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page isELIgnored="false" %>
 <html>
@@ -120,7 +121,7 @@
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 4}">
-                    <li><a href="/account_list" class="account_off"></a></li>
+                    <li><a href="/account/account_list" class="account_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
@@ -159,17 +160,34 @@
             <div>
                 模块：
                 <select name="module_id" id="selModules" class="select_search">
-                    <option value="-1">全部</option>
-                    <option value="1">角色管理</option>
-                    <option value="2">管理员管理</option>
-                    <option value="3">资费管理</option>
-                    <option value="4">账务账号</option>
-                    <option value="5">业务账号</option>
-                    <option value="6">账单管理</option>
-                    <option value="7">报表</option>
+                    <c:if test="${module_id eq -1}">selected</c:if>
+                    <option
+                            <c:if test="${module_id eq -1}">selected</c:if> value="-1">全部
+                    </option>
+                    <option
+                            <c:if test="${module_id eq 1}">selected</c:if> value="1">角色管理
+                    </option>
+                    <option
+                            <c:if test="${module_id eq 3}">selected</c:if> value="2">管理员管理
+                    </option>
+                    <option
+                            <c:if test="${module_id eq 3}">selected</c:if> value="3">资费管理
+                    </option>
+                    <option
+                            <c:if test="${module_id eq 4}">selected</c:if> value="4">账务账号
+                    </option>
+                    <option
+                            <c:if test="${module_id eq 5}">selected</c:if> value="5">业务账号
+                    </option>
+                    <option
+                            <c:if test="${module_id eq 6}">selected</c:if> value="6">账单管理
+                    </option>
+                    <option
+                            <c:if test="${module_id eq 7}">selected</c:if> value="7">报表
+                    </option>
                 </select>
             </div>
-            <div>角色：<input name="role_name" type="text" value="" class="text_search width200"/></div>
+            <div>角色：<input name="role_name" type="text" value="${role_name}" class="text_search width200"/></div>
             <div><input type="submit" value="搜索" class="btn_search"/></div>
         </form>
         <input type="button" value="密码重置" class="btn_add" onclick="resetPwd();"/>
@@ -207,19 +225,37 @@
                     <td>${admin.email}</td>
                     <td>${admin.enrolldate}</td>
                     <td>
-                        <a class="summary" onmouseover="showDetail(true,this);"
-                           onmouseout="showDetail(false,this);">
-                            <c:forEach items="${admin.roles}" var="role" varStatus="status">
-                                <c:if test="${status.count == 1}">
+                        <c:choose>
+                            <c:when test="${fn:length(admin.roles)>1}">
+                                <a class="summary" onmouseover="showDetail(true,this);"
+                                   onmouseout="showDetail(false,this);">
+                                    <c:forEach items="${admin.roles}" var="role" varStatus="status">
+                                        <c:if test="${status.count == 1}">
+                                            ${role.name}
+                                        </c:if>
+                                    </c:forEach>...</a>
+                                <!--浮动的详细信息-->
+                                <div class="detail_info">
+                                    <c:forEach items="${admin.roles}" var="role" varStatus="status">
+                                        <c:choose>
+                                            <c:when test="${status.count eq fn:length(admin.roles)}">
+                                                ${role.name}
+                                            </c:when>
+                                            <c:otherwise>
+                                                ${role.name}、
+                                            </c:otherwise>
+                                        </c:choose>
+
+                                    </c:forEach>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach items="${admin.roles}" var="role">
                                     ${role.name}
-                                </c:if>
-                            </c:forEach>...</a>
-                        <!--浮动的详细信息-->
-                        <div class="detail_info">
-                            <c:forEach items="${admin.roles}" var="role">
-                                ${role.name}、
-                            </c:forEach>
-                        </div>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
+
                     </td>
                     <td class="td_modi">
                         <input type="button" value="修改" class="btn_modify"
@@ -236,6 +272,7 @@
     <!--分页-->
     <div id="pages">
         <c:if test="${pageBean.pageNum>1}">
+            <a href="/admin/admin_list?pageNum=${1}">首页</a>
             <a href="/admin/admin_list?pageNum=${pageBean.pageNum-1}">上一页</a>
         </c:if>
         <c:if test="${pageBean.totalPage<=5}">
@@ -266,6 +303,7 @@
         </c:if>
         <c:if test="${pageBean.pageNum<pageBean.totalPage}">
             <a href="/admin/admin_list?pageNum=${pageBean.pageNum+1}">下一页</a>
+            <a href="/admin/admin_list?pageNum=${pageBean.totalPage}">尾页</a>
         </c:if>
     </div>
 </div>

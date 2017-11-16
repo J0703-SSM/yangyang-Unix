@@ -309,6 +309,8 @@ public class AdminController {
      */
     @RequestMapping("/admin_conditionQuery")
     public String conditionQuery(int module_id, String role_name, Model model) {
+        model.addAttribute("module_id",module_id);
+        model.addAttribute("role_name",role_name);
         List<Admin> admins = adminService.findAllAdmin();
         List<Admin> adminList = new ArrayList<Admin>();
         PageBean<Admin> pageBean = new PageBean<Admin>();

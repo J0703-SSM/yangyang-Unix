@@ -1,17 +1,14 @@
-package com.huawei.account.mapper;
+package com.huawei.account.service;
 
 import com.huawei.account.domain.Account;
 import com.huawei.base.utils.PageBean;
 
-import java.util.List;
 
 /**
  * Created by dllo on 17/11/16.
  */
-public interface AccountMapper {
-    List<Account> findAllAccount(PageBean pageBean);
-
-    int findAccountCount();
+public interface AccountService {
+    PageBean<Account> findAllAccount(Integer pageNum, int pageSize);
 
     int setState(Account account);
 

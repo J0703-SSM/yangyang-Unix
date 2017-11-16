@@ -24,6 +24,9 @@ public class AccountTest {
     @Test
     public void test(){
         AccountMapper accountMapper = context.getBean(AccountMapper.class);
-
+//        List<Account> accounts = accountMapper.findAllAccount();
+//        for (Account account : accounts) {
+//            System.out.println(account);
+//        }
     }
 }

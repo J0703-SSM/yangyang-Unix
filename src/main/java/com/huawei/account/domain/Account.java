@@ -1,7 +1,7 @@
 package com.huawei.account.domain;
 
+import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  * Created by dllo on 17/11/16.
@@ -11,12 +11,14 @@ public class Account {
     private int recommender_id;
     private String login_name;
     private String login_passwd;
+    private String login_passwd1;
     private String status;
-    private Timestamp create_date;
+    private Date create_date;
     private Timestamp pause_date;
     private Timestamp close_date;
     private String real_name;
     private String idcard_no;
+    private String re_idcard;
     private Date birthdate;
     private String gender;
     private String occupation;
@@ -97,11 +99,11 @@ public class Account {
         this.status = status;
     }
 
-    public Timestamp getCreate_date() {
+    public Date getCreate_date() {
         return create_date;
     }
 
-    public void setCreate_date(Timestamp create_date) {
+    public void setCreate_date(Date create_date) {
         this.create_date = create_date;
     }
 
@@ -215,5 +217,21 @@ public class Account {
 
     public void setLast_login_ip(Timestamp last_login_ip) {
         this.last_login_ip = last_login_ip;
+    }
+
+    public String getLogin_passwd1() {
+        return login_passwd1;
+    }
+
+    public void setLogin_passwd1(String login_passwd1) {
+        this.login_passwd1 = login_passwd1;
+    }
+
+    public String getRe_idcard() {
+        return re_idcard;
+    }
+
+    public void setRe_idcard(String re_idcard) {
+        this.re_idcard = re_idcard;
     }
 }

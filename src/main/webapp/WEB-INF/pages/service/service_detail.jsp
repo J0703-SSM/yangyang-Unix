@@ -55,7 +55,7 @@
                 <c:forEach items="${applicationScope.admin.roles}" var="role">
                     <c:forEach items="${role.modules}" var="module">
                         <c:if test="${module.module_id eq 4}">
-                            <li><a href="/account_list" class="account_off"></a></li>
+                            <li><a href="/account/account_list" class="account_off"></a></li>
                         </c:if>
                     </c:forEach>
                 </c:forEach>

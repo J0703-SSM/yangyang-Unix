@@ -84,10 +84,6 @@ public class MainController {
         return "index";
     }
 
-    @RequestMapping("/account_list")
-    public String account_list() {
-        return "account/account_list";
-    }
 
     @RequestMapping("/service_list")
     public String service_list() {

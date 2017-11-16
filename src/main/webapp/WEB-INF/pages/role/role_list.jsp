@@ -1,4 +1,5 @@
 ﻿<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page isELIgnored="false" %>
 <html>
@@ -78,7 +79,7 @@
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 4}">
-                    <li><a href="/account_list" class="account_off"></a></li>
+                    <li><a href="/account/account_list" class="account_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
@@ -133,8 +134,16 @@
                         <td>${role.role_id}</td>
                         <td>${role.name}</td>
                         <td>
-                            <c:forEach items="${role.modules}" var="module">
-                                ${module.name}、
+                            <c:forEach items="${role.modules}" var="module" varStatus="status">
+                                <c:choose>
+                                    <c:when test="${status.count eq fn:length(role.modules)}">
+                                        ${module.name}
+                                    </c:when>
+                                    <c:otherwise>
+                                        ${module.name}、
+                                    </c:otherwise>
+                                </c:choose>
+
                             </c:forEach>
                         </td>
                         <td>
@@ -149,6 +158,7 @@
         <!--分页-->
         <div id="pages">
             <c:if test="${pageBean.pageNum>1}">
+                <a href="/admin/role_list?pageNum=${1}">首页</a>
                 <a href="/admin/role_list?pageNum=${pageBean.pageNum-1}">上一页</a>
             </c:if>
             <c:if test="${pageBean.totalPage<=5}">
@@ -179,6 +189,7 @@
             </c:if>
             <c:if test="${pageBean.pageNum<pageBean.totalPage}">
                 <a href="/admin/role_list?pageNum=${pageBean.pageNum+1}">下一页</a>
+                <a href="/admin/role_list?pageNum=${pageBean.totalPage}">尾页</a>
             </c:if>
         </div>
     </form>
