@@ -19,10 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by dllo on 17/11/13.
@@ -57,41 +54,6 @@ public class AdminController {
     }
 
     /**
-     * 登录
-     *
-     * @param admin admin对象
-     * @param model 驱动
-     */
-    @RequestMapping("/userLogin")
-    public String login(@Validated Admin admin,
-                        BindingResult result,
-                        HttpServletRequest request, Model model) {
-        String code1 = (String) request.getSession().getAttribute("code");
-        String code = admin.getCode();
-        if (result.hasErrors()) {
-            FieldError nameErr = result.getFieldError("name");
-            FieldError passwordErr = result.getFieldError("password");
-            model.addAttribute("nameErr", nameErr);
-            model.addAttribute("passwordErr", passwordErr);
-        } else {
-            if (!code.equalsIgnoreCase(code1)) {
-                model.addAttribute("codeErr", "验证码错误");
-            } else {
-                Admin admin1 = adminService.findByAdmin(admin);
-                if (admin1 == null) {
-                    model.addAttribute("userErr", "用户名或密码错误,请重试");
-                } else {
-                    Admin admin2 = adminService.findAdminToInfo(admin1.getAdmin_id());
-                    request.getSession().setAttribute("admin", admin2);
-                    return "index";
-                }
-            }
-        }
-        return "login";
-    }
-
-
-    /**
      * 查询所有role分页
      *
      * @param pageNum 当前页码数
@@ -114,7 +76,7 @@ public class AdminController {
      * @param modules module集合
      */
     @ResponseBody
-    @RequestMapping("/addRole_module")
+    @RequestMapping("/role_moduleAdd")
     public AjaxResult addRole_module(String name, String modules) {
         AjaxResult ajaxResult = new AjaxResult();
         Map<String, Object> map = new HashMap<String, Object>();
@@ -155,7 +117,7 @@ public class AdminController {
      * @param role_id role id
      */
     @ResponseBody
-    @RequestMapping("/deleteRole")
+    @RequestMapping("/role_delete")
     public AjaxResult deleteRole(int role_id) {
         AjaxResult ajaxResult = new AjaxResult();
         int count = adminService.deleteRole(role_id);
@@ -190,7 +152,7 @@ public class AdminController {
      * @param modules module集合
      */
     @ResponseBody
-    @RequestMapping("/updateRole")
+    @RequestMapping("/role_update")
     public AjaxResult updateRole(int role_id, String name, String modules) {
         AjaxResult ajaxResult = new AjaxResult();
         Map<String, Object> map = new HashMap<String, Object>();
@@ -227,8 +189,15 @@ public class AdminController {
         return "admin/admin_add";
     }
 
+    /**
+     * 添加管理员
+     *
+     * @param admin  管理员数据
+     * @param result 校验
+     * @return 结果集
+     */
     @ResponseBody
-    @RequestMapping("/addAdmin")
+    @RequestMapping("/adminAdd")
     public AjaxResult addAdmin(@Validated Admin admin, BindingResult result) {
         AjaxResult ajaxResult = new AjaxResult();
         Map<String, Object> errors = getErrors(result);
@@ -262,8 +231,14 @@ public class AdminController {
         return ajaxResult;
     }
 
+    /**
+     * 删除管理员
+     *
+     * @param admin_id 管理员id
+     * @return 结果集
+     */
     @ResponseBody
-    @RequestMapping("/deleteAdmin")
+    @RequestMapping("/admin_delete")
     public AjaxResult deleteAdmin(int admin_id) {
         AjaxResult ajaxResult = new AjaxResult();
         int count = adminService.deleteAdmin(admin_id);
@@ -278,6 +253,12 @@ public class AdminController {
         return ajaxResult;
     }
 
+    /**
+     * 表单回显
+     *
+     * @param admin_id 管理员id
+     * @param model    驱动
+     */
     @RequestMapping("/admin_modi")
     public String admin_modi(int admin_id, Model model) {
         Admin admin = adminService.findAdminById(admin_id);
@@ -287,8 +268,15 @@ public class AdminController {
         return "admin/admin_modi";
     }
 
+    /**
+     * 更新admin
+     *
+     * @param admin  admin数据
+     * @param result 校验
+     * @return 结果集
+     */
     @ResponseBody
-    @RequestMapping("/updateAdmin")
+    @RequestMapping("/admin_update")
     public AjaxResult updateAdmin(@Validated Admin admin, BindingResult result) {
         AjaxResult ajaxResult = new AjaxResult();
         Map<String, Object> errors = getErrors(result);
@@ -313,11 +301,146 @@ public class AdminController {
         return ajaxResult;
     }
 
+    /**
+     * 条件查询
+     * @param module_id 模块id
+     * @param role_name 角色名
+     * @param model 驱动
+     */
+    @RequestMapping("/admin_conditionQuery")
+    public String conditionQuery(int module_id, String role_name, Model model) {
+        List<Admin> admins = adminService.findAllAdmin();
+        List<Admin> adminList = new ArrayList<Admin>();
+        PageBean<Admin> pageBean = new PageBean<Admin>();
+        if (module_id == -1 && role_name.trim().length() == 0) {
+            admin_list(null, model);
+        } else if (module_id == -1 && role_name.trim().length() > 0) {
+            for (Admin admin : admins) {
+                for (Role role : admin.getRoles()) {
+                    if (role.getName().contains(role_name)) {
+                        adminList.add(admin);
+                    }
+                }
+            }
+            pageBean.setData(repeat(adminList));
+            model.addAttribute("pageBean", pageBean);
+        } else if (module_id != -1 && role_name.trim().length() == 0) {
+            for (Admin admin : admins) {
+                for (Role role : admin.getRoles()) {
+                    for (Module module : role.getModules()) {
+                        if (module.getModule_id() == module_id) {
+                            adminList.add(admin);
+                        }
+                    }
+                }
+            }
+            pageBean.setData(repeat(adminList));
+            model.addAttribute("pageBean", pageBean);
+        } else {
+            pageBean = adminService.findAdminToInfoByCQ(module_id, role_name);
+            model.addAttribute("pageBean", pageBean);
+        }
+        return "admin/admin_list";
+    }
+
+    /**
+     * 密码重置
+     *
+     * @param cbValue 要重置的管理员id集合
+     * @return 结果集
+     */
+    @ResponseBody
+    @RequestMapping("/admin_resetPwd")
+    public AjaxResult resetPwd(String cbValue) {
+        AjaxResult ajaxResult = new AjaxResult();
+        System.out.println(cbValue);
+        String[] admin_ids = cbValue.split(",");
+        Admin admin = new Admin();
+        admin.setPassword("123");
+        for (String admin_id : admin_ids) {
+            admin.setAdmin_id(Integer.parseInt(admin_id));
+            int count = adminService.resetPwd(admin);
+            if (count > 0) {
+                ajaxResult.setSuccess(true);
+                ajaxResult.setMessage("密码重置成功");
+            } else {
+                ajaxResult.setSuccess(false);
+                ajaxResult.setMessage("密码重置失败");
+            }
+        }
+        return ajaxResult;
+    }
+
+    /**
+     * 修改登录的个人信息
+     * @param admin 包含个人信息的对象
+     * @return 结果集
+     */
+    @ResponseBody
+    @RequestMapping("/modi_user_info")
+    public AjaxResult modi_user_info(@Validated Admin admin, BindingResult result, HttpServletRequest request) {
+        AjaxResult ajaxResult = new AjaxResult();
+        Map<String, Object> errors = getErrors(result);
+        if (result.hasErrors()) {
+            ajaxResult.setMap(errors);
+            ajaxResult.setErrorCode(1);
+        }else {
+            int count = adminService.modi_user_info(admin);
+            if (count > 0) {
+                ajaxResult.setSuccess(true);
+                ajaxResult.setMessage("保存成功");
+                Admin admin1 = adminService.findAdminToInfo(admin.getAdmin_id());
+                request.getServletContext().setAttribute("admin", admin1);
+            } else {
+                ajaxResult.setSuccess(false);
+                ajaxResult.setMessage("失败");
+            }
+        }
+        return ajaxResult;
+    }
+
+
+    /**
+     * 修改密码
+     * @param admin admin
+     * @param result 校验
+     * @return 结果集
+     */
+    @ResponseBody
+    @RequestMapping("/modi_pwd")
+    public AjaxResult modi_pwd(@Validated Admin admin, BindingResult result, HttpServletRequest request) {
+        Admin adminLogin = (Admin) request.getServletContext().getAttribute("admin");
+        admin.setAdmin_id(adminLogin.getAdmin_id());
+        AjaxResult ajaxResult = new AjaxResult();
+        Map<String, Object> errors = getErrors(result);
+        if (result.hasErrors()) {
+            ajaxResult.setErrorCode(1);
+            ajaxResult.setMap(errors);
+        }
+        if (!admin.getPassword1().equals(admin.getPassword2())) {
+            ajaxResult.setErrorCode(1);
+            errors.put("password2", "两次新密码必须相同");
+        }
+        if (!adminLogin.getPassword().equals(admin.getPassword())) {
+            ajaxResult.setMessage("保存失败，旧密码错误！");
+            ajaxResult.setSuccess(false);
+        } else {
+            int count = adminService.modi_pwd(admin);
+            if (count > 0){
+                Admin admin2 = adminService.findAdminToInfo(admin.getAdmin_id());
+                request.getServletContext().setAttribute("admin", admin2);
+                ajaxResult.setMessage("保存成功");
+                ajaxResult.setSuccess(true);
+            }
+        }
+        ajaxResult.setMap(errors);
+        return ajaxResult;
+    }
 
     /**
      * 获取发生的所有错误信息, 保存到map中
      *
-     * @param result
+     * @param result 包含错误信息的map
      */
     private Map<String, Object> getErrors(BindingResult result) {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -326,5 +449,23 @@ public class AdminController {
             map.put(error.getField(), error.getDefaultMessage());
         }
         return map;
+    }
+
+    /**
+     * 去除集合重复数据
+     *
+     * @param admins 重复集合
+     * @return 去除重复后的集合
+     */
+    private List<Admin> repeat(List<Admin> admins) {
+
+        for (int i = 0; i < admins.size(); i++) {
+            for (int j = admins.size() - 1; j > i; j--) {
+                if (admins.get(j).getAdmin_id() == admins.get(i).getAdmin_id()) {
+                    admins.remove(j);
+                }
+            }
+        }
+        return admins;
     }
 }

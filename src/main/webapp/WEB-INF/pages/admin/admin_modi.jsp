@@ -18,9 +18,9 @@
 
             $.ajax({
                 type: "get",
-                url: "/admin/updateAdmin",
+                url: "/admin/admin_update",
                 data: {
-                    admin_id:$("#admin_id").val(),
+                    admin_id: $("#admin_id").val(),
                     admin_code: $("#admin_code").val(),
                     name: $("#name").val(),
                     telephone: $("#telephone").val(),
@@ -30,8 +30,6 @@
                 success: function (result) {
                     if (result.errorCode == 1) {
                         $("#nameErr").html(result.map["name"]);
-                        $("#codeErr").html(result.map["admin_code"]);
-                        $("#codeErr").html(result.map["admin_codeErr"]);
                         $("#telErr").html(result.map["telephone"]);
                         $("#emailErr").html(result.map["email"]);
                         $("#moduleErr").html(result.map["cbValue"]);
@@ -50,7 +48,7 @@
                 divResult.style.display = "none";
         }
         function rollback() {
-            location.href="/admin/admin_list"
+            location.href = "/admin/admin_list"
         }
     </script>
 </head>
@@ -64,44 +62,100 @@
 <!--导航区域开始-->
 <div id="navi">
     <ul id="menu">
+
+        <%--<li><a href="/index" class="index_off"></a></li>--%>
+        <%--<li><a href="/admin/role_list" class="role_off"></a></li>--%>
+        <%--<li><a href="/admin/admin_list" class="admin_off"></a></li>--%>
+        <%--<li><a href="/cost/cost_list" class="fee_off"></a></li>--%>
+        <%--<li><a href="/account_list" class="account_off"></a></li>--%>
+        <%--<li><a href="/service_list" class="service_off"></a></li>--%>
+        <%--<li><a href="/bill_list" class="bill_off"></a></li>--%>
+        <%--<li><a href="/report_list" class="report_off"></a></li>--%>
+        <%--<li><a href="/user_info" class="information_off"></a></li>--%>
+        <%--<li><a href="/user_modi_pwd" class="password_on"></a></li>--%>
         <li><a href="/index" class="index_off"></a></li>
-        <li><a href="/admin/role_list" class="role_off"></a></li>
-        <li><a href="/admin/admin_list" class="admin_off"></a></li>
-        <li><a href="/cost/cost_list" class="fee_off"></a></li>
-        <li><a href="/account_list" class="account_off"></a></li>
-        <li><a href="/service_list" class="service_off"></a></li>
-        <li><a href="/bill_list" class="bill_off"></a></li>
-        <li><a href="/report_list" class="report_off"></a></li>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 1}">
+                    <li><a href="/admin/role_list" class="role_off"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 2}">
+                    <li><a href="/admin/admin_list" class="admin_on"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 3}">
+                    <li><a href="/cost/cost_list" class="fee_off"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 4}">
+                    <li><a href="/account_list" class="account_off"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 5}">
+                    <li><a href="/service_list" class="service_off"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 6}">
+                    <li><a href="/bill_list" class="bill_off"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 7}">
+                    <li><a href="/report_list" class="report_off"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
         <li><a href="/user_info" class="information_off"></a></li>
-        <li><a href="/user_modi_pwd" class="password_on"></a></li>
+        <li><a href="/user_modi_pwd" class="password_off"></a></li>
     </ul>
 </div>
 <!--导航区域结束-->
 <!--主要区域开始-->
 <div id="main">
-    <div id="save_result_info" class="save_success">保存成功！</div>
+    <div id="save_result_info" class="save_success">保存成功！
+        <img src="/resource/images/close.png" onclick="rollback()"/>
+    </div>
     <form action="" method="" class="main_form">
         <div class="text_info clearfix"><span>姓名：</span></div>
         <div class="input_info">
             <input type="hidden" id="admin_id" value="${admin.admin_id}">
             <input id="name" type="text" value="${admin.name}"/>
             <span class="required">*</span>
-            <div class="validate_msg_long error_msg">20长度以内的汉字、字母、数字的组合</div>
+            <div id="nameErr" class="validate_msg_long error_msg"></div>
         </div>
         <div class="text_info clearfix"><span>管理员账号：</span></div>
-        <div class="input_info"><input id="admin_code" type="text" readonly="readonly" class="readonly" value="${admin.admin_code}"/>
+        <div class="input_info"><input id="admin_code" type="text" readonly="readonly" class="readonly"
+                                       value="${admin.admin_code}"/>
         </div>
         <div class="text_info clearfix"><span>电话：</span></div>
         <div class="input_info">
             <input id="telephone" type="text" value="${admin.telephone}"/>
             <span class="required">*</span>
-            <div class="validate_msg_long error_msg">正确的电话号码格式：手机或固话</div>
+            <div id="telErr" class="validate_msg_long error_msg"></div>
         </div>
         <div class="text_info clearfix"><span>Email：</span></div>
         <div class="input_info">
             <input id="email" type="text" class="width200" value="${admin.email}"/>
             <span class="required">*</span>
-            <div class="validate_msg_medium error_msg">50长度以内，正确的 email 格式</div>
+            <div id="emailErr" class="validate_msg_medium error_msg"></div>
         </div>
         <div class="text_info clearfix"><span>角色：</span></div>
         <div class="input_info_high">
@@ -119,7 +173,7 @@
                 </ul>
             </div>
             <span class="required">*</span>
-            <div class="validate_msg_tiny error_msg">至少选择一个</div>
+            <div id="moduleErr" class="validate_msg_tiny error_msg"></div>
         </div>
         <div class="button_info clearfix">
             <input type="button" value="保存" class="btn_save" onclick="showResult();"/>

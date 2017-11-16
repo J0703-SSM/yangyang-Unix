@@ -15,6 +15,7 @@ public class PageBean<T> {
     private String condition; //条件
     private String column;
     private List<T> data;
+    private int id;
 
     @Override
     public String toString() {
@@ -40,6 +41,14 @@ public class PageBean<T> {
         } else {
             this.totalPage = totalCount / pageSize;
         }
+    }
+
+    public PageBean(int pageNum, int pageSize, int totalCount, String condition, int id) {
+        this.pageNum = pageNum;
+        this.pageSize = pageSize;
+        this.totalCount = totalCount;
+        this.condition = condition;
+        this.id = id;
     }
 
     public PageBean(int pageNum, int pageSize, int totalCount, String condition, String column) {
@@ -119,5 +128,13 @@ public class PageBean<T> {
 
     public void setData(List<T> data) {
         this.data = data;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

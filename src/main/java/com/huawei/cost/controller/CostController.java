@@ -88,7 +88,7 @@ public class CostController {
      * @return 结果对象
      */
     @ResponseBody
-    @RequestMapping("/addCost")
+    @RequestMapping("/costAdd")
     public AjaxResult addCost(@Validated Cost cost, BindingResult result) {
         AjaxResult ajaxResult = resultMap(cost, result);
         if (ajaxResult.getMap().size() == 0) {
@@ -127,7 +127,7 @@ public class CostController {
      * @return 结果信息
      */
     @ResponseBody
-    @RequestMapping("/startCost")
+    @RequestMapping("/cost_start")
     public Map<String, Object> startCost(int cost_id) {
 
         Map<String, Object> map = new HashMap<String, Object>();
@@ -150,7 +150,7 @@ public class CostController {
      * @return 结果信息
      */
     @ResponseBody
-    @RequestMapping("/deleteCost")
+    @RequestMapping("/cost_delete")
     public Map<String, Object> deleteCost(int cost_id) {
         Map<String, Object> map = new HashMap<String, Object>();
         int result = costService.deleteCost(cost_id);
@@ -184,7 +184,7 @@ public class CostController {
      * @return 结果对象
      */
     @ResponseBody
-    @RequestMapping("/updateCost")
+    @RequestMapping("/cost_update")
     public AjaxResult updateCost(@Validated Cost cost, BindingResult result) {
         AjaxResult ajaxResult = resultMap(cost, result);
         if (ajaxResult.getMap().size() == 0) {
@@ -240,11 +240,11 @@ public class CostController {
         FieldError nameErr = result.getFieldError("name");
         FieldError descrErr = result.getFieldError("descr");
         if (nameErr != null) {
-            map.put("name", nameErr);
+            map.put("name", nameErr.getDefaultMessage());
             ajaxCostResult.setErrorCode(1);
         }
         if (descrErr != null) {
-            map.put("descr", descrErr);
+            map.put("descr", descrErr.getDefaultMessage());
             ajaxCostResult.setErrorCode(1);
         }
         ajaxCostResult.setMap(map);

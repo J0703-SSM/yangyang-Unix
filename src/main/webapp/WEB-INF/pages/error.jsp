@@ -1,4 +1,6 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -21,7 +23,7 @@
                 }
                 else {
                     window.clearInterval(timer);
-                    location.href = "login.jsp";
+                    location.href = "/";
                 }
             }
 
@@ -29,14 +31,14 @@
             function resetTimer() {
                 if (timer != null && timer != undefined) {
                     window.clearInterval(timer);
-                    location.href = "login.jsp";
+                    location.href = "/";
                 }
             }
         </script> 
     </head>
     <body class="error_page" onload="startTimes();">
         <h1 id="error">
-	        遇到错误，&nbsp;<span id="secondes">5</span>&nbsp;秒后将自动跳转，立即跳转请点击&nbsp;
+	        ${message}，&nbsp;<span id="secondes">5</span>&nbsp;秒后将自动跳转，立即跳转请点击&nbsp;
             <a  href="javascript:resetTimer();">返回</a>
         </h1>
     </body>

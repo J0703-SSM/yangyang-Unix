@@ -82,7 +82,7 @@
     <select id="findByAdmin"
             parameterType="com.huawei.user_admin.domain.Admin"
             resultMap="adminMap">
-        SELECT * FROM admin_info WHERE name = #{name} AND password = #{password}
+        SELECT * FROM admin_info WHERE admin_code = #{admin_code} AND password = #{password}
     </select>
 
     <select id="findAdminToInfo"
@@ -235,4 +235,68 @@
         UPDATE admin_info SET admin_code=#{admin_code},name=#{name},telephone=#{telephone},email=#{email}
         WHERE admin_id=#{admin_id}
     </update>
+
+    <select id="findAllAdmin"
+            resultMap="admin_role_module">
+        SELECT
+        <include refid="adminSql"/>
+        ,
+        <include refid="roleSql"/>
+        ,
+        <include refid="moduleSql"/>
+        FROM admin_info, role_info, admin_role, module_info, role_module
+        WHERE admin_info.admin_id = admin_role.admin_id
+        AND role_info.role_id = admin_role.role_id
+        AND role_info.role_id = role_module.role_id
+        AND module_info.module_id = role_module.module_id
+    </select>
+
+    <select id="findCountByCQ"
+            parameterType="com.huawei.base.utils.PageBean"
+            resultType="int">
+        SELECT
+        count(*)
+        FROM admin_info, role_info, admin_role, module_info, role_module
+        WHERE admin_info.admin_id = admin_role.admin_id
+        AND role_info.role_id = admin_role.role_id
+        AND role_info.role_id = role_module.role_id
+        AND module_info.module_id = role_module.module_id
+        AND module_info.module_id=#{id}
+        AND role_info.name LIKE "%"#{condition}"%"
+    </select>
+
+    <select id="findAdminByCQ"
+            parameterType="com.huawei.base.utils.PageBean"
+            resultMap="admin_role_module">
+        SELECT
+        <include refid="adminSql"/>
+        ,
+        <include refid="roleSql"/>
+        ,
+        <include refid="moduleSql"/>
+        FROM  admin_info, role_info, admin_role, module_info, role_module
+        WHERE admin_info.admin_id = admin_role.admin_id
+        AND role_info.role_id = admin_role.role_id
+        AND role_info.role_id = role_module.role_id
+        AND module_info.module_id = role_module.module_id
+        AND module_info.module_id=#{id}
+        AND role_info.name LIKE "%"#{condition}"%"
+    </select>
+
+    <update id="resetPwd"
+            parameterType="com.huawei.user_admin.domain.Admin">
+        UPDATE admin_info SET password = #{password} WHERE admin_id=#{admin_id}
+    </update>
+
+    <update id="modi_user_info"
+            parameterType="com.huawei.user_admin.domain.Admin">
+        UPDATE admin_info SET name=#{name},telephone=#{telephone},email=#{email}
+        WHERE admin_id=#{admin_id}
+    </update>
+
+    <update id="modi_pwd"
+            parameterType="com.huawei.user_admin.domain.Admin">
+        UPDATE admin_info SET password=#{password1} WHERE admin_id=#{admin_id}
+    </update>
+
 </mapper>

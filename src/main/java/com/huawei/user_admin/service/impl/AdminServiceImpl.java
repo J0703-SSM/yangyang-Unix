@@ -15,7 +15,7 @@ import java.util.List;
  * Created by dllo on 17/11/13.
  */
 @Service("adminService")
-public class AdminServiceImpl implements AdminService{
+public class AdminServiceImpl implements AdminService {
 
     @Resource
     private AdminMapper adminMapper;
@@ -45,7 +45,7 @@ public class AdminServiceImpl implements AdminService{
     }
 
     public int addRule_module(Module module) {
-       return adminMapper.addRule_module(module);
+        return adminMapper.addRule_module(module);
     }
 
     public int deleteRole(int role_id) {
@@ -103,4 +103,32 @@ public class AdminServiceImpl implements AdminService{
     public void updateAdmin(Admin admin) {
         adminMapper.updateAdmin(admin);
     }
+
+    public List<Admin> findAllAdmin() {
+        return adminMapper.findAllAdmin();
+    }
+
+    public PageBean<Admin> findAdminToInfoByCQ(int module_id, String role_name) {
+        PageBean<Admin> pageBean = new PageBean<Admin>();
+        pageBean.setId(module_id);
+        pageBean.setCondition(role_name);
+//        int totalCount = adminMapper.findCountByCQ(pageBean);
+//        pageBean.setTotalCount(totalCount);
+        List<Admin> admins = adminMapper.findAdminByCQ(pageBean);
+        pageBean.setData(admins);
+        return pageBean;
+    }
+
+    public int resetPwd(Admin admin) {
+        return adminMapper.resetPwd(admin);
+    }
+
+    public int modi_user_info(Admin admin) {
+        return adminMapper.modi_user_info(admin);
+    }
+
+    public int modi_pwd(Admin admin) {
+        return adminMapper.modi_pwd(admin);
+    }
+
 }

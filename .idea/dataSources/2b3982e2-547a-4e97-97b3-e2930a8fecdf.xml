@@ -36,7 +36,7 @@
     <column id="31" parent="22" name="account_id">
       <mandatory>1</mandatory>
       <data-type>int(9)|0</data-type>
-      <default-expression>&apos;0&apos;</default-expression>
+      <sequence-identity>1</sequence-identity>
     </column>
     <column id="32" parent="22" name="recommender_id">
       <data-type>int(9)|0</data-type>

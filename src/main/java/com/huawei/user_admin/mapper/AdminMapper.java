@@ -56,4 +56,16 @@ public interface AdminMapper {
     Admin findAdminById(int admin_id);
 
     void updateAdmin(Admin admin);
+
+    List<Admin> findAllAdmin();
+
+    int findCountByCQ(PageBean<Admin> pageBean);
+
+    List<Admin> findAdminByCQ(PageBean<Admin> pageBean);
+
+    int resetPwd(Admin admin);
+
+    int modi_user_info(Admin admin);
+
+    int modi_pwd(Admin admin);
 }

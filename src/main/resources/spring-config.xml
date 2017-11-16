@@ -36,6 +36,7 @@
 
     <!-- springmvc第二条: 配置视图解析规则 -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
         <!-- 配置视图解析的前缀 -->
         <property name="prefix" value="/WEB-INF/pages/"/>
         <!-- 配置视图解析的后缀 -->
@@ -91,13 +92,23 @@
     </bean>
 
     <!-- 配置拦截器 -->
-    <!--<mvc:interceptors>-->
-        <!--&lt;!&ndash; 拦截器执行的顺序依照下面的加入顺序执行 &ndash;&gt;-->
-        <!--<mvc:interceptor>-->
-            <!--&lt;!&ndash; 要拦截的请求路径 &ndash;&gt;-->
-            <!--<mvc:mapping path="/**"/>-->
-            <!--&lt;!&ndash; 拦截器所对应的类路径 &ndash;&gt;-->
-            <!--<bean class="com.huawei.cost.interceptor.LoginInterceptor"/>-->
-        <!--</mvc:interceptor>-->
-    <!--</mvc:interceptors>-->
+    <mvc:interceptors>
+        <!-- 拦截器执行的顺序依照下面的加入顺序执行 -->
+        <mvc:interceptor>
+            <!-- 要拦截的请求路径 -->
+            <mvc:mapping path="/index"/>
+            <mvc:mapping path="/admin/admin*"/>
+            <mvc:mapping path="/admin/role*"/>
+            <mvc:mapping path="/cost/cost*"/>
+            <mvc:mapping path="/account/account*"/>
+            <mvc:mapping path="/account/bill*"/>
+            <mvc:mapping path="/account/report*"/>
+            <mvc:mapping path="/account/service*"/>
+            <mvc:mapping path="/user**"/>
+            <!-- 拦截器所对应的类路径 -->
+            <bean class="com.huawei.base.interceptor.AdminInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <bean class="com.huawei.base.exception.CustomExceptionResolver"/>
 </beans>

@@ -20,19 +20,38 @@
         }
         //重置密码
         function resetPwd() {
-            alert("请至少选择一条数据！");
-            //document.getElementById("operate_result_info").style.display = "block";
+            if ($(":checkbox:checked").length == 0) {
+                alert("请至少选择一条数据！");
+            } else {
+                var cbValue = "";
+                $(":checkbox:checked").each(function () {
+                    cbValue += $(this).val() + ","
+                })
+                $.ajax({
+                    type: "get",
+                    url: "/admin/admin_resetPwd",
+                    data: {
+                        cbValue: cbValue
+                    },
+                    success: function (result) {
+                        if (result.message.length > 0) {
+                            $("#result_info").html(result.message);
+                            document.getElementById("operate_result_info").style.display = "block";
+                        }
+                    }
+                })
+            }
         }
         //删除
         function deleteAdmin(admin_id) {
             var r = window.confirm("确定要删除此管理员吗？");
             $.ajax({
-                type:"get",
-                url:"/admin/deleteAdmin",
-                data:{
-                    admin_id:admin_id
+                type: "get",
+                url: "/admin/admin_delete",
+                data: {
+                    admin_id: admin_id
                 },
-                success:function (result) {
+                success: function (result) {
                     $("#result_info").html(result.message);
                     document.getElementById("operate_result_info").style.display = "block";
                 }
@@ -51,7 +70,7 @@
             }
         }
         function flush() {
-            location.href="/admin/admin_list"
+            location.href = "/admin/admin_list"
         }
     </script>
 </head>
@@ -65,136 +84,190 @@
 <!--导航区域开始-->
 <div id="navi">
     <ul id="menu">
+
+        <%--<li><a href="/index" class="index_off"></a></li>--%>
+        <%--<li><a href="/admin/role_list" class="role_off"></a></li>--%>
+        <%--<li><a href="/admin/admin_list" class="admin_off"></a></li>--%>
+        <%--<li><a href="/cost/cost_list" class="fee_off"></a></li>--%>
+        <%--<li><a href="/account_list" class="account_off"></a></li>--%>
+        <%--<li><a href="/service_list" class="service_off"></a></li>--%>
+        <%--<li><a href="/bill_list" class="bill_off"></a></li>--%>
+        <%--<li><a href="/report_list" class="report_off"></a></li>--%>
+        <%--<li><a href="/user_info" class="information_off"></a></li>--%>
+        <%--<li><a href="/user_modi_pwd" class="password_on"></a></li>--%>
         <li><a href="/index" class="index_off"></a></li>
-        <li><a href="/admin/role_list" class="role_off"></a></li>
-        <li><a href="/admin/admin_list" class="admin_off"></a></li>
-        <li><a href="/cost/cost_list" class="fee_off"></a></li>
-        <li><a href="/account_list" class="account_off"></a></li>
-        <li><a href="/service_list" class="service_off"></a></li>
-        <li><a href="/bill_list" class="bill_off"></a></li>
-        <li><a href="/report_list" class="report_off"></a></li>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 1}">
+                    <li><a href="/admin/role_list" class="role_off"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 2}">
+                    <li><a href="/admin/admin_list" class="admin_on"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 3}">
+                    <li><a href="/cost/cost_list" class="fee_off"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 4}">
+                    <li><a href="/account_list" class="account_off"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 5}">
+                    <li><a href="/service_list" class="service_off"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 6}">
+                    <li><a href="/bill_list" class="bill_off"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 7}">
+                    <li><a href="/report_list" class="report_off"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
         <li><a href="/user_info" class="information_off"></a></li>
-        <li><a href="/user_modi_pwd" class="password_on"></a></li>
+        <li><a href="/user_modi_pwd" class="password_off"></a></li>
     </ul>
 </div>
 <!--导航区域结束-->
 <!--主要区域开始-->
 <div id="main">
-    <form action="" method="">
-        <!--查询-->
-        <div class="search_add">
+
+    <!--查询-->
+    <div class="search_add">
+        <form action="/admin/admin_conditionQuery" method="post">
             <div>
                 模块：
-                <select id="selModules" class="select_search">
-                    <option>全部</option>
-                    <option>角色管理</option>
-                    <option>管理员管理</option>
-                    <option>资费管理</option>
-                    <option>账务账号</option>
-                    <option>业务账号</option>
-                    <option>账单管理</option>
-                    <option>报表</option>
+                <select name="module_id" id="selModules" class="select_search">
+                    <option value="-1">全部</option>
+                    <option value="1">角色管理</option>
+                    <option value="2">管理员管理</option>
+                    <option value="3">资费管理</option>
+                    <option value="4">账务账号</option>
+                    <option value="5">业务账号</option>
+                    <option value="6">账单管理</option>
+                    <option value="7">报表</option>
                 </select>
             </div>
-            <div>角色：<input type="text" value="" class="text_search width200"/></div>
-            <div><input type="button" value="搜索" class="btn_search"/></div>
-            <input type="button" value="密码重置" class="btn_add" onclick="resetPwd();"/>
-            <input type="button" value="增加" class="btn_add" onclick="location.href='/admin/admin_add';"/>
-        </div>
-        <!--删除和密码重置的操作提示-->
-        <div id="operate_result_info" class="operate_fail">
-            <img src="/resource/images/close.png" onclick="flush()"/>
-            <span id="result_info"></span><!--密码重置失败！数据并发错误。-->
-        </div>
-        <!--数据区域：用表格展示数据-->
-        <div id="data">
-            <table id="datalist">
+            <div>角色：<input name="role_name" type="text" value="" class="text_search width200"/></div>
+            <div><input type="submit" value="搜索" class="btn_search"/></div>
+        </form>
+        <input type="button" value="密码重置" class="btn_add" onclick="resetPwd();"/>
+        <input type="button" value="增加" class="btn_add" onclick="location.href='/admin/admin_add';"/>
+    </div>
+    <!--删除和密码重置的操作提示-->
+    <div id="operate_result_info" class="operate_fail">
+        <img src="/resource/images/close.png" onclick="flush()"/>
+        <span id="result_info"></span><!--密码重置失败！数据并发错误。-->
+    </div>
+    <!--数据区域：用表格展示数据-->
+    <div id="data">
+        <table id="datalist">
+            <tr>
+                <th class="th_select_all">
+                    <input value="-1" type="checkbox" onclick="selectAdmins(this);"/>
+                    <span>全选</span>
+                </th>
+                <th>管理员ID</th>
+                <th>姓名</th>
+                <th>登录名</th>
+                <th>电话</th>
+                <th>电子邮件</th>
+                <th>授权日期</th>
+                <th class="width100">拥有角色</th>
+                <th></th>
+            </tr>
+            <c:forEach items="${pageBean.data}" var="admin">
                 <tr>
-                    <th class="th_select_all">
-                        <input type="checkbox" onclick="selectAdmins(this);"/>
-                        <span>全选</span>
-                    </th>
-                    <th>管理员ID</th>
-                    <th>姓名</th>
-                    <th>登录名</th>
-                    <th>电话</th>
-                    <th>电子邮件</th>
-                    <th>授权日期</th>
-                    <th class="width100">拥有角色</th>
-                    <th></th>
+                    <td><input value="${admin.admin_id}" type="checkbox"/></td>
+                    <td>${admin.admin_id}</td>
+                    <td>${admin.name}</td>
+                    <td>${admin.admin_code}</td>
+                    <td>${admin.telephone}</td>
+                    <td>${admin.email}</td>
+                    <td>${admin.enrolldate}</td>
+                    <td>
+                        <a class="summary" onmouseover="showDetail(true,this);"
+                           onmouseout="showDetail(false,this);">
+                            <c:forEach items="${admin.roles}" var="role" varStatus="status">
+                                <c:if test="${status.count == 1}">
+                                    ${role.name}
+                                </c:if>
+                            </c:forEach>...</a>
+                        <!--浮动的详细信息-->
+                        <div class="detail_info">
+                            <c:forEach items="${admin.roles}" var="role">
+                                ${role.name}、
+                            </c:forEach>
+                        </div>
+                    </td>
+                    <td class="td_modi">
+                        <input type="button" value="修改" class="btn_modify"
+                               onclick="location.href='/admin/admin_modi?admin_id=${admin.admin_id}';"/>
+                        <input type="button" value="删除" class="btn_delete" onclick="deleteAdmin(${admin.admin_id});"/>
+                    </td>
                 </tr>
-                <c:forEach items="${pageBean.data}" var="admin">
-                    <tr>
-                        <td><input type="checkbox"/></td>
-                        <td>${admin.admin_id}</td>
-                        <td>${admin.name}</td>
-                        <td>${admin.admin_code}</td>
-                        <td>${admin.telephone}</td>
-                        <td>${admin.email}</td>
-                        <td>${admin.enrolldate}</td>
-                        <td>
-                            <a class="summary" onmouseover="showDetail(true,this);"
-                               onmouseout="showDetail(false,this);">
-                                <c:forEach items="${admin.roles}" var="role" varStatus="status">
-                                    <c:if test="${status.count == 1}">
-                                        ${role.name}
-                                    </c:if>
-                                </c:forEach>...</a>
-                            <!--浮动的详细信息-->
-                            <div class="detail_info">
-                                <c:forEach items="${admin.roles}" var="role">
-                                    ${role.name}、
-                                </c:forEach>
-                            </div>
-                        </td>
-                        <td class="td_modi">
-                            <input type="button" value="修改" class="btn_modify"
-                                   onclick="location.href='/admin/admin_modi?admin_id=${admin.admin_id}';"/>
-                            <input type="button" value="删除" class="btn_delete" onclick="deleteAdmin(${admin.admin_id});"/>
-                        </td>
-                    </tr>
-                </c:forEach>
+            </c:forEach>
 
 
-            </table>
-        </div>
+        </table>
+    </div>
 
-        <!--分页-->
-        <div id="pages">
-            <c:if test="${pageBean.pageNum>1}">
-                <a href="/admin/admin_list?pageNum=${pageBean.pageNum-1}">上一页</a>
-            </c:if>
-            <c:if test="${pageBean.totalPage<=5}">
-                <c:forEach var="i" begin="1" end="${pageBean.totalPage}">
+    <!--分页-->
+    <div id="pages">
+        <c:if test="${pageBean.pageNum>1}">
+            <a href="/admin/admin_list?pageNum=${pageBean.pageNum-1}">上一页</a>
+        </c:if>
+        <c:if test="${pageBean.totalPage<=5}">
+            <c:forEach var="i" begin="1" end="${pageBean.totalPage}">
+                <a href="/admin/admin_list?pageNum=${i}"
+                   <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
+            </c:forEach>
+        </c:if>
+        <c:if test="${pageBean.totalPage>5}">
+            <c:if test="${pageBean.pageNum <= 3}">
+                <c:forEach var="i" begin="1" end="5">
                     <a href="/admin/admin_list?pageNum=${i}"
                        <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
                 </c:forEach>
             </c:if>
-            <c:if test="${pageBean.totalPage>5}">
-                <c:if test="${pageBean.pageNum <= 3}">
-                    <c:forEach var="i" begin="1" end="5">
-                        <a href="/admin/admin_list?pageNum=${i}"
-                           <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
-                    </c:forEach>
-                </c:if>
-                <c:if test="${pageBean.pageNum > 3 and pageBean.pageNum <= pageBean.totalPage -3}">
-                    <c:forEach var="i" begin="${pageBean.pageNum-2}" end="${pageBean.pageNum+2}">
-                        <a href="/admin/admin_list?pageNum=${i}"
-                           <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
-                    </c:forEach>
-                </c:if>
-                <c:if test="${pageBean.pageNum > 3 and pageBean.pageNum > pageBean.totalPage-3}">
-                    <c:forEach var="i" begin="${pageBean.totalPage-4}" end="${pageBean.totalPage}">
-                        <a href="/admin/admin_list?pageNum=${i}"
-                           <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
-                    </c:forEach>
-                </c:if>
+            <c:if test="${pageBean.pageNum > 3 and pageBean.pageNum <= pageBean.totalPage -3}">
+                <c:forEach var="i" begin="${pageBean.pageNum-2}" end="${pageBean.pageNum+2}">
+                    <a href="/admin/admin_list?pageNum=${i}"
+                       <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
+                </c:forEach>
             </c:if>
-            <c:if test="${pageBean.pageNum<pageBean.totalPage}">
-                <a href="/admin/admin_list?pageNum=${pageBean.pageNum+1}">下一页</a>
+            <c:if test="${pageBean.pageNum > 3 and pageBean.pageNum > pageBean.totalPage-3}">
+                <c:forEach var="i" begin="${pageBean.totalPage-4}" end="${pageBean.totalPage}">
+                    <a href="/admin/admin_list?pageNum=${i}"
+                       <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
+                </c:forEach>
             </c:if>
-        </div>
-    </form>
+        </c:if>
+        <c:if test="${pageBean.pageNum<pageBean.totalPage}">
+            <a href="/admin/admin_list?pageNum=${pageBean.pageNum+1}">下一页</a>
+        </c:if>
+    </div>
 </div>
 <!--主要区域结束-->
 <div id="footer">

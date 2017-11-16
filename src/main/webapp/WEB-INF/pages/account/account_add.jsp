@@ -1,4 +1,6 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -44,16 +46,69 @@
 <!--导航区域开始-->
 <div id="navi">
     <ul id="menu">
+
+        <%--<li><a href="/index" class="index_off"></a></li>--%>
+        <%--<li><a href="/admin/role_list" class="role_off"></a></li>--%>
+        <%--<li><a href="/admin/admin_list" class="admin_off"></a></li>--%>
+        <%--<li><a href="/cost/cost_list" class="fee_off"></a></li>--%>
+        <%--<li><a href="/account_list" class="account_off"></a></li>--%>
+        <%--<li><a href="/service_list" class="service_off"></a></li>--%>
+        <%--<li><a href="/bill_list" class="bill_off"></a></li>--%>
+        <%--<li><a href="/report_list" class="report_off"></a></li>--%>
+        <%--<li><a href="/user_info" class="information_off"></a></li>--%>
+        <%--<li><a href="/user_modi_pwd" class="password_on"></a></li>--%>
         <li><a href="/index" class="index_off"></a></li>
-        <li><a href="/admin/role_list" class="role_off"></a></li>
-        <li><a href="/admin/admin_list" class="admin_off"></a></li>
-        <li><a href="/cost/cost_list" class="fee_off"></a></li>
-        <li><a href="/account_list" class="account_off"></a></li>
-        <li><a href="/service_list" class="service_off"></a></li>
-        <li><a href="/bill_list" class="bill_off"></a></li>
-        <li><a href="/report_list" class="report_off"></a></li>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 1}">
+                    <li><a href="/admin/role_list" class="role_off"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 2}">
+                    <li><a href="/admin/admin_list" class="admin_off"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 3}">
+                    <li><a href="/cost/cost_list" class="fee_off"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 4}">
+                    <li><a href="/account_list" class="account_on"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 5}">
+                    <li><a href="/service_list" class="service_off"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 6}">
+                    <li><a href="/bill_list" class="bill_off"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
+        <c:forEach items="${applicationScope.admin.roles}" var="role">
+            <c:forEach items="${role.modules}" var="module">
+                <c:if test="${module.module_id eq 7}">
+                    <li><a href="/report_list" class="report_off"></a></li>
+                </c:if>
+            </c:forEach>
+        </c:forEach>
         <li><a href="/user_info" class="information_off"></a></li>
-        <li><a href="/user_modi_pwd" class="password_on"></a></li>
+        <li><a href="/user_modi_pwd" class="password_off"></a></li>
     </ul>
 </div>
 <!--导航区域结束-->
@@ -102,7 +157,7 @@
         <!--可选项-->
         <div class="text_info clearfix"><span>可选项：</span></div>
         <div class="input_info">
-            <img src="../images/show.png" alt="展开" onclick="showOptionalInfo(this);"/>
+            <img src="/resource/images/show.png" alt="展开" onclick="showOptionalInfo(this);"/>
         </div>
         <div id="optionalInfo" class="hide">
             <div class="text_info clearfix"><span>推荐人身份证号码：</span></div>

@@ -15,9 +15,6 @@ public interface AdminService {
 
     Admin findAdminToInfo(int admin_id);
 
-
-
-
     PageBean<Role> findRoleToInfo(Integer pageNum, int pageSize);
 
     void addRule(String name);
@@ -51,4 +48,15 @@ public interface AdminService {
     Admin findAdminById(int admin_id);
 
     void updateAdmin(Admin admin);
+
+    List<Admin> findAllAdmin();
+
+
+    PageBean<Admin> findAdminToInfoByCQ(int module_id, String role_name);
+
+    int resetPwd(Admin admin);
+
+    int modi_user_info(Admin admin);
+
+    int modi_pwd(Admin admin);
 }

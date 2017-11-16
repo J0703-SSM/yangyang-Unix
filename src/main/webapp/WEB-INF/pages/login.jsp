@@ -11,11 +11,11 @@
 </head>
 <body class="index">
 <div class="login_box">
-    <form id="form1" action="/admin/userLogin" method="post">
+    <form id="form1" action="/loginAdmin" method="post">
         <table>
             <tr>
                 <td class="login_info">账号：</td>
-                <td colspan="2"><input id="name" name="name" type="text" class="width150"/></td>
+                <td colspan="2"><input id="admin_code" name="admin_code" type="text" class="width150"/></td>
                 <td class="login_error_info"><span id="nameErr" class="required">${nameErr.defaultMessage}</span></td>
             </tr>
             <tr>
@@ -40,7 +40,6 @@
     </form>
 </div>
 <script>
-
 
 
     $("#verifyCodeImage").click(function () {

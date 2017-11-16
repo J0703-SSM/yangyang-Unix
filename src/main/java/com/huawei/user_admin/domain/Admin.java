@@ -5,20 +5,23 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
 /**
  * Created by dllo on 17/11/13.
  */
-public class Admin {
+public class Admin implements Serializable{
     private int admin_id;
     @Length(min = 1,max = 30,message = "30长度的字母、数字和下划线")
     private String admin_code;
-//    @Length(min = 1,max = 30,message = "30长度的字母、数字和下划线")
+    @Length(min = 1,max = 30,message = "30长度的字母、数字和下划线")
     private String password;
-//    @Length(min = 1,max = 30,message = "30长度的字母、数字和下划线")
+    @Length(min = 1,max = 30,message = "30长度的字母、数字和下划线")
     private String password1;
+    @Length(min = 1,max = 30,message = "30长度的字母、数字和下划线")
+    private String password2;
     @Length(min = 1,max = 20,message = "20长度的字母、数字和下划线")
     private String name;
     @Pattern(regexp = "^1[34578]\\d{9}$",message = "请输入正确的电话号码格式")
@@ -133,5 +136,13 @@ public class Admin {
 
     public void setCbValue(String cbValue) {
         this.cbValue = cbValue;
+    }
+
+    public String getPassword2() {
+        return password2;
+    }
+
+    public void setPassword2(String password2) {
+        this.password2 = password2;
     }
 }
