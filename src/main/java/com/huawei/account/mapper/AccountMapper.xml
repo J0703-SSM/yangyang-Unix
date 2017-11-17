@@ -3,6 +3,48 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.huawei.account.mapper.AccountMapper">
 
+    <resultMap id="serviceMap" type="com.huawei.account.domain.Services">
+        <id column="service_id" property="service_id"/>
+        <result column="account_id" property="account_id"/>
+        <result column="unix_host" property="unix_host"/>
+        <result column="os_username" property="os_username"/>
+        <result column="login_passwd" property="login_passwd"/>
+        <result column="status" property="status"/>
+        <result column="create_date" property="create_date"/>
+        <result column="pause_date" property="pause_date"/>
+        <result column="close_date" property="close_date"/>
+        <result column="cost_id" property="cost_id"/>
+    </resultMap>
+
+    <resultMap id="service_accountMap" type="com.huawei.account.domain.Services" extends="serviceMap">
+        <association property="account" javaType="com.huawei.account.domain.Account">
+            <id column="account_id" property="account_id"/>
+            <result column="real_name" property="real_name"/>
+            <result column="idcard_no" property="idcard_no"/>
+        </association>
+        <association property="cost" javaType="com.huawei.cost.domain.Cost">
+            <id column="cost_id" property="cost_id"/>
+            <result column="name" property="name"/>
+            <result column="descr" property="descr"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="billMap" type="com.huawei.account.domain.Bill">
+        <id column="bill_id" property="bill_id"/>
+        <result column="account_id" property="account_id"/>
+        <result column="bill_month" property="bill_month"/>
+        <result column="cost" property="cost"/>
+        <result column="payment_mode" property="payment_mode"/>
+        <result column="pay_state" property="pay_state"/>
+        <association property="account" javaType="com.huawei.account.domain.Account">
+            <id column="account_id" property="account_id"/>
+            <result column="real_name" property="real_name"/>
+            <result column="idcard_no" property="idcard_no"/>
+            <result column="login_name" property="login_name"/>
+        </association>
+    </resultMap>
+
+
     <select id="findAllAccount"
             parameterType="com.huawei.base.utils.PageBean"
             resultType="com.huawei.account.domain.Account">
@@ -39,4 +81,63 @@
          INSERT INTO account (recommender_id,login_name,login_passwd,status,create_date,real_name,idcard_no,birthdate,gender,occupation,telephone,email,mailaddress,zipcode,qq)
         VALUES (#{recommender_id},#{login_name},#{login_passwd},#{status},#{create_date},#{real_name},#{idcard_no},#{birthdate},#{gender},#{occupation},#{telephone},#{email},#{mailaddress},#{zipcode},#{qq})
     </insert>
+
+    <select id="findServiceCount"
+            resultType="int">
+        SELECT count(*) FROM service
+    </select>
+    <sql id="serviceSql">
+        service.service_id,
+        service.account_id,
+        service.unix_host,
+        service.os_username,
+        service.login_passwd,
+        service.status,
+        service.create_date,
+        service.pause_date,
+        service.close_date,
+        service.cost_id
+    </sql>
+    <sql id="accountSql">
+        account.account_id,
+        account.real_name,
+        account.idcard_no,
+        account.login_name
+    </sql>
+    <sql id="costSql">
+        cost.cost_id,
+        cost.name,
+        cost.descr
+    </sql>
+    <sql id="billSql">
+        bill.*
+    </sql>
+    <select id="findAllService"
+            parameterType="com.huawei.base.utils.PageBean"
+            resultMap="service_accountMap">
+        SELECT
+        <include refid="serviceSql"/>,
+        <include refid="accountSql"/>,
+        <include refid="costSql"/>
+        FROM service ,account, cost
+        WHERE service.account_id = account.account_id
+        AND service.cost_id = cost.cost_id
+        limit #{pageSize} offset #{startIndex}
+    </select>
+
+    <select id="findAllBill"
+            parameterType="com.huawei.base.utils.PageBean"
+            resultMap="billMap">
+        SELECT
+        <include refid="billSql"/>,
+        <include refid="accountSql"/>
+        FROM bill,account
+        WHERE bill.account_id=account.account_id
+        limit #{pageSize} offset #{startIndex}
+    </select>
+
+    <select id="findBillCount"
+            resultType="int">
+        SELECT count(*) FROM bill
+    </select>
 </mapper>

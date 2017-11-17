@@ -62,14 +62,14 @@
                 <c:forEach items="${applicationScope.admin.roles}" var="role">
                     <c:forEach items="${role.modules}" var="module">
                         <c:if test="${module.module_id eq 5}">
-                            <li><a href="/service_list" class="service_off"></a></li>
+                            <li><a href="/account/service_list" class="service_off"></a></li>
                         </c:if>
                     </c:forEach>
                 </c:forEach>
                 <c:forEach items="${applicationScope.admin.roles}" var="role">
                     <c:forEach items="${role.modules}" var="module">
                         <c:if test="${module.module_id eq 6}">
-                            <li><a href="/bill_list" class="bill_on"></a></li>
+                            <li><a href="/account/bill_list" class="bill_on"></a></li>
                         </c:if>
                     </c:forEach>
                 </c:forEach>

@@ -15,25 +15,37 @@
             $(":checkbox:checked").each(function () {
                 cbValue += $(this).val() + ","
             });
-            $.ajax({
-                type: "get",
-                url: "/admin/role_update",
-                data: {
-                    role_id: $("#role_id").val(),
-                    name: $("#name").val(),
-                    modules: cbValue
-                },
-                success: function (result) {
-                    if (result.errorCode == 1){
-                        $("#nameErr").html(result.map["nameErr"]);
-                        $("#moduleErr").html(result.map["moduleErr"]);
-                    }else {
-                        showResultDiv(result.success);
+            var _name = $("#name").val();
+            var boo = check(_name, cbValue)
+            if (boo) {
+                $.ajax({
+                    type: "get",
+                    url: "/admin/role_update",
+                    data: {
+                        role_id: $("#role_id").val(),
+                        name: _name,
+                        modules: cbValue
+                    },
+                    success: function (result) {
+                        var _html =result.message + $("#save_result_info").html();
+                        $("#save_result_info").html(_html);
+                        showResultDiv(true);
                         window.setTimeout("showResultDiv(false);", 3000);
                     }
-
-                }
-            })
+                })
+            }
+        }
+        function check(_name, cbValue) {
+            var boo = true;
+            if (_name.trim().length == 0) {
+                $("#nameErr").html("* 不能为空，且为20长度的字母、数字和汉字的组合");
+                boo = false;
+            }
+            if (cbValue.trim().length == 0) {
+                $("#moduleErr").html("* 请至少选择一个权限");
+                boo = false;
+            }
+            return boo;
         }
         function showResultDiv(flag) {
             var divResult = document.getElementById("save_result_info");
@@ -104,14 +116,14 @@
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 5}">
-                    <li><a href="/service_list" class="service_off"></a></li>
+                    <li><a href="/account/service_list" class="service_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 6}">
-                    <li><a href="/bill_list" class="bill_off"></a></li>
+                    <li><a href="/account/bill_list" class="bill_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
@@ -130,17 +142,16 @@
 <!--主要区域开始-->
 <div id="main">
     <!--保存操作后的提示信息：成功或者失败-->
-    <div id="save_result_info" class="save_success">
-        保存成功！
+    <div id="operate_result_info" class="operate_success">
         <img src="/resource/images/close.png" onclick="flush()"/>
-        </div>
+    </div>
     <form action="" method="" class="main_form">
         <div class="text_info clearfix"><span>角色名称：</span></div>
         <div class="input_info">
             <input id="role_id" type="hidden" value="${role.role_id}">
             <input id="name" type="text" class="width200" value="${role.name}"/>
-            <span class="required">*</span>
-            <div id="nameErr" class="validate_msg_medium error_msg"></div>
+            <%--<span class="required">*</span>--%>
+            <div id="nameErr" class="validate_msg_tiny"></div>
         </div>
         <div class="text_info clearfix"><span>设置权限：</span></div>
         <div class="input_info_high">
@@ -197,7 +208,7 @@
                     </li>
                 </ul>
             </div>
-            <span class="required">*</span>
+            <%--<span class="required">*</span>--%>
             <div class="validate_msg_tiny" id="moduleErr"></div>
         </div>
         <div class="button_info clearfix">

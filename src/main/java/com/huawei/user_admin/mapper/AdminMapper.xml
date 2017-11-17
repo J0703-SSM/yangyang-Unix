@@ -94,12 +94,17 @@
         <include refid="roleSql"/>
         ,
         <include refid="moduleSql"/>
-        FROM admin_info, role_info, admin_role, module_info, role_module
-        WHERE admin_info.admin_id = admin_role.admin_id
-        AND role_info.role_id = admin_role.role_id
-        AND role_info.role_id = role_module.role_id
-        AND module_info.module_id = role_module.module_id
-        AND admin_info.admin_id = #{value}
+        FROM admin_info
+        LEFT JOIN admin_role
+        ON admin_info.admin_id = admin_role.admin_id
+        LEFT JOIN role_info
+        ON role_info.role_id = admin_role.role_id
+        LEFT JOIN role_module
+        ON role_info.role_id = role_module.role_id
+        LEFT JOIN module_info
+        ON module_info.module_id = role_module.module_id
+
+        WHERE admin_info.admin_id = #{value}
     </select>
 
     <select id="findAllAdminToInfo"
@@ -224,7 +229,7 @@
         ,
         <include refid="roleSql"/>
 
-        FROM  admin_info, role_info, admin_role
+        FROM admin_info, role_info, admin_role
         WHERE admin_info.admin_id = admin_role.admin_id
         AND role_info.role_id = admin_role.role_id
         AND admin_info.admin_id=#{value}
@@ -244,11 +249,15 @@
         <include refid="roleSql"/>
         ,
         <include refid="moduleSql"/>
-        FROM admin_info, role_info, admin_role, module_info, role_module
-        WHERE admin_info.admin_id = admin_role.admin_id
-        AND role_info.role_id = admin_role.role_id
-        AND role_info.role_id = role_module.role_id
-        AND module_info.module_id = role_module.module_id
+        FROM admin_info
+        LEFT JOIN admin_role
+        ON admin_info.admin_id = admin_role.admin_id
+        LEFT JOIN role_info
+        ON role_info.role_id = admin_role.role_id
+        LEFT JOIN role_module
+        ON role_info.role_id = role_module.role_id
+        LEFT JOIN module_info
+        ON module_info.module_id = role_module.module_id
     </select>
 
     <select id="findCountByCQ"
@@ -256,31 +265,58 @@
             resultType="int">
         SELECT
         count(*)
-        FROM admin_info, role_info, admin_role, module_info, role_module
-        WHERE admin_info.admin_id = admin_role.admin_id
-        AND role_info.role_id = admin_role.role_id
-        AND role_info.role_id = role_module.role_id
-        AND module_info.module_id = role_module.module_id
-        AND module_info.module_id=#{id}
-        AND role_info.name LIKE "%"#{condition}"%"
+        FROM admin_info
+        LEFT JOIN admin_role
+        ON admin_info.admin_id = admin_role.admin_id
+        LEFT JOIN role_info
+        ON role_info.role_id = admin_role.role_id
+        LEFT JOIN role_module
+        ON role_info.role_id = role_module.role_id
+        LEFT JOIN module_info
+        ON module_info.module_id = role_module.module_id
+        <where>
+            1=1
+            <if test="id != -1">
+                AND module_info.module_id=#{id}
+            </if>
+            <if test="condition != null and condition.length() > 0">
+                AND role_info.name LIKE "%"#{condition}"%"
+            </if>
+        </where>
     </select>
 
     <select id="findAdminByCQ"
             parameterType="com.huawei.base.utils.PageBean"
             resultMap="admin_role_module">
+
+        SELECT
+        *
+        FROM (
         SELECT
         <include refid="adminSql"/>
         ,
         <include refid="roleSql"/>
         ,
         <include refid="moduleSql"/>
-        FROM  admin_info, role_info, admin_role, module_info, role_module
-        WHERE admin_info.admin_id = admin_role.admin_id
-        AND role_info.role_id = admin_role.role_id
-        AND role_info.role_id = role_module.role_id
-        AND module_info.module_id = role_module.module_id
-        AND module_info.module_id=#{id}
-        AND role_info.name LIKE "%"#{condition}"%"
+        FROM admin_info
+        LEFT JOIN admin_role
+        ON admin_info.admin_id = admin_role.admin_id
+        LEFT JOIN role_info
+        ON role_info.role_id = admin_role.role_id
+        LEFT JOIN role_module
+        ON role_info.role_id = role_module.role_id
+        LEFT JOIN module_info
+        ON module_info.module_id = role_module.module_id
+        <where>
+            1=1
+            <if test="id != -1">
+                AND module_info.module_id=#{id}
+            </if>
+            <if test="condition != null and condition.length() > 0">
+                AND role_info.name LIKE "%"#{condition}"%"
+            </if>
+        </where>
+        ) admin_role_module limit #{pageSize} offset #{startIndex}
     </select>
 
     <update id="resetPwd"
@@ -298,5 +334,15 @@
             parameterType="com.huawei.user_admin.domain.Admin">
         UPDATE admin_info SET password=#{password1} WHERE admin_id=#{admin_id}
     </update>
+    <select id="checkAdmin"
+            parameterType="java.lang.String"
+            resultType="com.huawei.user_admin.domain.Admin">
+        SELECT * FROM admin_info WHERE admin_code=#{admin_code}
+    </select>
 
+    <select id="findRoleByName"
+            parameterType="java.lang.String"
+            resultType="com.huawei.user_admin.domain.Role">
+        SELECT * FROM role_info WHERE name=#{value}
+    </select>
 </mapper>

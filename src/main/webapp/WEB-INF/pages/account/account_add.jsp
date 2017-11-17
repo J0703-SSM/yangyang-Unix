@@ -130,14 +130,14 @@
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 5}">
-                    <li><a href="/service_list" class="service_off"></a></li>
+                    <li><a href="/account/service_list" class="service_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 6}">
-                    <li><a href="/bill_list" class="bill_off"></a></li>
+                    <li><a href="/account/bill_list" class="bill_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
@@ -161,39 +161,39 @@
         <!--必填项-->
         <div class="text_info clearfix"><span>姓名：</span></div>
         <div class="input_info">
-            <input id="real_name" type="text" value=""/>
-            <span class="required">*</span>
-            <div class="validate_msg_long">20长度以内的汉字、字母和数字的组合</div>
+            <input id="real_name" type="text" placeholder="20长度以内的汉字、字母和数字的组合"/>
+            <%--<span class="required">*</span>--%>
+            <div class="validate_msg_long"></div>
         </div>
         <div class="text_info clearfix"><span>身份证：</span></div>
         <div class="input_info">
-            <input id="idcard_no" type="text" value=""/>
-            <span class="required">*</span>
-            <div class="validate_msg_long">正确的身份证号码格式</div>
+            <input id="idcard_no" type="text"/>
+            <%--<span class="required">*</span>--%>
+            <div class="validate_msg_long"></div>
         </div>
         <div class="text_info clearfix"><span>登录账号：</span></div>
         <div class="input_info">
-            <input id="login_name" type="text" value=""/>
-            <span class="required">*</span>
-            <div class="validate_msg_long">30长度以内的字母、数字和下划线的组合</div>
+            <input id="login_name" type="text" placeholder="30长度以内的字母、数字和下划线的组合"/>
+            <%--<span class="required">*</span>--%>
+            <div class="validate_msg_long"></div>
         </div>
         <div class="text_info clearfix"><span>密码：</span></div>
         <div class="input_info">
-            <input id="login_passwd" type="password"/>
-            <span class="required">*</span>
-            <div class="validate_msg_long">30长度以内的字母、数字和下划线的组合</div>
+            <input id="login_passwd" type="password" placeholder="30长度以内的字母、数字和下划线的组合"/>
+            <%--<span class="required">*</span>--%>
+            <div class="validate_msg_long"></div>
         </div>
         <div class="text_info clearfix"><span>重复密码：</span></div>
         <div class="input_info">
-            <input id="login_passwd1" type="password"/>
-            <span class="required">*</span>
-            <div class="validate_msg_long">两次密码必须相同</div>
+            <input id="login_passwd1" type="password" placeholder="30长度以内的字母、数字和下划线的组合"/>
+            <%--<span class="required">*</span>--%>
+            <div class="validate_msg_long"></div>
         </div>
         <div class="text_info clearfix"><span>电话：</span></div>
         <div class="input_info">
             <input id="tel" type="text" class="width200"/>
-            <span class="required">*</span>
-            <div class="validate_msg_medium">正确的电话号码格式：手机或固话</div>
+            <%--<span class="required">*</span>--%>
+            <div class="validate_msg_medium"></div>
         </div>
         <!--可选项-->
         <div class="text_info clearfix"><span>可选项：</span></div>
@@ -204,7 +204,7 @@
             <div class="text_info clearfix"><span>推荐人身份证号码：</span></div>
             <div class="input_info">
                 <input id="re_idcard" type="text"/>
-                <div class="validate_msg_long">正确的身份证号码格式</div>
+                <div class="validate_msg_long"></div>
             </div>
             <div class="text_info clearfix"><span>生日：</span></div>
             <div class="input_info">
@@ -213,7 +213,7 @@
             <div class="text_info clearfix"><span>Email：</span></div>
             <div class="input_info">
                 <input id="email" type="text" class="width350"/>
-                <div class="validate_msg_tiny">50长度以内，合法的 Email 格式</div>
+                <div class="validate_msg_tiny"></div>
             </div>
             <div class="text_info clearfix"><span>职业：</span></div>
             <div class="input_info">
@@ -233,18 +233,18 @@
             </div>
             <div class="text_info clearfix"><span>通信地址：</span></div>
             <div class="input_info">
-                <input id="mailaddress" type="text" class="width350"/>
-                <div class="validate_msg_tiny">50长度以内</div>
+                <input id="mailaddress" type="text" class="width350" placeholder="50长度以内"/>
+                <div class="validate_msg_tiny"></div>
             </div>
             <div class="text_info clearfix"><span>邮编：</span></div>
             <div class="input_info">
                 <input id="zipcode" type="text"/>
-                <div class="validate_msg_long">6位数字</div>
+                <div class="validate_msg_long"></div>
             </div>
             <div class="text_info clearfix"><span>QQ：</span></div>
             <div class="input_info">
                 <input id="qq" type="text"/>
-                <div class="validate_msg_long">5到13位数字</div>
+                <div class="validate_msg_long"></div>
             </div>
         </div>
         <!--操作按钮-->

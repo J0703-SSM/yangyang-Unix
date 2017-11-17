@@ -108,15 +108,17 @@ public class AdminServiceImpl implements AdminService {
         return adminMapper.findAllAdmin();
     }
 
-    public PageBean<Admin> findAdminToInfoByCQ(int module_id, String role_name) {
+    public PageBean<Admin> findAdminToInfoByCQ(Integer pageNum,int pageSize,int module_id, String role_name) {
         PageBean<Admin> pageBean = new PageBean<Admin>();
         pageBean.setId(module_id);
         pageBean.setCondition(role_name);
-//        int totalCount = adminMapper.findCountByCQ(pageBean);
-//        pageBean.setTotalCount(totalCount);
-        List<Admin> admins = adminMapper.findAdminByCQ(pageBean);
-        pageBean.setData(admins);
-        return pageBean;
+        int totalCount = adminMapper.findCountByCQ(pageBean);
+        PageBean<Admin> pageBean1 = new PageBean<Admin>(pageNum,pageSize,totalCount);
+        pageBean1.setId(module_id);
+        pageBean1.setCondition(role_name);
+        List<Admin> admins = adminMapper.findAdminByCQ(pageBean1);
+        pageBean1.setData(admins);
+        return pageBean1;
     }
 
     public int resetPwd(Admin admin) {
@@ -129,6 +131,14 @@ public class AdminServiceImpl implements AdminService {
 
     public int modi_pwd(Admin admin) {
         return adminMapper.modi_pwd(admin);
+    }
+
+    public Admin checkAdmin(String admin_code) {
+        return adminMapper.checkAdmin(admin_code);
+    }
+
+    public Role findRoleByName(String name) {
+        return adminMapper.findRoleByName(name);
     }
 
 }

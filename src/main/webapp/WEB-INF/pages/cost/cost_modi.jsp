@@ -138,14 +138,14 @@
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 5}">
-                    <li><a href="/service_list" class="service_off"></a></li>
+                    <li><a href="/account/service_list" class="service_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 6}">
-                    <li><a href="/bill_list" class="bill_off"></a></li>
+                    <li><a href="/account/bill_list" class="bill_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
@@ -170,7 +170,7 @@
         <div class="text_info clearfix"><span>资费名称：</span></div>
         <div class="input_info">
             <input id="name" type="text" class="width300" value="${cost.name}"/>
-            <span class="required">*</span>
+            <%--<span class="required">*</span>--%>
             <div id="nameErr" class="validate_msg_short"></div>
         </div>
         <div class="text_info clearfix"><span>资费类型：</span></div>
@@ -190,21 +190,21 @@
         <div class="input_info">
             <input id="base_duration" type="text" value="${cost.base_duration}" class="width100"/>
             <span class="info">小时</span>
-            <span class="required">*</span>
+            <%--<span class="required">*</span>--%>
             <div id="base_durationErr" class="validate_msg_long"></div>
         </div>
         <div class="text_info clearfix"><span>基本费用：</span></div>
         <div class="input_info">
             <input id="base_cost" type="text" value="${cost.base_cost}" class="width100"/>
             <span class="info">元</span>
-            <span class="required">*</span>
+            <%--<span class="required">*</span>--%>
             <div id="base_costErr" class="validate_msg_long"></div>
         </div>
         <div class="text_info clearfix"><span>单位费用：</span></div>
         <div class="input_info">
             <input id="unit_cost" type="text" value="${cost.unit_cost}" class="width100"/>
             <span class="info">元/小时</span>
-            <span class="required">*</span>
+            <%--<span class="required">*</span>--%>
             <div id="unit_costErr" class="validate_msg_long"></div>
         </div>
         <div class="text_info clearfix"><span>资费说明：</span></div>

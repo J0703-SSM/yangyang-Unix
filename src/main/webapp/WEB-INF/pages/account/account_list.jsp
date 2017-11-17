@@ -108,14 +108,14 @@
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 5}">
-                    <li><a href="/service_list" class="service_off"></a></li>
+                    <li><a href="/account/service_list" class="service_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 6}">
-                    <li><a href="/bill_list" class="bill_off"></a></li>
+                    <li><a href="/account/bill_list" class="bill_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
@@ -197,14 +197,14 @@
                 </c:forEach>
 
             </table>
-            <p>业务说明：<br/>
-                1、创建则开通，记载创建时间；<br/>
-                2、暂停后，记载暂停时间；<br/>
-                3、重新开通后，删除暂停时间；<br/>
-                4、删除后，记载删除时间，标示为删除，不能再开通、修改、删除；<br/>
-                5、暂停账务账号，同时暂停下属的所有业务账号；<br/>
-                6、暂停后重新开通账务账号，并不同时开启下属的所有业务账号，需要在业务账号管理中单独开启；<br/>
-                7、删除账务账号，同时删除下属的所有业务账号。</p>
+            <%--<p>业务说明：<br/>--%>
+                <%--1、创建则开通，记载创建时间；<br/>--%>
+                <%--2、暂停后，记载暂停时间；<br/>--%>
+                <%--3、重新开通后，删除暂停时间；<br/>--%>
+                <%--4、删除后，记载删除时间，标示为删除，不能再开通、修改、删除；<br/>--%>
+                <%--5、暂停账务账号，同时暂停下属的所有业务账号；<br/>--%>
+                <%--6、暂停后重新开通账务账号，并不同时开启下属的所有业务账号，需要在业务账号管理中单独开启；<br/>--%>
+                <%--7、删除账务账号，同时删除下属的所有业务账号。</p>--%>
         </div>
         <!--分页-->
         <div id="pages">

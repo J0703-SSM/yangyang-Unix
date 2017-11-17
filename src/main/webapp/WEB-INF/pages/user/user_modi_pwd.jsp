@@ -10,26 +10,27 @@
 
     <script>
         function showResult() {
-            $.ajax({
-                type: "get",
-                url: "/admin/modi_pwd",
-                data: {
-                    password:$("#password").val(),
-                    password1:$("#password1").val(),
-                    password2:$("#password2").val()
-                },
-                success: function (result) {
-                    if (result.errorCode == 1){
-                        $("#pwdErr").html(result.map["password"])
-                        $("#pwdErr1").html(result.map["password1"])
-                        $("#pwdErr2").html(result.map["password2"])
-                    }else {
+
+            var password = $("#password").val();
+            var password1 = $("#password1").val();
+            var password2 = $("#password2").val();
+            var boo = check(password, password1, password2);
+            if (boo) {
+                $.ajax({
+                    type: "get",
+                    url: "/admin/modi_pwd",
+                    data: {
+                        password: password,
+                        password1: password1,
+                        password2: password2
+                    },
+                    success: function (result) {
                         $("#save_result_info").html(result.message)
                         showResultDiv(true);
                         window.setTimeout("showResultDiv(false);", 3000);
                     }
-                }
-            })
+                })
+            }
         }
         function showResultDiv(flag) {
             var divResult = document.getElementById("save_result_info");
@@ -41,6 +42,54 @@
 
         function rollback() {
             location.href = "/index"
+        }
+        function checkPwd() {
+            var pwd = $("#password").val();
+            if (pwd.trim().length > 0) {
+                $.ajax({
+                    type: "get",
+                    url: "/admin/checkPwd",
+                    data: {
+                        password: pwd
+                    },
+                    success: function (result) {
+                        $("#pwdErr").html(result.message)
+                        if (result.message.length > 0) {
+                            $("#pwdErr").removeClass("validate_msg_medium");
+                            $("#pwdErr").addClass("validate_msg_short error_msg");
+                        }
+
+                    }
+                })
+            }
+        }
+        function check(password, password1, password2) {
+            var boo = true;
+            if (password.trim().length == 0 || password.trim().length > 30) {
+                boo = false;
+                $("#pwdErr").removeClass("validate_msg_medium");
+                $("#pwdErr").addClass("validate_msg_short error_msg");
+                $("#pwdErr").html("* 30长度的字母、数字和下划线")
+            }
+            if (password1.trim().length == 0 || password1.trim().length > 30) {
+                boo = false;
+                $("#pwdErr1").removeClass("validate_msg_medium");
+                $("#pwdErr1").addClass("validate_msg_short error_msg");
+                $("#pwdErr1").html("* 30长度的字母、数字和下划线")
+            }
+            if (password2.trim().length == 0 || password2.trim().length > 30) {
+                boo = false;
+                $("#pwdErr2").removeClass("validate_msg_medium");
+                $("#pwdErr2").addClass("validate_msg_short error_msg");
+                $("#pwdErr2").html("* 30长度的字母、数字和下划线")
+            }
+            if (password1 != password2) {
+                boo = false;
+                $("#pwdErr2").removeClass("validate_msg_medium");
+                $("#pwdErr2").addClass("validate_msg_short error_msg");
+                $("#pwdErr2").html("* 两次输入的密码不一致")
+            }
+            return boo;
         }
     </script>
 </head>
@@ -97,14 +146,14 @@
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 5}">
-                    <li><a href="/service_list" class="service_off"></a></li>
+                    <li><a href="/account/service_list" class="service_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 6}">
-                    <li><a href="/bill_list" class="bill_off"></a></li>
+                    <li><a href="/account/bill_list" class="bill_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
@@ -126,17 +175,20 @@
     <form action="" method="" class="main_form">
         <div class="text_info clearfix"><span>旧密码：</span></div>
         <div class="input_info">
-            <input id="password" type="password" class="width200"/><span class="required">*</span>
+            <input onblur="checkPwd()" id="password" type="password" class="width200" placeholder="30长度的字母、数字和下划线"/>
+            <%--<span class="required">*</span>--%>
             <div id="pwdErr" class="validate_msg_medium"></div>
         </div>
         <div class="text_info clearfix"><span>新密码：</span></div>
         <div class="input_info">
-            <input id="password1" type="password" class="width200"/><span class="required">*</span>
+            <input id="password1" type="password" class="width200" placeholder="30长度的字母、数字和下划线"/>
+            <%--<span class="required">*</span>--%>
             <div id="pwdErr1" class="validate_msg_medium"></div>
         </div>
         <div class="text_info clearfix"><span>重复新密码：</span></div>
         <div class="input_info">
-            <input id="password2" type="password" class="width200"/><span class="required">*</span>
+            <input id="password2" type="password" class="width200" placeholder="30长度的字母、数字和下划线"/>
+            <%--<span class="required">*</span>--%>
             <div id="pwdErr2" class="validate_msg_medium"></div>
         </div>
         <div class="button_info clearfix">

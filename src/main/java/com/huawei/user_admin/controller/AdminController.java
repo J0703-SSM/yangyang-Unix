@@ -7,6 +7,7 @@ import com.huawei.user_admin.domain.Module;
 import com.huawei.user_admin.domain.Role;
 import com.huawei.user_admin.service.AdminService;
 
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,7 +36,7 @@ public class AdminController {
     /**
      * 跳转
      */
-    @RequestMapping("/admin_list")
+    @RequestMapping("/admin_list1")
     public String admin_list(Integer pageNum, Model model) {
         if (pageNum == null) {
             pageNum = 1;
@@ -79,35 +80,25 @@ public class AdminController {
     @RequestMapping("/role_moduleAdd")
     public AjaxResult addRole_module(String name, String modules) {
         AjaxResult ajaxResult = new AjaxResult();
-        Map<String, Object> map = new HashMap<String, Object>();
-        if (name.trim().length() == 0) {
-            map.put("nameErr", "不能为空，且为20长度的字母、数字和汉字的组合");
-            ajaxResult.setErrorCode(1);
-        } else if (modules.trim().length() == 0) {
-            map.put("moduleErr", "至少选择一个权限");
-            ajaxResult.setErrorCode(1);
-        } else {
-            Role role1 = adminService.findRule(name);
-            if (role1 == null) {
-                adminService.addRule(name);
-                Role role = adminService.findRule(name);
-                String[] module_ids = modules.split(",");
-                for (String module_id : module_ids) {
-                    Module module = new Module();
-                    module.setRole_id(role.getRole_id());
-                    module.setModule_id(Integer.parseInt(module_id));
-                    int count = adminService.addRule_module(module);
-                    if (count > 0) {
-                        ajaxResult.setSuccess(true);
-                    } else {
-                        ajaxResult.setSuccess(false);
-                    }
+        Role role1 = adminService.findRule(name);
+        if (role1 == null) {
+            adminService.addRule(name);
+            Role role = adminService.findRule(name);
+            String[] module_ids = modules.split(",");
+            for (String module_id : module_ids) {
+                Module module = new Module();
+                module.setRole_id(role.getRole_id());
+                module.setModule_id(Integer.parseInt(module_id));
+                int count = adminService.addRule_module(module);
+                if (count > 0) {
+                    ajaxResult.setSuccess(true);
+                } else {
+                    ajaxResult.setSuccess(false);
                 }
-            } else {
-                ajaxResult.setSuccess(false);
             }
+        } else {
+            ajaxResult.setSuccess(false);
         }
-        ajaxResult.setMap(map);
         return ajaxResult;
     }
 
@@ -155,14 +146,8 @@ public class AdminController {
     @RequestMapping("/role_update")
     public AjaxResult updateRole(int role_id, String name, String modules) {
         AjaxResult ajaxResult = new AjaxResult();
-        Map<String, Object> map = new HashMap<String, Object>();
-        if (name.trim().length() == 0) {
-            map.put("nameErr", "不能为空，且为20长度的字母、数字和汉字的组合");
-            ajaxResult.setErrorCode(1);
-        } else if (modules.trim().length() == 0) {
-            map.put("moduleErr", "至少选择一个权限");
-            ajaxResult.setErrorCode(1);
-        } else {
+        Role role1 = adminService.findRoleByName(name);
+        if (role1.getRole_id() == role_id) {
             Role role = new Role(role_id, name);
             adminService.updateRole(role);
             String[] module_ids = modules.split(",");
@@ -173,9 +158,12 @@ public class AdminController {
                 module.setModule_id(Integer.parseInt(module_id));
                 adminService.addRule_module(module);
                 ajaxResult.setSuccess(true);
+                ajaxResult.setMessage("保存成功");
             }
+        } else {
+            ajaxResult.setSuccess(false);
+            ajaxResult.setMessage("保存失败,角色名称已存在");
         }
-        ajaxResult.setMap(map);
         return ajaxResult;
     }
 
@@ -303,43 +291,28 @@ public class AdminController {
 
     /**
      * 条件查询
+     *
      * @param module_id 模块id
      * @param role_name 角色名
-     * @param model 驱动
+     * @param model     驱动
      */
-    @RequestMapping("/admin_conditionQuery")
-    public String conditionQuery(int module_id, String role_name, Model model) {
-        model.addAttribute("module_id",module_id);
-        model.addAttribute("role_name",role_name);
-        List<Admin> admins = adminService.findAllAdmin();
-        List<Admin> adminList = new ArrayList<Admin>();
-        PageBean<Admin> pageBean = new PageBean<Admin>();
-        if (module_id == -1 && role_name.trim().length() == 0) {
-            admin_list(null, model);
-        } else if (module_id == -1 && role_name.trim().length() > 0) {
-            for (Admin admin : admins) {
-                for (Role role : admin.getRoles()) {
-                    if (role.getName().contains(role_name)) {
-                        adminList.add(admin);
-                    }
-                }
-            }
-            pageBean.setData(repeat(adminList));
-            model.addAttribute("pageBean", pageBean);
-        } else if (module_id != -1 && role_name.trim().length() == 0) {
-            for (Admin admin : admins) {
-                for (Role role : admin.getRoles()) {
-                    for (Module module : role.getModules()) {
-                        if (module.getModule_id() == module_id) {
-                            adminList.add(admin);
-                        }
-                    }
-                }
-            }
-            pageBean.setData(repeat(adminList));
-            model.addAttribute("pageBean", pageBean);
+    @RequestMapping("/admin_list")
+    public String conditionQuery(Integer pageNum, String module_id, String role_name, Model model) {
+        if (module_id == null) {
+            module_id = "-1";
+        }
+        if (role_name == null) {
+            role_name = "";
+        }
+        model.addAttribute("module_id", module_id);
+        model.addAttribute("role_name", role_name);
+        if (pageNum == null) {
+            pageNum = 1;
+        }
+        if (Integer.parseInt(module_id) == -1 && role_name.trim().length() == 0) {
+            admin_list(pageNum, model);
         } else {
-            pageBean = adminService.findAdminToInfoByCQ(module_id, role_name);
+            PageBean<Admin> pageBean = adminService.findAdminToInfoByCQ(pageNum, pageSize, Integer.parseInt(module_id), role_name);
             model.addAttribute("pageBean", pageBean);
         }
         return "admin/admin_list";
@@ -375,6 +348,7 @@ public class AdminController {
 
     /**
      * 修改登录的个人信息
+     *
      * @param admin 包含个人信息的对象
      * @return 结果集
      */
@@ -386,7 +360,7 @@ public class AdminController {
         if (result.hasErrors()) {
             ajaxResult.setMap(errors);
             ajaxResult.setErrorCode(1);
-        }else {
+        } else {
             int count = adminService.modi_user_info(admin);
             if (count > 0) {
                 ajaxResult.setSuccess(true);
@@ -402,40 +376,41 @@ public class AdminController {
     }
 
 
+    @ResponseBody
+    @RequestMapping("/checkPwd")
+    public AjaxResult checkPwd(String password, HttpServletRequest request) {
+        AjaxResult ajaxResult = new AjaxResult();
+        Admin admin = (Admin) request.getServletContext().getAttribute("admin");
+        if (!admin.getPassword().equals(password)) {
+            ajaxResult.setMessage("* 您输入的旧密码有误 ");
+        }
+        return ajaxResult;
+    }
+
     /**
      * 修改密码
+     *
      * @param admin admin
-     * @param result 校验
      * @return 结果集
      */
     @ResponseBody
     @RequestMapping("/modi_pwd")
-    public AjaxResult modi_pwd(@Validated Admin admin, BindingResult result, HttpServletRequest request) {
+    public AjaxResult modi_pwd(@Validated Admin admin, HttpServletRequest request) {
         Admin adminLogin = (Admin) request.getServletContext().getAttribute("admin");
         admin.setAdmin_id(adminLogin.getAdmin_id());
         AjaxResult ajaxResult = new AjaxResult();
-        Map<String, Object> errors = getErrors(result);
-        if (result.hasErrors()) {
-            ajaxResult.setErrorCode(1);
-            ajaxResult.setMap(errors);
-        }
-        if (!admin.getPassword1().equals(admin.getPassword2())) {
-            ajaxResult.setErrorCode(1);
-            errors.put("password2", "两次新密码必须相同");
-        }
         if (!adminLogin.getPassword().equals(admin.getPassword())) {
             ajaxResult.setMessage("保存失败，旧密码错误！");
             ajaxResult.setSuccess(false);
         } else {
             int count = adminService.modi_pwd(admin);
-            if (count > 0){
+            if (count > 0) {
                 Admin admin2 = adminService.findAdminToInfo(admin.getAdmin_id());
                 request.getServletContext().setAttribute("admin", admin2);
                 ajaxResult.setMessage("保存成功");
                 ajaxResult.setSuccess(true);
             }
         }
-        ajaxResult.setMap(errors);
         return ajaxResult;
     }
 
@@ -453,21 +428,5 @@ public class AdminController {
         return map;
     }
 
-    /**
-     * 去除集合重复数据
-     *
-     * @param admins 重复集合
-     * @return 去除重复后的集合
-     */
-    private List<Admin> repeat(List<Admin> admins) {
 
-        for (int i = 0; i < admins.size(); i++) {
-            for (int j = admins.size() - 1; j > i; j--) {
-                if (admins.get(j).getAdmin_id() == admins.get(i).getAdmin_id()) {
-                    admins.remove(j);
-                }
-            }
-        }
-        return admins;
-    }
 }

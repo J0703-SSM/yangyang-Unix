@@ -34,7 +34,7 @@ public class CostController {
     private int pageSize = 2;
 
     /**
-     * 查询所有自费条目
+     * 查询所有cost条目
      *
      * @param pageNum 当前页码数
      * @param model   驱动

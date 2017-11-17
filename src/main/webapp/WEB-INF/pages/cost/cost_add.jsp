@@ -24,13 +24,13 @@
                     descr: $("#descr").val()
                 },
                 success: function (result) {
-                    if (result.errorCode == 1){
+                    if (result.errorCode == 1) {
                         $("#nameErr").html(result.map["name"]);
                         $("#base_durationErr").html(result.map["base_duration"]);
                         $("#base_costErr").html(result.map["base_cost"]);
                         $("#unit_costErr").html(result.map["unit_cost"]);
                         $("#descrErr").html(result.map["descr"]);
-                    }else {
+                    } else {
                         showResultDiv(result.success);
                         window.setTimeout("showResultDiv(false);", 3000);
                     }
@@ -39,9 +39,9 @@
         }
         function showResultDiv(flag) {
             var divResult = document.getElementById("save_result_info");
-            if (!flag){
+            if (!flag) {
                 divResult.style.display = "block";
-            } else{
+            } else {
                 divResult.style.display = "none";
                 location.href = "/cost/cost_list"
             }
@@ -81,7 +81,7 @@
             }
         }
         function rollback() {
-            location.href="/cost/cost_list";
+            location.href = "/cost/cost_list";
         }
     </script>
 </head>
@@ -138,14 +138,14 @@
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 5}">
-                    <li><a href="/service_list" class="service_off"></a></li>
+                    <li><a href="/account/service_list" class="service_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 6}">
-                    <li><a href="/bill_list" class="bill_off"></a></li>
+                    <li><a href="/account/bill_list" class="bill_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
@@ -167,8 +167,8 @@
     <form id="add_cost" action="/addCost" method="post" class="main_form">
         <div class="text_info clearfix"><span>资费名称：</span></div>
         <div class="input_info">
-            <input type="text" id="name" class="width300" value=""/>
-            <span class="required">*</span>
+            <input type="text" id="name" class="width300" placeholder="100长度的字母、数字、汉字和下划线的组合"/>
+            <%--<span class="required">*</span>--%>
             <div id="nameErr" class="validate_msg_short"></div>
         </div>
         <div class="text_info clearfix"><span>资费类型：</span></div>
@@ -182,29 +182,29 @@
         </div>
         <div class="text_info clearfix"><span>基本时长：</span></div>
         <div class="input_info">
-            <input type="text" id="base_duration" value="" class="width100"/>
+            <input type="text" id="base_duration" class="width100" placeholder="1-600之间的整数"/>
             <span class="info">小时</span>
-            <span class="required">*</span>
-            <div id="base_durationErr" class="validate_msg_long"></div>
+            <%--<span class="required">*</span>--%>
+            <div id="base_durationErr" class="validate_msg_short"></div>
         </div>
         <div class="text_info clearfix"><span>基本费用：</span></div>
         <div class="input_info">
-            <input type="text" id="base_cost" value="" class="width100"/>
+            <input type="text" id="base_cost" class="width100" placeholder="0-99999.99之间的数值"/>
             <span class="info">元</span>
-            <span class="required">*</span>
-            <div id="base_costErr" class="validate_msg_long error_msg"></div>
+            <%--<span class="required">*</span>--%>
+            <div id="base_costErr" class="validate_msg_short"></div>
         </div>
         <div class="text_info clearfix"><span>单位费用：</span></div>
         <div class="input_info">
-            <input type="text" id="unit_cost" value="" class="width100"/>
+            <input type="text" id="unit_cost" class="width100" placeholder="0-99999.99之间的数值"/>
             <span class="info">元/小时</span>
-            <span class="required">*</span>
-            <div id="unit_costErr" class="validate_msg_long error_msg"></div>
+            <%--<span class="required">*</span>--%>
+            <div id="unit_costErr" class="validate_msg_short"></div>
         </div>
         <div class="text_info clearfix"><span>资费说明：</span></div>
         <div class="input_info_high">
-            <textarea id="descr" class="width300 height70"></textarea>
-            <div id="descrErr" class="validate_msg_short error_msg"></div>
+            <textarea id="descr" class="width300 height70" placeholder="100长度的字母、数字、汉字和下划线的组合"></textarea>
+            <div id="descrErr" class="validate_msg_short"></div>
         </div>
         <div class="button_info clearfix">
             <input type="button" value="保存" class="btn_save" onclick="showResult();"/>

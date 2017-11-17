@@ -1,6 +1,8 @@
 package com.huawei.account.controller;
 
 import com.huawei.account.domain.Account;
+import com.huawei.account.domain.Bill;
+import com.huawei.account.domain.Services;
 import com.huawei.account.service.AccountService;
 import com.huawei.base.utils.AjaxResult;
 import com.huawei.base.utils.PageBean;
@@ -24,6 +26,12 @@ public class AccountController {
     private int pageSize = 2;
 
 
+    /**
+     * 查询所有account
+     * @param pageNum 当前页数
+     * @param model 驱动
+     * @return account集合
+     */
     @RequestMapping("/account_list")
     public String account_list(Integer pageNum, Model model) {
         if (pageNum == null) {
@@ -34,11 +42,20 @@ public class AccountController {
         return "account/account_list";
     }
 
+    /**
+     * 跳转
+     * @return
+     */
     @RequestMapping("/account_add")
     public String account_add() {
         return "account/account_add";
     }
 
+    /**
+     * 开通暂停account
+     * @param account account对象
+     * @return 结果集
+     */
     @ResponseBody
     @RequestMapping("/accountSetState")
     public AjaxResult accountSetState(Account account) {
@@ -64,6 +81,11 @@ public class AccountController {
         return ajaxResult;
     }
 
+    /**
+     * 删除account
+     * @param account 要删除的account
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/accountDelete")
     public AjaxResult accountDelete(Account account) {
@@ -79,6 +101,11 @@ public class AccountController {
         return ajaxResult;
     }
 
+    /**
+     * 添加account
+     * @param account
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/accountAdd")
     public AjaxResult accountAdd(Account account) {
@@ -96,5 +123,45 @@ public class AccountController {
             ajaxResult.setSuccess(false);
         }
         return ajaxResult;
+    }
+
+    /**
+     * 查询service集合
+     * @param pageNum 当前页数
+     * @param model 驱动
+     */
+    @RequestMapping("/service_list")
+    public String service_list(Integer pageNum, Model model) {
+        if (pageNum == null) {
+            pageNum = 1;
+        }
+        PageBean<Services> pageBean = accountService.findAllService(pageNum, pageSize);
+        model.addAttribute("pageBean",pageBean);
+        return "service/service_list";
+    }
+
+    /**
+     * 跳转
+     * @return
+     */
+    @RequestMapping("/service_add")
+    public String service_add(){
+        return "service/service_add";
+    }
+
+    /**
+     * 查询bill集合
+     * @param pageNum 当前页数
+     * @param model 驱动
+     * @return
+     */
+    @RequestMapping("/bill_list")
+    public String bill_list(Integer pageNum,Model model){
+        if (pageNum == null){
+            pageNum =1;
+        }
+        PageBean<Bill> pageBean = accountService.findAllBill(pageNum,pageSize);
+        model.addAttribute("pageBean",pageBean);
+        return "bill/bill_list";
     }
 }

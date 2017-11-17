@@ -1,6 +1,8 @@
 package com.huawei.account.service.impl;
 
 import com.huawei.account.domain.Account;
+import com.huawei.account.domain.Bill;
+import com.huawei.account.domain.Services;
 import com.huawei.account.mapper.AccountMapper;
 import com.huawei.account.service.AccountService;
 import com.huawei.base.utils.PageBean;
@@ -40,6 +42,22 @@ public class AccountServiceImpl implements AccountService {
 
     public int addAccount(Account account) {
         return accountMapper.addAccount(account);
+    }
+
+    public PageBean<Services> findAllService(Integer pageNum, int pageSize) {
+        int totalCount = accountMapper.findServiceCount();
+        PageBean<Services> pageBean = new PageBean(pageNum, pageSize, totalCount);
+        List<Services> services = accountMapper.findAllService(pageBean);
+        pageBean.setData(services);
+        return pageBean;
+    }
+
+    public PageBean<Bill> findAllBill(Integer pageNum, int pageSize) {
+        int totalCount = accountMapper.findBillCount();
+        PageBean<Bill> pageBean = new PageBean(pageNum, pageSize, totalCount);
+        List<Bill> bills = accountMapper.findAllBill(pageBean);
+        pageBean.setData(bills);
+        return pageBean;
     }
 
 }

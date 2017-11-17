@@ -41,6 +41,20 @@
 </div>
 <script>
 
+    $("#admin_code").blur(function () {
+        if ($("#admin_code").val().trim().length > 0){
+            $.ajax({
+                type: "post",
+                url: "/checkadmin",
+                data: {
+                    admin_code: $("#admin_code").val()
+                },
+                success: function (result) {
+                    $("#nameErr").text(result.message)
+                }
+            })
+        }
+    });
 
     $("#verifyCodeImage").click(function () {
         $("#verifyCodeImage").attr('src', '/getVerifyCode?timestamp=' + genTimestamp());

@@ -68,4 +68,8 @@ public interface AdminMapper {
     int modi_user_info(Admin admin);
 
     int modi_pwd(Admin admin);
+
+    Admin checkAdmin(String admin_code);
+
+    Role findRoleByName(String name);
 }

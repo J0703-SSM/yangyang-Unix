@@ -114,14 +114,14 @@
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 5}">
-                    <li><a href="/service_list" class="service_off"></a></li>
+                    <li><a href="/account/service_list" class="service_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 6}">
-                    <li><a href="/bill_list" class="bill_off"></a></li>
+                    <li><a href="/account/bill_list" class="bill_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
@@ -145,39 +145,39 @@
     <form action="" method="" class="main_form">
         <div class="text_info clearfix"><span>姓名：</span></div>
         <div class="input_info">
-            <input id="name" type="text"/>
-            <span class="required">*</span>
+            <input id="name" type="text" placeholder="20长度的字母、数字和下划线"/>
+            <%--<span class="required">*</span>--%>
             <div id="nameErr" class="validate_msg_long"></div>
         </div>
         <div class="text_info clearfix"><span>管理员账号：</span></div>
         <div class="input_info">
-            <input id="admin_code" type="text"/>
-            <span class="required">*</span>
+            <input id="admin_code" type="text" placeholder="30长度的字母、数字和下划线"/>
+            <%--<span class="required">*</span>--%>
             <div id="codeErr" class="validate_msg_long"></div>
         </div>
         <div class="text_info clearfix"><span>密码：</span></div>
         <div class="input_info">
-            <input id="password" type="password"/>
-            <span class="required">*</span>
-            <div id="passErr" class="validate_msg_long error_msg"></div>
+            <input id="password" type="password" placeholder="30长度的字母、数字和下划线"/>
+            <%--<span class="required">*</span>--%>
+            <div id="passErr" class="validate_msg_long"></div>
         </div>
         <div class="text_info clearfix"><span>重复密码：</span></div>
         <div class="input_info">
-            <input id="password1" type="password"/>
-            <span class="required">*</span>
-            <div id="repassErr" class="validate_msg_long error_msg"></div>
+            <input id="password1" type="password" placeholder="30长度的字母、数字和下划线"/>
+            <%--<span class="required">*</span>--%>
+            <div id="repassErr" class="validate_msg_long"></div>
         </div>
         <div class="text_info clearfix"><span>电话：</span></div>
         <div class="input_info">
             <input id="telephone" type="text" class="width200"/>
-            <span class="required">*</span>
-            <div id="telErr" class="validate_msg_medium error_msg"></div>
+            <%--<span class="required">*</span>--%>
+            <div id="telErr" class="validate_msg_medium"></div>
         </div>
         <div class="text_info clearfix"><span>Email：</span></div>
         <div class="input_info">
             <input id="email" type="text" class="width200"/>
-            <span class="required">*</span>
-            <div id="emailErr" class="validate_msg_medium error_msg"></div>
+            <%--<span class="required">*</span>--%>
+            <div id="emailErr" class="validate_msg_medium"></div>
         </div>
         <div class="text_info clearfix"><span>角色：</span></div>
         <div class="input_info_high">
@@ -188,8 +188,8 @@
                     </c:forEach>
                 </ul>
             </div>
-            <span class="required">*</span>
-            <div id="moduleErr" class="validate_msg_tiny error_msg"></div>
+            <%--<span class="required">*</span>--%>
+            <div id="moduleErr" class="validate_msg_tiny"></div>
         </div>
         <div class="button_info clearfix">
             <input type="button" value="保存" class="btn_save" onclick="showResult();"/>

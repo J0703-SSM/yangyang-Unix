@@ -128,14 +128,14 @@
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 5}">
-                    <li><a href="/service_list" class="service_off"></a></li>
+                    <li><a href="/account/service_list" class="service_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 6}">
-                    <li><a href="/bill_list" class="bill_off"></a></li>
+                    <li><a href="/account/bill_list" class="bill_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
@@ -156,7 +156,7 @@
 
     <!--查询-->
     <div class="search_add">
-        <form action="/admin/admin_conditionQuery" method="post">
+        <form action="/admin/admin_list" method="post">
             <div>
                 模块：
                 <select name="module_id" id="selModules" class="select_search">
@@ -187,7 +187,8 @@
                     </option>
                 </select>
             </div>
-            <div>角色：<input name="role_name" type="text" value="${role_name}" class="text_search width200"/></div>
+            <div>角色：<input name="role_name" type="text" value="${role_name}" class="text_search width200"
+                           placeholder="请输入角色名称"/></div>
             <div><input type="submit" value="搜索" class="btn_search"/></div>
         </form>
         <input type="button" value="密码重置" class="btn_add" onclick="resetPwd();"/>
@@ -271,40 +272,42 @@
 
     <!--分页-->
     <div id="pages">
-        <c:if test="${pageBean.pageNum>1}">
-            <a href="/admin/admin_list?pageNum=${1}">首页</a>
-            <a href="/admin/admin_list?pageNum=${pageBean.pageNum-1}">上一页</a>
-        </c:if>
-        <c:if test="${pageBean.totalPage<=5}">
-            <c:forEach var="i" begin="1" end="${pageBean.totalPage}">
-                <a href="/admin/admin_list?pageNum=${i}"
-                   <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
-            </c:forEach>
-        </c:if>
-        <c:if test="${pageBean.totalPage>5}">
-            <c:if test="${pageBean.pageNum <= 3}">
-                <c:forEach var="i" begin="1" end="5">
-                    <a href="/admin/admin_list?pageNum=${i}"
+
+            <c:if test="${pageBean.pageNum>1}">
+                <a href="/admin/admin_list?pageNum=${1}&&module_id=${module_id}&&role_name=${role_name}">首页</a>
+                <a href="/admin/admin_list?pageNum=${pageBean.pageNum-1}&module_id=${module_id}&role_name=${role_name}">上一页</a>
+            </c:if>
+            <c:if test="${pageBean.totalPage<=5}">
+                <c:forEach var="i" begin="1" end="${pageBean.totalPage}">
+                    <a href="/admin/admin_list?pageNum=${i}&module_id=${module_id}&role_name=${role_name}"
                        <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
                 </c:forEach>
             </c:if>
-            <c:if test="${pageBean.pageNum > 3 and pageBean.pageNum <= pageBean.totalPage -3}">
-                <c:forEach var="i" begin="${pageBean.pageNum-2}" end="${pageBean.pageNum+2}">
-                    <a href="/admin/admin_list?pageNum=${i}"
-                       <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
-                </c:forEach>
+            <c:if test="${pageBean.totalPage>5}">
+                <c:if test="${pageBean.pageNum <= 3}">
+                    <c:forEach var="i" begin="1" end="5">
+                        <a href="/admin/admin_list?pageNum=${i}&module_id=${module_id}&role_name=${role_name}"
+                           <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${pageBean.pageNum > 3 and pageBean.pageNum <= pageBean.totalPage -3}">
+                    <c:forEach var="i" begin="${pageBean.pageNum-2}" end="${pageBean.pageNum+2}">
+                        <a href="/admin/admin_list?pageNum=${i}&module_id=${module_id}&role_name=${role_name}"
+                           <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${pageBean.pageNum > 3 and pageBean.pageNum > pageBean.totalPage-3}">
+                    <c:forEach var="i" begin="${pageBean.totalPage-4}" end="${pageBean.totalPage}">
+                        <a href="/admin/admin_list?pageNum=${i}&module_id=${module_id}&role_name=${role_name}"
+                           <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
+                    </c:forEach>
+                </c:if>
             </c:if>
-            <c:if test="${pageBean.pageNum > 3 and pageBean.pageNum > pageBean.totalPage-3}">
-                <c:forEach var="i" begin="${pageBean.totalPage-4}" end="${pageBean.totalPage}">
-                    <a href="/admin/admin_list?pageNum=${i}"
-                       <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
-                </c:forEach>
+            <c:if test="${pageBean.pageNum<pageBean.totalPage}">
+                <a href="/admin/admin_list?pageNum=${pageBean.pageNum+1}&module_id=${module_id}&role_name=${role_name}">下一页</a>
+                <a href="/admin/admin_list?pageNum=${pageBean.totalPage}&module_id=${module_id}&role_name=${role_name}">尾页</a>
             </c:if>
-        </c:if>
-        <c:if test="${pageBean.pageNum<pageBean.totalPage}">
-            <a href="/admin/admin_list?pageNum=${pageBean.pageNum+1}">下一页</a>
-            <a href="/admin/admin_list?pageNum=${pageBean.totalPage}">尾页</a>
-        </c:if>
+
     </div>
 </div>
 <!--主要区域结束-->

@@ -117,14 +117,14 @@
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 5}">
-                    <li><a href="/service_list" class="service_off"></a></li>
+                    <li><a href="/account/service_list" class="service_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 6}">
-                    <li><a href="/bill_list" class="bill_off"></a></li>
+                    <li><a href="/account/bill_list" class="bill_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
@@ -207,17 +207,18 @@
                     </tr>
                 </c:forEach>
             </table>
-            <p>业务说明：<br/>
-                1、创建资费时，状态为暂停，记载创建时间；<br/>
-                2、暂停状态下，可修改，可删除；<br/>
-                3、开通后，记载开通时间，且开通后不能修改、不能再停用、也不能删除；<br/>
-                4、业务账号修改资费时，在下月底统一触发，修改其关联的资费ID（此触发动作由程序处理）
-            </p>
+            <%--<p>业务说明：<br/>--%>
+                <%--1、创建资费时，状态为暂停，记载创建时间；<br/>--%>
+                <%--2、暂停状态下，可修改，可删除；<br/>--%>
+                <%--3、开通后，记载开通时间，且开通后不能修改、不能再停用、也不能删除；<br/>--%>
+                <%--4、业务账号修改资费时，在下月底统一触发，修改其关联的资费ID（此触发动作由程序处理）--%>
+            <%--</p>--%>
         </div>
         <!--分页-->
         <div id="pages">
             <c:if test="${empty column}">
                 <c:if test="${pageBean.pageNum>1}">
+                    <a href="/cost/cost_list?pageNum=${1}">首页</a>
                     <a href="/cost/cost_list?pageNum=${pageBean.pageNum-1}">上一页</a>
                 </c:if>
                 <c:if test="${pageBean.totalPage<=5}">
@@ -248,11 +249,13 @@
                 </c:if>
                 <c:if test="${pageBean.pageNum<pageBean.totalPage}">
                     <a href="/cost/cost_list?pageNum=${pageBean.pageNum+1}">下一页</a>
+                    <a href="/cost/cost_list?pageNum=${pageBean.totalPage}">尾页</a>
                 </c:if>
             </c:if>
 
             <c:if test="${not empty column}">
             <c:if test="${pageBean.pageNum>1}">
+                <a href="/cost/cost_order?pageNum=${1}&sort=${sort}&column=${column}">首页</a>
                 <a href="/cost/cost_order?pageNum=${pageBean.pageNum-1}&sort=${sort}&column=${column}">上一页</a>
             </c:if>
             <c:if test="${pageBean.totalPage<=5}">
@@ -283,6 +286,7 @@
             </c:if>
             <c:if test="${pageBean.pageNum<pageBean.totalPage}">
                 <a href="/cost/cost_order?pageNum=${pageBean.pageNum+1}&sort=${sort}&column=${column}">下一页</a>
+                <a href="/cost/cost_order?pageNum=${pageBean.totalPage}&sort=${sort}&column=${column}">尾页</a>
             </c:if>
             </c:if>
         </div>

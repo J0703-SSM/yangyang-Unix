@@ -52,11 +52,15 @@ public interface AdminService {
     List<Admin> findAllAdmin();
 
 
-    PageBean<Admin> findAdminToInfoByCQ(int module_id, String role_name);
+    PageBean<Admin> findAdminToInfoByCQ(Integer pageNum,int pageSize,int module_id, String role_name);
 
     int resetPwd(Admin admin);
 
     int modi_user_info(Admin admin);
 
     int modi_pwd(Admin admin);
+
+    Admin checkAdmin(String admin_code);
+
+    Role findRoleByName(String name);
 }

@@ -1,5 +1,6 @@
 package com.huawei.base.controller;
 
+import com.huawei.base.utils.AjaxResult;
 import com.huawei.base.utils.VerifyCode;
 import com.huawei.user_admin.domain.Admin;
 import com.huawei.user_admin.service.AdminService;
@@ -9,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +31,7 @@ public class MainController {
      * 跳转登录页面
      */
     @RequestMapping("/")
-    public String login(HttpServletRequest request){
+    public String login(HttpServletRequest request) {
         request.getServletContext().removeAttribute("admin");
         return "login";
     }
@@ -67,16 +69,29 @@ public class MainController {
         }
         return "login";
     }
+
     /**
      * 获取验证码图片以及值
+     *
      * @throws IOException
      */
     @RequestMapping("/getVerifyCode")
     public void getVerifyCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
         VerifyCode code = new VerifyCode();
         BufferedImage image = code.getImage();
-        request.getSession().setAttribute("code",code.getText());
+        request.getSession().setAttribute("code", code.getText());
         VerifyCode.output(image, response.getOutputStream());
+    }
+
+    @ResponseBody
+    @RequestMapping("/checkadmin")
+    public AjaxResult checkadmin(String admin_code) {
+        AjaxResult ajaxResult = new AjaxResult();
+        Admin admin = adminService.checkAdmin(admin_code);
+        if (admin == null) {
+            ajaxResult.setMessage("该账户不存在");
+        }
+        return ajaxResult;
     }
 
     @RequestMapping("/index")
@@ -84,16 +99,6 @@ public class MainController {
         return "index";
     }
 
-
-    @RequestMapping("/service_list")
-    public String service_list() {
-        return "service/service_list";
-    }
-
-    @RequestMapping("/bill_list")
-    public String bill_list() {
-        return "bill/bill_list";
-    }
 
     @RequestMapping("/report_list")
     public String report_list() {
@@ -111,7 +116,7 @@ public class MainController {
     }
 
     @RequestMapping("/error")
-    public String error(){
+    public String error() {
         return "error";
     }
 
