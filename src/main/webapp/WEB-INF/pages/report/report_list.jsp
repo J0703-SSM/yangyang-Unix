@@ -35,17 +35,6 @@
         <!--导航区域开始-->
         <div id="navi">
             <ul id="menu">
-
-                <%--<li><a href="/index" class="index_off"></a></li>--%>
-                <%--<li><a href="/admin/role_list" class="role_off"></a></li>--%>
-                <%--<li><a href="/admin/admin_list" class="admin_off"></a></li>--%>
-                <%--<li><a href="/cost/cost_list" class="fee_off"></a></li>--%>
-                <%--<li><a href="/account_list" class="account_off"></a></li>--%>
-                <%--<li><a href="/service_list" class="service_off"></a></li>--%>
-                <%--<li><a href="/bill_list" class="bill_off"></a></li>--%>
-                <%--<li><a href="/report_list" class="report_off"></a></li>--%>
-                <%--<li><a href="/user_info" class="information_off"></a></li>--%>
-                <%--<li><a href="/user_modi_pwd" class="password_on"></a></li>--%>
                 <li><a href="/index" class="index_off"></a></li>
                 <c:forEach items="${applicationScope.admin.roles}" var="role">
                     <c:forEach items="${role.modules}" var="module">
@@ -92,7 +81,7 @@
                 <c:forEach items="${applicationScope.admin.roles}" var="role">
                     <c:forEach items="${role.modules}" var="module">
                         <c:if test="${module.module_id eq 7}">
-                            <li><a href="/report_list" class="report_on"></a></li>
+                            <li><a href="/account/report_list" class="report_on"></a></li>
                         </c:if>
                     </c:forEach>
                 </c:forEach>
@@ -122,43 +111,21 @@
                             <th>电话</th>
                             <th class="width150">月份</th>
                             <th class="width150">累积时长</th>
-                        </tr>                      
-                        <tr>
-                            <td>1</td>
-                            <td>mary</td>
-                            <td>贾强</td>
-                            <td>220222020202020202</td>
-                            <td>13987654345</td>
-                            <td>2013年1月</td>
-                            <td>16小时32分</td>
                         </tr>
+                        <c:forEach items="${pageBean.data}" var="bill_code">
+
+
                         <tr>
-                            <td>1</td>
-                            <td>mary</td>
-                            <td>贾强</td>
-                            <td>220222020202020202</td>
-                            <td>13987654345</td>
-                            <td>2013年2月</td>
-                            <td>16小时32分</td>
+                            <td>${bill_code.bill_id}</td>
+                            <td>${bill_code.account.login_name}</td>
+                            <td>${bill_code.account.real_name}</td>
+                            <td>${bill_code.account.idcard_no}</td>
+                            <td>${bill_code.account.telephone}</td>
+                            <td>${bill_code.bill.bill_month}</td>
+                            <td>${bill_code.bill_month}</td>
                         </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>mary</td>
-                            <td>贾强</td>
-                            <td>220222020202020202</td>
-                            <td>13987654345</td>
-                            <td>2013年3月</td>
-                            <td>16小时32分</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>tony</td>
-                            <td>真真</td>
-                            <td>220222020202020202</td>
-                            <td>13987654345</td>
-                            <td>2013年1月</td>
-                            <td>16小时32分</td>
-                        </tr>
+                        </c:forEach>
+
                     </table>
                     <table id="datalist1" style="display:none;">
                         <tr>                            
@@ -219,15 +186,40 @@
                 </div>
                 <!--分页-->
                 <div id="pages">
-                    <a href="#">首页</a>
-        	        <a href="#">上一页</a>
-                    <a href="#" class="current_page">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <a href="#">4</a>
-                    <a href="#">5</a>
-                    <a href="#">下一页</a>
-                    <a href="#">末页</a>
+                    <c:if test="${pageBean.pageNum>1}">
+                        <a href="/account/report_list?pageNum=${1}">首页</a>
+                        <a href="/account/report_list?pageNum=${pageBean.pageNum-1}">上一页</a>
+                    </c:if>
+                    <c:if test="${pageBean.totalPage<=5}">
+                        <c:forEach var="i" begin="1" end="${pageBean.totalPage}">
+                            <a href="/account/report_list?pageNum=${i}"
+                               <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
+                        </c:forEach>
+                    </c:if>
+                    <c:if test="${pageBean.totalPage>5}">
+                        <c:if test="${pageBean.pageNum <= 3}">
+                            <c:forEach var="i" begin="1" end="5">
+                                <a href="/account/report_list?pageNum=${i}"
+                                   <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
+                            </c:forEach>
+                        </c:if>
+                        <c:if test="${pageBean.pageNum > 3 and pageBean.pageNum <= pageBean.totalPage -3}">
+                            <c:forEach var="i" begin="${pageBean.pageNum-2}" end="${pageBean.pageNum+2}">
+                                <a href="/account/report_list?pageNum=${i}"
+                                   <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
+                            </c:forEach>
+                        </c:if>
+                        <c:if test="${pageBean.pageNum > 3 and pageBean.pageNum > pageBean.totalPage-3}">
+                            <c:forEach var="i" begin="${pageBean.totalPage-4}" end="${pageBean.totalPage}">
+                                <a href="/account/report_list?pageNum=${i}"
+                                   <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
+                            </c:forEach>
+                        </c:if>
+                    </c:if>
+                    <c:if test="${pageBean.pageNum<pageBean.totalPage}">
+                        <a href="/account/report_list?pageNum=${pageBean.pageNum+1}">下一页</a>
+                        <a href="/account/report_list?pageNum=${pageBean.totalPage}">尾页</a>
+                    </c:if>
                 </div>
 
             </div>

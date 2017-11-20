@@ -27,8 +27,9 @@
                         modules: cbValue
                     },
                     success: function (result) {
-                        var _html =result.message + $("#save_result_info").html();
-                        $("#save_result_info").html(_html);
+                        var _html = $("#operate_result_info").html();
+                        var __html = result.message + _html
+                        $("#operate_result_info").html(__html);
                         showResultDiv(true);
                         window.setTimeout("showResultDiv(false);", 3000);
                     }
@@ -48,7 +49,7 @@
             return boo;
         }
         function showResultDiv(flag) {
-            var divResult = document.getElementById("save_result_info");
+            var divResult = document.getElementById("operate_result_info");
             if (flag)
                 divResult.style.display = "block";
             else
@@ -58,7 +59,7 @@
             location.href = "/admin/role_list";
         }
         function flush() {
-            document.getElementById("save_result_info").style.display = "none";
+            document.getElementById("operate_result_info").style.display = "none";
             location.href = "/admin/role_list?"
         }
     </script>
@@ -73,17 +74,6 @@
 <!--导航区域开始-->
 <div id="navi">
     <ul id="menu">
-
-        <%--<li><a href="/index" class="index_off"></a></li>--%>
-        <%--<li><a href="/admin/role_list" class="role_off"></a></li>--%>
-        <%--<li><a href="/admin/admin_list" class="admin_off"></a></li>--%>
-        <%--<li><a href="/cost/cost_list" class="fee_off"></a></li>--%>
-        <%--<li><a href="/account_list" class="account_off"></a></li>--%>
-        <%--<li><a href="/service_list" class="service_off"></a></li>--%>
-        <%--<li><a href="/bill_list" class="bill_off"></a></li>--%>
-        <%--<li><a href="/report_list" class="report_off"></a></li>--%>
-        <%--<li><a href="/user_info" class="information_off"></a></li>--%>
-        <%--<li><a href="/user_modi_pwd" class="password_on"></a></li>--%>
         <li><a href="/index" class="index_off"></a></li>
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
@@ -130,7 +120,7 @@
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 7}">
-                    <li><a href="/report_list" class="report_off"></a></li>
+                    <li><a href="/account/report_list" class="report_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
@@ -157,55 +147,15 @@
         <div class="input_info_high">
             <div class="input_info_scroll">
                 <ul>
-                    <li><input type="checkbox"
-                            <c:forEach items="${role.modules}" var="module">
-                                <c:if test="${module.module_id eq 1}">
-                                    checked
-                                </c:if>
-                            </c:forEach> value="1"/>管理员管理
-                    </li>
-                    <li><input type="checkbox"
-                            <c:forEach items="${role.modules}" var="module">
-                                <c:if test="${module.module_id eq 2}">
-                                    checked
-                                </c:if>
-                            </c:forEach> value="2"/>角色管理
-                    </li>
-                    <li><input type="checkbox"
-                            <c:forEach items="${role.modules}" var="module">
-                                <c:if test="${module.module_id eq 3}">
-                                    checked
-                                </c:if>
-                            </c:forEach> value="3"/>资费管理
-                    </li>
-                    <li><input type="checkbox"
-                            <c:forEach items="${role.modules}" var="module">
-                                <c:if test="${module.module_id eq 4}">
-                                    checked
-                                </c:if>
-                            </c:forEach> value="4"/>账务账号
-                    </li>
-                    <li><input type="checkbox"
-                            <c:forEach items="${role.modules}" var="module">
-                                <c:if test="${module.module_id eq 5}">
-                                    checked
-                                </c:if>
-                            </c:forEach> value="5"/>业务账号
-                    </li>
-                    <li><input type="checkbox"
-                            <c:forEach items="${role.modules}" var="module">
-                                <c:if test="${module.module_id eq 6}">
-                                    checked
-                                </c:if>
-                            </c:forEach> value="6"/>账单
-                    </li>
-                    <li><input type="checkbox"
-                            <c:forEach items="${role.modules}" var="module">
-                                <c:if test="${module.module_id eq 7}">
-                                    checked
-                                </c:if>
-                            </c:forEach> value="7"/>报表
-                    </li>
+                    <c:forEach items="${modules}" var="module">
+                        <li><input type="checkbox"
+                                <c:forEach items="${role.modules}" var="module1">
+                                    <c:if test="${module1.module_id eq module.module_id}">
+                                        checked
+                                    </c:if>
+                                </c:forEach> value="${module.module_id}"/>${module.name}
+                        </li>
+                    </c:forEach>
                 </ul>
             </div>
             <%--<span class="required">*</span>--%>

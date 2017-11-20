@@ -63,4 +63,8 @@ public interface AdminService {
     Admin checkAdmin(String admin_code);
 
     Role findRoleByName(String name);
+
+    List<Module> findAllModule();
+
+    int findAdmin_role(int role_id);
 }

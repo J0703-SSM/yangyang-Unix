@@ -50,7 +50,9 @@ public class AdminController {
      * 跳转
      */
     @RequestMapping("/role_add")
-    public String role_add() {
+    public String role_add(Model model) {
+        List<Module> modules = adminService.findAllModule();
+        model.addAttribute("modules",modules);
         return "role/role_add";
     }
 
@@ -111,13 +113,19 @@ public class AdminController {
     @RequestMapping("/role_delete")
     public AjaxResult deleteRole(int role_id) {
         AjaxResult ajaxResult = new AjaxResult();
-        int count = adminService.deleteRole(role_id);
-        if (count > 0) {
-            ajaxResult.setSuccess(true);
-            ajaxResult.setMessage("删除成功");
-        } else {
+        int total = adminService.findAdmin_role(role_id);
+        if (total == 0){
+            int count = adminService.deleteRole(role_id);
+            if (count > 0) {
+                ajaxResult.setSuccess(true);
+                ajaxResult.setMessage("删除成功");
+            } else {
+                ajaxResult.setSuccess(false);
+                ajaxResult.setMessage("删除失败");
+            }
+        }else {
             ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("删除失败");
+            ajaxResult.setMessage("删除错误！该角色被使用，不能删除");
         }
         return ajaxResult;
     }
@@ -131,7 +139,9 @@ public class AdminController {
     @RequestMapping("/role_modi")
     public String role_modi(int role_id, Model model) {
         Role role = adminService.findRoleById(role_id);
+        List<Module> modules = adminService.findAllModule();
         model.addAttribute("role", role);
+        model.addAttribute("modules",modules);
         return "role/role_modi";
     }
 
@@ -315,6 +325,8 @@ public class AdminController {
             PageBean<Admin> pageBean = adminService.findAdminToInfoByCQ(pageNum, pageSize, Integer.parseInt(module_id), role_name);
             model.addAttribute("pageBean", pageBean);
         }
+        List<Module> modules = adminService.findAllModule();
+        model.addAttribute("modules",modules);
         return "admin/admin_list";
     }
 

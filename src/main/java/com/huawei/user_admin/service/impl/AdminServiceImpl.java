@@ -141,4 +141,12 @@ public class AdminServiceImpl implements AdminService {
         return adminMapper.findRoleByName(name);
     }
 
+    public List<Module> findAllModule() {
+        return adminMapper.findAllModule();
+    }
+
+    public int findAdmin_role(int role_id) {
+        return adminMapper.findAdmin_role(role_id);
+    }
+
 }

@@ -63,24 +63,24 @@
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
     </bean>
 
-    <!--&lt;!&ndash; 3.配置事物 &ndash;&gt;-->
-    <!--<bean id="transactionManager"-->
-          <!--class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
-        <!--<property name="dataSource" ref="dataSource"/>-->
-    <!--</bean>-->
+    <!-- 3.配置事物 -->
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 
-    <!--&lt;!&ndash; 4.配置事物属性 &ndash;&gt;-->
-    <!--<tx:advice id="txAdvice" transaction-manager="transactionManager">-->
-        <!--<tx:attributes>-->
-            <!--<tx:method name="*"/>-->
-        <!--</tx:attributes>-->
-    <!--</tx:advice>-->
+    <!-- 4.配置事物属性 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
 
-    <!--&lt;!&ndash; 5.配置切面 &ndash;&gt;-->
-    <!--<aop:config>-->
-        <!--<aop:pointcut id="pointCut" expression="execution(* com.huawei.cost.mapper.*.*(..))"/>-->
-        <!--<aop:advisor advice-ref="txAdvice" pointcut-ref="pointCut"/>-->
-    <!--</aop:config>-->
+    <!-- 5.配置切面 -->
+    <aop:config>
+        <aop:pointcut id="pointCut" expression="execution(* com.huawei.*.mapper.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="pointCut"/>
+    </aop:config>
 
     <!-- 6.配置mybatis中的mapper接口自动扫描 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
@@ -111,5 +111,6 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
+    <!-- 全局异常捕获, 跳转到错误页面 -->
     <bean class="com.huawei.base.exception.CustomExceptionResolver"/>
 </beans>

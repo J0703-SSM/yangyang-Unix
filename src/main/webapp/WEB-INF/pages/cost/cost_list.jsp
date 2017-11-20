@@ -25,37 +25,40 @@
         //启用
         function startFee(cost_id) {
             var r = window.confirm("确定要启用此资费吗？资费启用后将不能修改和删除。");
-            $.ajax({
-                type: "get",
-                url: "/cost/cost_start",
-                data: {
-                    cost_id:cost_id
-                },
-                success: function (map) {
-                    var _html = $("#operate_result_info").html();
-                    _html += map["msg"];
-                    $("#operate_result_info").html(_html);
-                }
-
-            });
-            document.getElementById("operate_result_info").style.display = "block";
+            if(r){
+                $.ajax({
+                    type: "get",
+                    url: "/cost/cost_start",
+                    data: {
+                        cost_id:cost_id
+                    },
+                    success: function (map) {
+                        var _html = $("#operate_result_info").html();
+                        _html += map["msg"];
+                        $("#operate_result_info").html(_html);
+                        document.getElementById("operate_result_info").style.display = "block";
+                    }
+                });
+            }
         }
         //删除
         function deleteFee(cost_id) {
             var r = window.confirm("确定要删除此资费吗？");
-            $.ajax({
-                type: "get",
-                url: "/cost/cost_delete",
-                data: {
-                    cost_id: cost_id
-                },
-                success: function (map) {
-                    var _html = $("#operate_result_info").html();
-                    _html += map["msg"];
-                    $("#operate_result_info").html(_html);
-                }
-            });
-            document.getElementById("operate_result_info").style.display = "block";
+            if(r){
+                $.ajax({
+                    type: "get",
+                    url: "/cost/cost_delete",
+                    data: {
+                        cost_id: cost_id
+                    },
+                    success: function (map) {
+                        var _html = $("#operate_result_info").html();
+                        _html += map["msg"];
+                        $("#operate_result_info").html(_html);
+                        document.getElementById("operate_result_info").style.display = "block";
+                    }
+                });
+            }
         }
         //刷新
         function flush(pageNum) {
@@ -74,17 +77,6 @@
 <!--导航区域开始-->
 <div id="navi">
     <ul id="menu">
-
-        <%--<li><a href="/index" class="index_off"></a></li>--%>
-        <%--<li><a href="/admin/role_list" class="role_off"></a></li>--%>
-        <%--<li><a href="/admin/admin_list" class="admin_off"></a></li>--%>
-        <%--<li><a href="/cost/cost_list" class="fee_off"></a></li>--%>
-        <%--<li><a href="/account_list" class="account_off"></a></li>--%>
-        <%--<li><a href="/service_list" class="service_off"></a></li>--%>
-        <%--<li><a href="/bill_list" class="bill_off"></a></li>--%>
-        <%--<li><a href="/report_list" class="report_off"></a></li>--%>
-        <%--<li><a href="/user_info" class="information_off"></a></li>--%>
-        <%--<li><a href="/user_modi_pwd" class="password_on"></a></li>--%>
         <li><a href="/index" class="index_off"></a></li>
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
@@ -131,7 +123,7 @@
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 7}">
-                    <li><a href="/report_list" class="report_off"></a></li>
+                    <li><a href="/account/report_list" class="report_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>

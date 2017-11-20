@@ -16,6 +16,7 @@ public class PageBean<T> {
     private String column;
     private List<T> data;
     private int id;
+    private T t;
 
     @Override
     public String toString() {
@@ -136,5 +137,13 @@ public class PageBean<T> {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public T getT() {
+        return t;
+    }
+
+    public void setT(T t) {
+        this.t = t;
     }
 }

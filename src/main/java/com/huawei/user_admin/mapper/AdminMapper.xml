@@ -345,4 +345,15 @@
             resultType="com.huawei.user_admin.domain.Role">
         SELECT * FROM role_info WHERE name=#{value}
     </select>
+
+    <select id="findAllModule"
+            resultType="com.huawei.user_admin.domain.Module">
+        SELECT * FROM module_info
+    </select>
+
+    <select id="findAdmin_role"
+            parameterType="int"
+            resultType="int">
+        SELECT COUNT(*) FROM admin_role WHERE role_id=#{value}
+    </select>
 </mapper>

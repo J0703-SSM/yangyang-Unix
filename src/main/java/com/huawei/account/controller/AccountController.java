@@ -2,6 +2,7 @@ package com.huawei.account.controller;
 
 import com.huawei.account.domain.Account;
 import com.huawei.account.domain.Bill;
+import com.huawei.account.domain.Bill_Code;
 import com.huawei.account.domain.Services;
 import com.huawei.account.service.AccountService;
 import com.huawei.base.utils.AjaxResult;
@@ -28,22 +29,31 @@ public class AccountController {
 
     /**
      * 查询所有account
+     *
      * @param pageNum 当前页数
-     * @param model 驱动
+     * @param model   驱动
      * @return account集合
      */
     @RequestMapping("/account_list")
-    public String account_list(Integer pageNum, Model model) {
+    public String account_list(Account account, Integer pageNum, Model model) {
+        if (account.getStatus() == null) {
+            account.setStatus("-1");
+        }
+        model.addAttribute("idcard_no", account.getIdcard_no());
+        model.addAttribute("real_name", account.getReal_name());
+        model.addAttribute("login_name", account.getLast_login_time());
+        model.addAttribute("status", account.getStatus());
         if (pageNum == null) {
             pageNum = 1;
         }
-        PageBean<Account> pageBean = accountService.findAllAccount(pageNum, pageSize);
+        PageBean<Account> pageBean = accountService.findAllAccount(pageNum, pageSize, account);
         model.addAttribute("pageBean", pageBean);
         return "account/account_list";
     }
 
     /**
      * 跳转
+     *
      * @return
      */
     @RequestMapping("/account_add")
@@ -53,6 +63,7 @@ public class AccountController {
 
     /**
      * 开通暂停account
+     *
      * @param account account对象
      * @return 结果集
      */
@@ -83,6 +94,7 @@ public class AccountController {
 
     /**
      * 删除account
+     *
      * @param account 要删除的account
      * @return
      */
@@ -103,6 +115,7 @@ public class AccountController {
 
     /**
      * 添加account
+     *
      * @param account
      * @return
      */
@@ -127,8 +140,9 @@ public class AccountController {
 
     /**
      * 查询service集合
+     *
      * @param pageNum 当前页数
-     * @param model 驱动
+     * @param model   驱动
      */
     @RequestMapping("/service_list")
     public String service_list(Integer pageNum, Model model) {
@@ -136,32 +150,51 @@ public class AccountController {
             pageNum = 1;
         }
         PageBean<Services> pageBean = accountService.findAllService(pageNum, pageSize);
-        model.addAttribute("pageBean",pageBean);
+        model.addAttribute("pageBean", pageBean);
         return "service/service_list";
     }
 
     /**
      * 跳转
+     *
      * @return
      */
     @RequestMapping("/service_add")
-    public String service_add(){
+    public String service_add() {
         return "service/service_add";
     }
 
     /**
      * 查询bill集合
+     *
      * @param pageNum 当前页数
-     * @param model 驱动
+     * @param model   驱动
      * @return
      */
     @RequestMapping("/bill_list")
-    public String bill_list(Integer pageNum,Model model){
-        if (pageNum == null){
-            pageNum =1;
+    public String bill_list(Integer pageNum, Model model) {
+        if (pageNum == null) {
+            pageNum = 1;
         }
-        PageBean<Bill> pageBean = accountService.findAllBill(pageNum,pageSize);
-        model.addAttribute("pageBean",pageBean);
+        PageBean<Bill> pageBean = accountService.findAllBill(pageNum, pageSize);
+        model.addAttribute("pageBean", pageBean);
         return "bill/bill_list";
+    }
+
+    @RequestMapping("/account_modi")
+    public String account_modi(int account_id, Model model) {
+        Account account = accountService.findAccountById(account_id);
+        model.addAttribute("account",account);
+        return "account/account_modi";
+    }
+
+    @RequestMapping("/report_list")
+    public String report_list(Integer pageNum, Model model){
+        if (pageNum == null){
+            pageNum = 1;
+        }
+        PageBean<Bill_Code> pageBean = accountService.findAllBill_code(pageNum,pageSize);
+        model.addAttribute("pageBean",pageBean);
+        return "report/report_list";
     }
 }

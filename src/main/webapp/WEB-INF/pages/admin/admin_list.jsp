@@ -46,20 +46,20 @@
         //删除
         function deleteAdmin(admin_id) {
             var r = window.confirm("确定要删除此管理员吗？");
-            $.ajax({
-                type: "get",
-                url: "/admin/admin_delete",
-                data: {
-                    admin_id: admin_id
-                },
-                success: function (result) {
-                    $("#result_info").html(result.message);
-                    document.getElementById("operate_result_info").style.display = "block";
-                }
+            if (r){
+                $.ajax({
+                    type: "get",
+                    url: "/admin/admin_delete",
+                    data: {
+                        admin_id: admin_id
+                    },
+                    success: function (result) {
+                        $("#result_info").html(result.message);
+                        document.getElementById("operate_result_info").style.display = "block";
+                    }
 
-            });
-
-
+                });
+            }
         }
         //全选
         function selectAdmins(inputObj) {
@@ -85,64 +85,29 @@
 <!--导航区域开始-->
 <div id="navi">
     <ul id="menu">
-
-        <%--<li><a href="/index" class="index_off"></a></li>--%>
-        <%--<li><a href="/admin/role_list" class="role_off"></a></li>--%>
-        <%--<li><a href="/admin/admin_list" class="admin_off"></a></li>--%>
-        <%--<li><a href="/cost/cost_list" class="fee_off"></a></li>--%>
-        <%--<li><a href="/account_list" class="account_off"></a></li>--%>
-        <%--<li><a href="/service_list" class="service_off"></a></li>--%>
-        <%--<li><a href="/bill_list" class="bill_off"></a></li>--%>
-        <%--<li><a href="/report_list" class="report_off"></a></li>--%>
-        <%--<li><a href="/user_info" class="information_off"></a></li>--%>
-        <%--<li><a href="/user_modi_pwd" class="password_on"></a></li>--%>
         <li><a href="/index" class="index_off"></a></li>
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 1}">
                     <li><a href="/admin/role_list" class="role_off"></a></li>
                 </c:if>
-            </c:forEach>
-        </c:forEach>
-        <c:forEach items="${applicationScope.admin.roles}" var="role">
-            <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 2}">
                     <li><a href="/admin/admin_list" class="admin_on"></a></li>
                 </c:if>
-            </c:forEach>
-        </c:forEach>
-        <c:forEach items="${applicationScope.admin.roles}" var="role">
-            <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 3}">
                     <li><a href="/cost/cost_list" class="fee_off"></a></li>
                 </c:if>
-            </c:forEach>
-        </c:forEach>
-        <c:forEach items="${applicationScope.admin.roles}" var="role">
-            <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 4}">
                     <li><a href="/account/account_list" class="account_off"></a></li>
                 </c:if>
-            </c:forEach>
-        </c:forEach>
-        <c:forEach items="${applicationScope.admin.roles}" var="role">
-            <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 5}">
                     <li><a href="/account/service_list" class="service_off"></a></li>
                 </c:if>
-            </c:forEach>
-        </c:forEach>
-        <c:forEach items="${applicationScope.admin.roles}" var="role">
-            <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 6}">
                     <li><a href="/account/bill_list" class="bill_off"></a></li>
                 </c:if>
-            </c:forEach>
-        </c:forEach>
-        <c:forEach items="${applicationScope.admin.roles}" var="role">
-            <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 7}">
-                    <li><a href="/report_list" class="report_off"></a></li>
+                    <li><a href="/account/report_list" class="report_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>
@@ -160,31 +125,12 @@
             <div>
                 模块：
                 <select name="module_id" id="selModules" class="select_search">
-                    <c:if test="${module_id eq -1}">selected</c:if>
-                    <option
-                            <c:if test="${module_id eq -1}">selected</c:if> value="-1">全部
-                    </option>
-                    <option
-                            <c:if test="${module_id eq 1}">selected</c:if> value="1">角色管理
-                    </option>
-                    <option
-                            <c:if test="${module_id eq 3}">selected</c:if> value="2">管理员管理
-                    </option>
-                    <option
-                            <c:if test="${module_id eq 3}">selected</c:if> value="3">资费管理
-                    </option>
-                    <option
-                            <c:if test="${module_id eq 4}">selected</c:if> value="4">账务账号
-                    </option>
-                    <option
-                            <c:if test="${module_id eq 5}">selected</c:if> value="5">业务账号
-                    </option>
-                    <option
-                            <c:if test="${module_id eq 6}">selected</c:if> value="6">账单管理
-                    </option>
-                    <option
-                            <c:if test="${module_id eq 7}">selected</c:if> value="7">报表
-                    </option>
+                    <option value="-1">全部</option>
+                    <c:forEach items="${modules}" var="module">
+                        <option
+                                <c:if test="${module_id eq module.module_id}">selected</c:if> value="${module.module_id}">${module.name}
+                        </option>
+                    </c:forEach>
                 </select>
             </div>
             <div>角色：<input name="role_name" type="text" value="${role_name}" class="text_search width200"

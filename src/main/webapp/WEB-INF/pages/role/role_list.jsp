@@ -12,20 +12,23 @@
     <script language="javascript" type="text/javascript">
         function deleteRole(role_id) {
             var r = window.confirm("确定要删除此角色吗？");
-            $.ajax({
-                type:"get",
-                url:"/admin/role_delete",
-                data:{
-                    role_id:role_id
-                },
-                success:function (result) {
-                    var _html = $("#operate_result_info").html();
-                    _html += result.message
-                    $("#operate_result_info").html(_html);
-                }
-            })
+            if (r){
+                $.ajax({
+                    type:"get",
+                    url:"/admin/role_delete",
+                    data:{
+                        role_id:role_id
+                    },
+                    success:function (result) {
+                        var _html = $("#operate_result_info").html();
+                        _html += result.message
+                        $("#operate_result_info").html(_html);
+                        document.getElementById("operate_result_info").style.display = "block";
+                    }
+                })
+            }
 
-            document.getElementById("operate_result_info").style.display = "block";
+
         }
         function flush(pageNum) {
             document.getElementById("operate_result_info").style.display = "none";
@@ -43,17 +46,6 @@
 <!--导航区域开始-->
 <div id="navi">
     <ul id="menu">
-
-        <%--<li><a href="/index" class="index_off"></a></li>--%>
-        <%--<li><a href="/admin/role_list" class="role_off"></a></li>--%>
-        <%--<li><a href="/admin/admin_list" class="admin_off"></a></li>--%>
-        <%--<li><a href="/cost/cost_list" class="fee_off"></a></li>--%>
-        <%--<li><a href="/account_list" class="account_off"></a></li>--%>
-        <%--<li><a href="/service_list" class="service_off"></a></li>--%>
-        <%--<li><a href="/bill_list" class="bill_off"></a></li>--%>
-        <%--<li><a href="/report_list" class="report_off"></a></li>--%>
-        <%--<li><a href="/user_info" class="information_off"></a></li>--%>
-        <%--<li><a href="/user_modi_pwd" class="password_on"></a></li>--%>
         <li><a href="/index" class="index_off"></a></li>
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
@@ -100,7 +92,7 @@
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 7}">
-                    <li><a href="/report_list" class="report_off"></a></li>
+                    <li><a href="/account/report_list" class="report_off"></a></li>
                 </c:if>
             </c:forEach>
         </c:forEach>

@@ -99,12 +99,6 @@ public class MainController {
         return "index";
     }
 
-
-    @RequestMapping("/report_list")
-    public String report_list() {
-        return "report/report_list";
-    }
-
     @RequestMapping("/user_info")
     public String user_info() {
         return "user/user_info";
