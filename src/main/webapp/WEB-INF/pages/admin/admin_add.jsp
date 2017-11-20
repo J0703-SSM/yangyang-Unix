@@ -74,6 +74,7 @@
         <li><a href="/index" class="index_off"></a></li>
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
+
                 <c:if test="${module.module_id eq 1}">
                     <li><a href="/admin/role_list" class="role_off"></a></li>
                 </c:if>
