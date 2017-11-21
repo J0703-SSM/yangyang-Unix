@@ -23,9 +23,21 @@
                 },
                 success: function (result) {
                     if (result.errorCode == 1) {
-                        $("#nameErr").html(result.map["name"]);
-                        $("#telErr").html(result.map["telephone"]);
-                        $("#emailErr").html(result.map["email"]);
+                        if (result.map["name"] != null){
+                            $("#nameErr").css('display','block');
+                        }else {
+                            $("#nameErr").css('display','none');
+                        }
+                        if (result.map["telephone"] != null){
+                            $("#telErr").css('display','block');
+                        }else {
+                            $("#telErr").css('display','none');
+                        }
+                        if (result.map["email"] != null){
+                            $("#emailErr").css('display','block');
+                        }else {
+                            $("#emailErr").css('display','none');
+                        }
                     } else {
                         $("#save_result_info").html(result.message);
                         showResultDiv(result.success);
@@ -128,17 +140,17 @@
             <input id="admin_id" type="hidden" value="${applicationScope.admin.admin_id}">
             <input id="name" type="text" value="${applicationScope.admin.name}"/>
             <%--<span class="required">*</span>--%>
-            <div id="nameErr" class="validate_msg_long"></div>
+            <div id="nameErr" style="display: none" class="validate_msg_short error_msg">20长度以内的汉字、字母的组合</div>
         </div>
         <div class="text_info clearfix"><span>电话：</span></div>
         <div class="input_info">
             <input id="telephone" type="text" class="width200" value="${applicationScope.admin.telephone}"/>
-            <div id="telErr" class="validate_msg_medium"></div>
+            <div id="telErr" style="display: none" class="validate_msg_short error_msg">电话号码格式不正确</div>
         </div>
         <div class="text_info clearfix"><span>Email：</span></div>
         <div class="input_info">
             <input id="email" type="text" class="width200" value="${applicationScope.admin.email}"/>
-            <div id="emailErr" class="validate_msg_medium"></div>
+            <div id="emailErr" style="display: none" class="validate_msg_short error_msg">50长度以内，符合 email 格式</div>
         </div>
         <div class="text_info clearfix"><span>创建时间：</span></div>
         <div class="input_info"><input type="text" readonly="readonly" class="readonly"

@@ -68,27 +68,31 @@
             var boo = true;
             if (password.trim().length == 0 || password.trim().length > 30) {
                 boo = false;
-                $("#pwdErr").removeClass("validate_msg_medium");
-                $("#pwdErr").addClass("validate_msg_short error_msg");
-                $("#pwdErr").html("* 30长度的字母、数字和下划线")
+                $("#pwdErr").html("30长度的字母、数字和下划线")
+                $("#pwdErr").css('display','block');
+            }else {
+                $("#pwdErr").css('display','none');
             }
             if (password1.trim().length == 0 || password1.trim().length > 30) {
                 boo = false;
-                $("#pwdErr1").removeClass("validate_msg_medium");
-                $("#pwdErr1").addClass("validate_msg_short error_msg");
-                $("#pwdErr1").html("* 30长度的字母、数字和下划线")
+                $("#pwdErr1").html("30长度的字母、数字和下划线")
+                $("#pwdErr1").css('display','block');
+            }else {
+                $("#pwdErr1").css('display','none');
             }
             if (password2.trim().length == 0 || password2.trim().length > 30) {
                 boo = false;
-                $("#pwdErr2").removeClass("validate_msg_medium");
-                $("#pwdErr2").addClass("validate_msg_short error_msg");
-                $("#pwdErr2").html("* 30长度的字母、数字和下划线")
+                $("#pwdErr2").html("30长度的字母、数字和下划线")
+                $("#pwdErr2").css('display','block');
+            }else {
+                $("#pwdErr2").css('display','none');
             }
             if (password1 != password2) {
                 boo = false;
-                $("#pwdErr2").removeClass("validate_msg_medium");
-                $("#pwdErr2").addClass("validate_msg_short error_msg");
                 $("#pwdErr2").html("* 两次输入的密码不一致")
+                $("#pwdErr2").css('display','block');
+            }else {
+                $("#pwdErr2").css('display','none');
             }
             return boo;
         }
@@ -163,21 +167,21 @@
     <form action="" method="" class="main_form">
         <div class="text_info clearfix"><span>旧密码：</span></div>
         <div class="input_info">
-            <input onblur="checkPwd()" id="password" type="password" class="width200" placeholder="30长度的字母、数字和下划线"/>
+            <input onblur="checkPwd()" id="password" type="password" class="width200"/>
             <%--<span class="required">*</span>--%>
-            <div id="pwdErr" class="validate_msg_medium"></div>
+            <div id="pwdErr" style="display: none" class="validate_msg_short error_msg"></div>
         </div>
         <div class="text_info clearfix"><span>新密码：</span></div>
         <div class="input_info">
-            <input id="password1" type="password" class="width200" placeholder="30长度的字母、数字和下划线"/>
+            <input id="password1" type="password" class="width200"/>
             <%--<span class="required">*</span>--%>
-            <div id="pwdErr1" class="validate_msg_medium"></div>
+            <div id="pwdErr1" style="display: none" class="validate_msg_short error_msg"></div>
         </div>
         <div class="text_info clearfix"><span>重复新密码：</span></div>
         <div class="input_info">
-            <input id="password2" type="password" class="width200" placeholder="30长度的字母、数字和下划线"/>
+            <input id="password2" type="password" class="width200"/>
             <%--<span class="required">*</span>--%>
-            <div id="pwdErr2" class="validate_msg_medium"></div>
+            <div id="pwdErr2" style="display: none" class="validate_msg_short error_msg"></div>
         </div>
         <div class="button_info clearfix">
             <input type="button" value="保存" class="btn_save" onclick="showResult();"/>

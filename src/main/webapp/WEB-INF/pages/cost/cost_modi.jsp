@@ -27,11 +27,31 @@
                 },
                 success: function (result) {
                     if (result.errorCode == 1) {
-                        $("#nameErr").html(result.map["name"]);
-                        $("#base_durationErr").html(result.map["base_duration"]);
-                        $("#base_costErr").html(result.map["base_cost"]);
-                        $("#unit_costErr").html(result.map["unit_cost"]);
-                        $("#descrErr").html(result.map["descr"]);
+                        if (result.map["name"] != null){
+                            $("#nameErr").css('display','block');
+                        }else {
+                            $("#nameErr").css('display','none');
+                        }
+                        if (result.map["base_duration"] != null){
+                            $("#base_durationErr").css('display','block');
+                        }else {
+                            $("#base_durationErr").css('display','none');
+                        }
+                        if (result.map["base_cost"] != null){
+                            $("#base_costErr").css('display','block');
+                        }else {
+                            $("#base_costErr").css('display','none');
+                        }
+                        if (result.map["unit_cost"] != null){
+                            $("#unit_costErr").css('display','block');
+                        }else {
+                            $("#unit_costErr").css('display','none');
+                        }
+                        if (result.map["descr"] != null){
+                            $("#descrErr").css('display','block');
+                        }else {
+                            $("#descrErr").css('display','none');
+                        }
                     } else {
                         showResultDiv(true);
                         $("#save_result_info").html(result.message);
@@ -165,7 +185,7 @@
         <div class="input_info">
             <input id="name" type="text" class="width300" value="${cost.name}"/>
             <%--<span class="required">*</span>--%>
-            <div id="nameErr" class="validate_msg_short"></div>
+            <div id="nameErr" style="display: none" class="validate_msg_short error_msg">50长度的字母、数字、汉字和下划线的组合</div>
         </div>
         <div class="text_info clearfix"><span>资费类型：</span></div>
         <div class="input_info fee_type">
@@ -185,26 +205,26 @@
             <input id="base_duration" type="text" value="${cost.base_duration}" class="width100"/>
             <span class="info">小时</span>
             <%--<span class="required">*</span>--%>
-            <div id="base_durationErr" class="validate_msg_long"></div>
+            <div id="base_durationErr" style="display: none" class="validate_msg_short error_msg">1-600之间的整数</div>
         </div>
         <div class="text_info clearfix"><span>基本费用：</span></div>
         <div class="input_info">
             <input id="base_cost" type="text" value="${cost.base_cost}" class="width100"/>
             <span class="info">元</span>
             <%--<span class="required">*</span>--%>
-            <div id="base_costErr" class="validate_msg_long"></div>
+            <div id="base_costErr" style="display: none" class="validate_msg_short error_msg">0-99999.99之间的数值</div>
         </div>
         <div class="text_info clearfix"><span>单位费用：</span></div>
         <div class="input_info">
             <input id="unit_cost" type="text" value="${cost.unit_cost}" class="width100"/>
             <span class="info">元/小时</span>
             <%--<span class="required">*</span>--%>
-            <div id="unit_costErr" class="validate_msg_long"></div>
+            <div id="unit_costErr" style="display: none" class="validate_msg_long error_msg">0-99999.99之间的数值</div>
         </div>
         <div class="text_info clearfix"><span>资费说明：</span></div>
         <div class="input_info_high">
             <textarea id="descr" class="width300 height70">${cost.descr}</textarea>
-            <div id="descrErr" class="validate_msg_short"></div>
+            <div id="descrErr" style="display: none" class="validate_msg_short error_msg">100长度的字母、数字、汉字和下划线的组合</div>
         </div>
         <div class="button_info clearfix">
             <input type="button" value="保存" class="btn_save" onclick="showResult();"/>

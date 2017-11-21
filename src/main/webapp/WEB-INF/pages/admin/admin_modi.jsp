@@ -29,10 +29,26 @@
                 },
                 success: function (result) {
                     if (result.errorCode == 1) {
-                        $("#nameErr").html(result.map["name"]);
-                        $("#telErr").html(result.map["telephone"]);
-                        $("#emailErr").html(result.map["email"]);
-                        $("#moduleErr").html(result.map["cbValue"]);
+                        if (result.map["name"] != null){
+                            $("#nameErr").css('display','block');
+                        }else {
+                            $("#nameErr").css('display','none');
+                        }
+                        if (result.map["telephone"] != null){
+                            $("#telErr").css('display','block');
+                        }else {
+                            $("#telErr").css('display','none');
+                        }
+                        if (result.map["email"] != null){
+                            $("#emailErr").css('display','block');
+                        }else {
+                            $("#emailErr").css('display','none');
+                        }
+                        if (result.map["cbValue"] != null){
+                            $("#moduleErr").css('display','block');
+                        }else {
+                            $("#moduleErr").css('display','none');
+                        }
                     } else {
                         showResultDiv(true);
                         $("#save_result_info").html(result.message);
@@ -126,8 +142,8 @@
         <div class="input_info">
             <input type="hidden" id="admin_id" value="${admin.admin_id}">
             <input id="name" type="text" value="${admin.name}"/>
-            <span class="required">*</span>
-            <div id="nameErr" class="validate_msg_long error_msg"></div>
+            <%--<span class="required">*</span>--%>
+            <div id="nameErr" style="display: none" class="validate_msg_long error_msg">20长度以内的汉字、字母、数字的组合</div>
         </div>
         <div class="text_info clearfix"><span>管理员账号：</span></div>
         <div class="input_info"><input id="admin_code" type="text" readonly="readonly" class="readonly"
@@ -136,14 +152,14 @@
         <div class="text_info clearfix"><span>电话：</span></div>
         <div class="input_info">
             <input id="telephone" type="text" value="${admin.telephone}"/>
-            <span class="required">*</span>
-            <div id="telErr" class="validate_msg_long error_msg"></div>
+            <%--<span class="required">*</span>--%>
+            <div id="telErr" style="display: none" class="validate_msg_medium error_msg">正确的电话号码格式：手机或固话</div>
         </div>
         <div class="text_info clearfix"><span>Email：</span></div>
         <div class="input_info">
             <input id="email" type="text" class="width200" value="${admin.email}"/>
-            <span class="required">*</span>
-            <div id="emailErr" class="validate_msg_medium error_msg"></div>
+            <%--<span class="required">*</span>--%>
+            <div id="emailErr" style="display: none" class="validate_msg_medium error_msg">50长度以内，正确的 email 格式</div>
         </div>
         <div class="text_info clearfix"><span>角色：</span></div>
         <div class="input_info_high">
@@ -160,8 +176,8 @@
                     </c:forEach>
                 </ul>
             </div>
-            <span class="required">*</span>
-            <div id="moduleErr" class="validate_msg_tiny error_msg"></div>
+            <%--<span class="required">*</span>--%>
+            <div id="moduleErr" style="display: none" class="validate_msg_tiny error_msg">至少选择一个</div>
         </div>
         <div class="button_info clearfix">
             <input type="button" value="保存" class="btn_save" onclick="showResult();"/>

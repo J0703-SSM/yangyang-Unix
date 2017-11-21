@@ -41,12 +41,16 @@
         function check(_name, cbValue) {
             var boo = true;
             if (_name.trim().length == 0) {
-                $("#nameErr").html("* 不能为空，且为20长度的字母、数字和汉字的组合");
+                $("#nameErr").css('display','block');
                 boo = false;
+            }else {
+                $("#nameErr").css('display','none');
             }
             if (cbValue.trim().length == 0) {
-                $("#moduleErr").html("* 请至少选择一个权限");
+                $("#moduleErr").css('display','block');
                 boo = false;
+            }else {
+                $("#moduleErr").css('display','none');
             }
             return boo;
         }
@@ -144,7 +148,7 @@
             <input id="role_id" type="hidden" value="${role.role_id}">
             <input id="name" type="text" class="width200" value="${role.name}"/>
             <%--<span class="required">*</span>--%>
-            <div id="nameErr" class="validate_msg_tiny"></div>
+            <div id="nameErr" style="display: none" class="validate_msg_medium error_msg">不能为空，且为20长度的字母、数字和汉字的组合</div>
         </div>
         <div class="text_info clearfix"><span>设置权限：</span></div>
         <div class="input_info_high">
@@ -162,7 +166,7 @@
                 </ul>
             </div>
             <%--<span class="required">*</span>--%>
-            <div class="validate_msg_tiny" id="moduleErr"></div>
+            <div id="moduleErr" style="display: none" class="validate_msg_tiny error_msg">至少选择一个权限</div>
         </div>
         <div class="button_info clearfix">
             <input type="button" value="保存" class="btn_save" onclick="showResult();"/>

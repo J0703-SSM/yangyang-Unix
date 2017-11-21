@@ -30,15 +30,48 @@
                 },
                 success: function (result) {
                     if (result.errorCode == 1) {
-                        $("#nameErr").html(result.map["name"]);
-                        $("#codeErr").html(result.map["admin_code"]);
-                        $("#codeErr").html(result.map["admin_codeErr"]);
-                        $("#passErr").html(result.map["password"]);
-                        $("#repassErr").html(result.map["password1"]);
-                        $("#repassErr").html(result.map["passErr"]);
-                        $("#telErr").html(result.map["telephone"]);
-                        $("#emailErr").html(result.map["email"]);
-                        $("#moduleErr").html(result.map["cbValue"]);
+                        if (result.map["name"] != null){
+                            $("#nameErr").css('display','block');
+                        }else {
+                            $("#nameErr").css('display','none');
+                        }
+                        if (result.map["admin_code"] != null){
+                            $("#codeErr").css('display','block');
+                        }else {
+                            $("#codeErr").css('display','none');
+                        }
+                        if (result.map["admin_codeErr"] != null){
+                            $("#codeErr").css('display','block');
+                            $("#codeErr").html(result.map["admin_codeErr"])
+                        }else {
+                            $("#codeErr").css('display','none');
+                            $("#codeErr").html("30长度以内的字母、数字和下划线的组合")
+                        }
+                        if (result.map["password"] != null){
+                            $("#passErr").css('display','block');
+                        }else {
+                            $("#passErr").css('display','none');
+                        }
+                        if (result.map["passErr"] != null){
+                            $("#repassErr").css('display','block');
+                        }else {
+                            $("#repassErr").css('display','none');
+                        }
+                        if (result.map["telephone"] != null){
+                            $("#telErr").css('display','block');
+                        }else {
+                            $("#telErr").css('display','none');
+                        }
+                        if (result.map["email"] != null){
+                            $("#emailErr").css('display','block');
+                        }else {
+                            $("#emailErr").css('display','none');
+                        }
+                        if (result.map["cbValue"] != null){
+                            $("#moduleErr").css('display','block');
+                        }else {
+                            $("#moduleErr").css('display','none');
+                        }
                     } else {
                         showResultDiv(result.success);
                         window.setTimeout('location.href="/admin/admin_list"', 2000);
@@ -132,39 +165,39 @@
     <form action="" method="" class="main_form">
         <div class="text_info clearfix"><span>姓名：</span></div>
         <div class="input_info">
-            <input id="name" type="text" placeholder="20长度的字母、数字和下划线"/>
+            <input id="name" type="text"/>
             <%--<span class="required">*</span>--%>
-            <div id="nameErr" class="validate_msg_long"></div>
+            <div id="nameErr" style="display: none" class="validate_msg_long error_msg">20长度以内的汉字、字母、数字的组合</div>
         </div>
         <div class="text_info clearfix"><span>管理员账号：</span></div>
         <div class="input_info">
-            <input id="admin_code" type="text" placeholder="30长度的字母、数字和下划线"/>
+            <input id="admin_code" type="text"/>
             <%--<span class="required">*</span>--%>
-            <div id="codeErr" class="validate_msg_long"></div>
+            <div id="codeErr" style="display: none" class="validate_msg_long error_msg">30长度以内的字母、数字和下划线的组合</div>
         </div>
         <div class="text_info clearfix"><span>密码：</span></div>
         <div class="input_info">
-            <input id="password" type="password" placeholder="30长度的字母、数字和下划线"/>
+            <input id="password" type="password"/>
             <%--<span class="required">*</span>--%>
-            <div id="passErr" class="validate_msg_long"></div>
+            <div id="passErr" style="display: none" class="validate_msg_long error_msg">30长度以内的字母、数字和下划线的组合</div>
         </div>
         <div class="text_info clearfix"><span>重复密码：</span></div>
         <div class="input_info">
-            <input id="password1" type="password" placeholder="30长度的字母、数字和下划线"/>
+            <input id="password1" type="password"/>
             <%--<span class="required">*</span>--%>
-            <div id="repassErr" class="validate_msg_long"></div>
+            <div id="repassErr" style="display: none" class="validate_msg_long error_msg">两次密码必须相同</div>
         </div>
         <div class="text_info clearfix"><span>电话：</span></div>
         <div class="input_info">
             <input id="telephone" type="text" class="width200"/>
             <%--<span class="required">*</span>--%>
-            <div id="telErr" class="validate_msg_medium"></div>
+            <div id="telErr" style="display: none" class="validate_msg_medium error_msg">正确的电话号码格式：手机或固话</div>
         </div>
         <div class="text_info clearfix"><span>Email：</span></div>
         <div class="input_info">
             <input id="email" type="text" class="width200"/>
             <%--<span class="required">*</span>--%>
-            <div id="emailErr" class="validate_msg_medium"></div>
+            <div id="emailErr" style="display: none" class="validate_msg_medium error_msg">50长度以内，正确的 email 格式</div>
         </div>
         <div class="text_info clearfix"><span>角色：</span></div>
         <div class="input_info_high">
@@ -176,7 +209,7 @@
                 </ul>
             </div>
             <%--<span class="required">*</span>--%>
-            <div id="moduleErr" class="validate_msg_tiny"></div>
+            <div id="moduleErr" style="display: none" class="validate_msg_tiny error_msg">至少选择一个</div>
         </div>
         <div class="button_info clearfix">
             <input type="button" value="保存" class="btn_save" onclick="showResult();"/>

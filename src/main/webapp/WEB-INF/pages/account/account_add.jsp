@@ -200,7 +200,7 @@
         <!--必填项-->
         <div class="text_info clearfix"><span>姓名：</span></div>
         <div class="input_info">
-            <input id="real_name" type="text" placeholder="20长度以内的汉字、字母和数字的组合"/>
+            <input id="real_name" type="text"/>
             <%--<span class="required">*</span>--%>
             <div class="validate_msg_long"></div>
         </div>
@@ -212,19 +212,19 @@
         </div>
         <div class="text_info clearfix"><span>登录账号：</span></div>
         <div class="input_info">
-            <input id="login_name" type="text" placeholder="30长度以内的字母、数字和下划线的组合"/>
+            <input id="login_name" type="text"/>
             <%--<span class="required">*</span>--%>
             <div class="validate_msg_long"></div>
         </div>
         <div class="text_info clearfix"><span>密码：</span></div>
         <div class="input_info">
-            <input id="login_passwd" type="password" placeholder="30长度以内的字母、数字和下划线的组合"/>
+            <input id="login_passwd" type="password"/>
             <%--<span class="required">*</span>--%>
             <div class="validate_msg_long"></div>
         </div>
         <div class="text_info clearfix"><span>重复密码：</span></div>
         <div class="input_info">
-            <input id="login_passwd1" type="password" placeholder="30长度以内的字母、数字和下划线的组合"/>
+            <input id="login_passwd1" type="password"/>
             <%--<span class="required">*</span>--%>
             <div class="validate_msg_long"></div>
         </div>
@@ -272,7 +272,7 @@
             </div>
             <div class="text_info clearfix"><span>通信地址：</span></div>
             <div class="input_info">
-                <input id="mailaddress" type="text" class="width350" placeholder="50长度以内"/>
+                <input id="mailaddress" type="text" class="width350"/>
                 <div class="validate_msg_tiny"></div>
             </div>
             <div class="text_info clearfix"><span>邮编：</span></div>
