@@ -2,6 +2,7 @@ package com.huawei.account.domain;
 
 /**
  * Created by dllo on 17/11/17.
+ *
  */
 public class Bill {
     private int bill_id;
