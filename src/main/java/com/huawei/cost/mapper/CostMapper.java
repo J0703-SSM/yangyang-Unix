@@ -20,7 +20,6 @@ public interface CostMapper {
 
     int updateCost(Cost cost);
 
-
     int findCount();
 
     List<Cost> findAll(PageBean<Cost> pageBean);

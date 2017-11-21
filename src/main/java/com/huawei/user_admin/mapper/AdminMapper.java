@@ -12,7 +12,6 @@ import java.util.List;
  * Created by dllo on 17/11/13.
  */
 public interface AdminMapper {
-    List<Admin> findAll();
 
     Admin findByAdmin(Admin admin);
 
@@ -38,7 +37,6 @@ public interface AdminMapper {
 
     void deleteRole_module(int role_id);
 
-
     int findAdminCount();
 
     List<Role> findAllRole();
@@ -56,8 +54,6 @@ public interface AdminMapper {
     Admin findAdminById(int admin_id);
 
     void updateAdmin(Admin admin);
-
-    List<Admin> findAllAdmin();
 
     int findCountByCQ(PageBean<Admin> pageBean);
 

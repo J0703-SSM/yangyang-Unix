@@ -6,9 +6,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
-    <link type="text/css" rel="stylesheet" media="all" href="/resource/styles/global.css"/>
-    <link type="text/css" rel="stylesheet" media="all" href="/resource/styles/global_color.css"/>
-    <script src="/resource/js/JQ3.2.1.js"></script>
+    <link type="text/css" rel="stylesheet" media="all" href="${pageContext.request.contextPath}/resource/styles/global.css"/>
+    <link type="text/css" rel="stylesheet" media="all" href="${pageContext.request.contextPath}/resource/styles/global_color.css"/>
+    <script src="${pageContext.request.contextPath}/resource/js/JQ3.2.1.js"></script>
     <script language="javascript" type="text/javascript">
         //显示角色详细信息
         function showDetail(flag, a) {
@@ -30,7 +30,7 @@
                 })
                 $.ajax({
                     type: "get",
-                    url: "/admin/admin_resetPwd",
+                    url: "${pageContext.request.contextPath}/admin/admin_resetPwd",
                     data: {
                         cbValue: cbValue
                     },
@@ -38,6 +38,7 @@
                         if (result.message.length > 0) {
                             $("#result_info").html(result.message);
                             document.getElementById("operate_result_info").style.display = "block";
+                            window.setTimeout('location.href = "/admin/admin_list?pageNum=' + ${pageBean.pageNum} + '"', 2000);
                         }
                     }
                 })
@@ -49,13 +50,14 @@
             if (r){
                 $.ajax({
                     type: "get",
-                    url: "/admin/admin_delete",
+                    url: "${pageContext.request.contextPath}/admin/admin_delete",
                     data: {
                         admin_id: admin_id
                     },
                     success: function (result) {
                         $("#result_info").html(result.message);
                         document.getElementById("operate_result_info").style.display = "block";
+                        window.setTimeout('location.href = "/admin/admin_list?pageNum=' + ${pageBean.pageNum} + '"', 2000);
                     }
 
                 });
@@ -70,49 +72,68 @@
                 }
             }
         }
-        function flush() {
-            location.href = "/admin/admin_list"
-        }
     </script>
 </head>
 <body>
 <!--Logo区域开始-->
 <div id="header">
-    <img src="/resource/images/logo.png" alt="logo" class="left"/>
-    <a href="/">[退出]</a>
+    <img src="${pageContext.request.contextPath}/resource/images/logo.png" alt="logo" class="left"/>
+    <a href="${pageContext.request.contextPath}/">[退出]</a>
 </div>
 <!--Logo区域结束-->
 <!--导航区域开始-->
 <div id="navi">
     <ul id="menu">
-        <li><a href="/index" class="index_off"></a></li>
+        <li><a href="${pageContext.request.contextPath}/index" class="index_off"></a></li>
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 1}">
-                    <li><a href="/admin/role_list" class="role_off"></a></li>
+                    <c:if test="${empty a1}">
+                        <li><a href="${pageContext.request.contextPath}/admin/role_list" class="role_off"></a></li>
+                        <c:set var="a1" value="1"/>
+                    </c:if>
+
                 </c:if>
                 <c:if test="${module.module_id eq 2}">
-                    <li><a href="/admin/admin_list" class="admin_on"></a></li>
+                    <c:if test="${empty b1}">
+                        <li><a href="${pageContext.request.contextPath}/admin/admin_list" class="admin_on"></a></li>
+                        <c:set var="b1" value="2"/>
+                    </c:if>
                 </c:if>
                 <c:if test="${module.module_id eq 3}">
-                    <li><a href="/cost/cost_list" class="fee_off"></a></li>
+                    <c:if test="${empty c1}">
+                        <li><a href="${pageContext.request.contextPath}/cost/cost_list" class="fee_off"></a></li>
+                        <c:set var="c1" value="3"/>
+                    </c:if>
                 </c:if>
                 <c:if test="${module.module_id eq 4}">
-                    <li><a href="/account/account_list" class="account_off"></a></li>
+                    <c:if test="${empty d1}">
+                        <li><a href="${pageContext.request.contextPath}/account/account_list" class="account_off"></a></li>
+                        <c:set var="d1" value="4"/>
+                    </c:if>
                 </c:if>
                 <c:if test="${module.module_id eq 5}">
-                    <li><a href="/account/service_list" class="service_off"></a></li>
+                    <c:if test="${empty e1}">
+                        <li><a href="${pageContext.request.contextPath}/account/service_list" class="service_off"></a></li>
+                        <c:set var="e1" value="5"/>
+                    </c:if>
                 </c:if>
                 <c:if test="${module.module_id eq 6}">
-                    <li><a href="/account/bill_list" class="bill_off"></a></li>
+                    <c:if test="${empty f1}">
+                        <li><a href="${pageContext.request.contextPath}/account/bill_list" class="bill_off"></a></li>
+                        <c:set var="f1" value="6"/>
+                    </c:if>
                 </c:if>
                 <c:if test="${module.module_id eq 7}">
-                    <li><a href="/account/report_list" class="report_off"></a></li>
+                    <c:if test="${empty g1}">
+                        <li><a href="${pageContext.request.contextPath}/account/report_list" class="report_off"></a></li>
+                        <c:set var="g1" value="7"/>
+                    </c:if>
                 </c:if>
             </c:forEach>
         </c:forEach>
-        <li><a href="/user_info" class="information_off"></a></li>
-        <li><a href="/user_modi_pwd" class="password_off"></a></li>
+        <li><a href="${pageContext.request.contextPath}/user_info" class="information_off"></a></li>
+        <li><a href="${pageContext.request.contextPath}/user_modi_pwd" class="password_off"></a></li>
     </ul>
 </div>
 <!--导航区域结束-->
@@ -121,7 +142,7 @@
 
     <!--查询-->
     <div class="search_add">
-        <form action="/admin/admin_list" method="post">
+        <form action="${pageContext.request.contextPath}/admin/admin_list" method="post">
             <div>
                 模块：
                 <select name="module_id" id="selModules" class="select_search">
@@ -142,7 +163,7 @@
     </div>
     <!--删除和密码重置的操作提示-->
     <div id="operate_result_info" class="operate_fail">
-        <img src="/resource/images/close.png" onclick="flush()"/>
+        <img src="${pageContext.request.contextPath}/resource/images/close.png" onclick="flush()"/>
         <span id="result_info"></span><!--密码重置失败！数据并发错误。-->
     </div>
     <!--数据区域：用表格展示数据-->
@@ -206,7 +227,7 @@
                     </td>
                     <td class="td_modi">
                         <input type="button" value="修改" class="btn_modify"
-                               onclick="location.href='/admin/admin_modi?admin_id=${admin.admin_id}';"/>
+                               onclick="location.href='${pageContext.request.contextPath}/admin/admin_modi?admin_id=${admin.admin_id}&pageNum=${pageBean.pageNum}';"/>
                         <input type="button" value="删除" class="btn_delete" onclick="deleteAdmin(${admin.admin_id});"/>
                     </td>
                 </tr>
@@ -220,38 +241,38 @@
     <div id="pages">
 
             <c:if test="${pageBean.pageNum>1}">
-                <a href="/admin/admin_list?pageNum=${1}&&module_id=${module_id}&&role_name=${role_name}">首页</a>
-                <a href="/admin/admin_list?pageNum=${pageBean.pageNum-1}&module_id=${module_id}&role_name=${role_name}">上一页</a>
+                <a href="${pageContext.request.contextPath}/admin/admin_list?pageNum=${1}&&module_id=${module_id}&&role_name=${role_name}">首页</a>
+                <a href="${pageContext.request.contextPath}/admin/admin_list?pageNum=${pageBean.pageNum-1}&module_id=${module_id}&role_name=${role_name}">上一页</a>
             </c:if>
             <c:if test="${pageBean.totalPage<=5}">
                 <c:forEach var="i" begin="1" end="${pageBean.totalPage}">
-                    <a href="/admin/admin_list?pageNum=${i}&module_id=${module_id}&role_name=${role_name}"
+                    <a href="${pageContext.request.contextPath}/admin/admin_list?pageNum=${i}&module_id=${module_id}&role_name=${role_name}"
                        <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
                 </c:forEach>
             </c:if>
             <c:if test="${pageBean.totalPage>5}">
                 <c:if test="${pageBean.pageNum <= 3}">
                     <c:forEach var="i" begin="1" end="5">
-                        <a href="/admin/admin_list?pageNum=${i}&module_id=${module_id}&role_name=${role_name}"
+                        <a href="${pageContext.request.contextPath}/admin/admin_list?pageNum=${i}&module_id=${module_id}&role_name=${role_name}"
                            <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
                     </c:forEach>
                 </c:if>
                 <c:if test="${pageBean.pageNum > 3 and pageBean.pageNum <= pageBean.totalPage -3}">
                     <c:forEach var="i" begin="${pageBean.pageNum-2}" end="${pageBean.pageNum+2}">
-                        <a href="/admin/admin_list?pageNum=${i}&module_id=${module_id}&role_name=${role_name}"
+                        <a href="${pageContext.request.contextPath}/admin/admin_list?pageNum=${i}&module_id=${module_id}&role_name=${role_name}"
                            <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
                     </c:forEach>
                 </c:if>
                 <c:if test="${pageBean.pageNum > 3 and pageBean.pageNum > pageBean.totalPage-3}">
                     <c:forEach var="i" begin="${pageBean.totalPage-4}" end="${pageBean.totalPage}">
-                        <a href="/admin/admin_list?pageNum=${i}&module_id=${module_id}&role_name=${role_name}"
+                        <a href="${pageContext.request.contextPath}/admin/admin_list?pageNum=${i}&module_id=${module_id}&role_name=${role_name}"
                            <c:if test="${pageBean.pageNum == i}">class="current_page"</c:if> >${i}</a>
                     </c:forEach>
                 </c:if>
             </c:if>
             <c:if test="${pageBean.pageNum<pageBean.totalPage}">
-                <a href="/admin/admin_list?pageNum=${pageBean.pageNum+1}&module_id=${module_id}&role_name=${role_name}">下一页</a>
-                <a href="/admin/admin_list?pageNum=${pageBean.totalPage}&module_id=${module_id}&role_name=${role_name}">尾页</a>
+                <a href="${pageContext.request.contextPath}/admin/admin_list?pageNum=${pageBean.pageNum+1}&module_id=${module_id}&role_name=${role_name}">下一页</a>
+                <a href="${pageContext.request.contextPath}/admin/admin_list?pageNum=${pageBean.totalPage}&module_id=${module_id}&role_name=${role_name}">尾页</a>
             </c:if>
 
     </div>

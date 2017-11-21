@@ -37,4 +37,8 @@ public interface AccountMapper {
     int findBill_CodeCount();
 
     List<Bill_Code> findAllBill_Code(PageBean<Bill_Code> pageBean);
+
+    void deleteAcc_Ser(Account account);
+
+
 }

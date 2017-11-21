@@ -49,6 +49,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     public int deleteRole(int role_id) {
+        adminMapper.deleteRole_module(role_id);
         return adminMapper.deleteRole(role_id);
     }
 
@@ -93,6 +94,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     public int deleteAdmin(int admin_id) {
+        adminMapper.deleteAdmin_rule(admin_id);
         return adminMapper.deleteAdmin(admin_id);
     }
 
@@ -104,19 +106,17 @@ public class AdminServiceImpl implements AdminService {
         adminMapper.updateAdmin(admin);
     }
 
-    public List<Admin> findAllAdmin() {
-        return adminMapper.findAllAdmin();
-    }
-
     public PageBean<Admin> findAdminToInfoByCQ(Integer pageNum,int pageSize,int module_id, String role_name) {
         PageBean<Admin> pageBean = new PageBean<Admin>();
         pageBean.setId(module_id);
         pageBean.setCondition(role_name);
         int totalCount = adminMapper.findCountByCQ(pageBean);
+
         PageBean<Admin> pageBean1 = new PageBean<Admin>(pageNum,pageSize,totalCount);
         pageBean1.setId(module_id);
         pageBean1.setCondition(role_name);
         List<Admin> admins = adminMapper.findAdminByCQ(pageBean1);
+
         pageBean1.setData(admins);
         return pageBean1;
     }

@@ -74,11 +74,6 @@
         module_info.name mname
     </sql>
 
-    <select id="findAll"
-            resultMap="adminMap">
-        SELECT * FROM admin_info
-    </select>
-
     <select id="findByAdmin"
             parameterType="com.huawei.user_admin.domain.Admin"
             resultMap="adminMap">
@@ -115,9 +110,11 @@
         ,
         <include refid="roleSql"/>
 
-        FROM (SELECT * FROM admin_info limit #{pageSize} offset #{startIndex}) admin_info, role_info, admin_role
-        WHERE admin_info.admin_id = admin_role.admin_id
-        AND role_info.role_id = admin_role.role_id
+        FROM (SELECT * FROM admin_info limit #{pageSize} offset #{startIndex}) admin_info
+        LEFT JOIN admin_role
+        ON admin_info.admin_id = admin_role.admin_id
+        LEFT JOIN role_info
+        ON role_info.role_id = admin_role.role_id
     </select>
 
     <select id="findRoleInfo"
@@ -127,9 +124,11 @@
         <include refid="roleSql"/>
         ,
         <include refid="moduleSql"/>
-        FROM (SELECT * FROM role_info limit #{pageSize} offset #{startIndex}) role_info, module_info, role_module
-        WHERE role_info.role_id = role_module.role_id
-        AND module_info.module_id = role_module.module_id
+        FROM (SELECT * FROM role_info limit #{pageSize} offset #{startIndex}) role_info
+        LEFT JOIN role_module
+        ON role_info.role_id = role_module.role_id
+        LEFT JOIN module_info
+        ON module_info.module_id = role_module.module_id
 
     </select>
 
@@ -161,10 +160,12 @@
         <include refid="roleSql"/>
         ,
         <include refid="moduleSql"/>
-        FROM role_info, module_info, role_module
-        WHERE role_info.role_id = role_module.role_id
-        AND module_info.module_id = role_module.module_id
-        AND role_info.role_id = #{value}
+        FROM role_info
+        LEFT JOIN role_module
+        ON role_info.role_id = role_module.role_id
+        LEFT JOIN module_info
+        ON module_info.module_id = role_module.module_id
+        WHERE role_info.role_id = #{value}
     </select>
 
     <update id="updateRole"
@@ -229,10 +230,12 @@
         ,
         <include refid="roleSql"/>
 
-        FROM admin_info, role_info, admin_role
-        WHERE admin_info.admin_id = admin_role.admin_id
-        AND role_info.role_id = admin_role.role_id
-        AND admin_info.admin_id=#{value}
+        FROM admin_info
+        LEFT JOIN admin_role
+        ON admin_info.admin_id = admin_role.admin_id
+        LEFT JOIN role_info
+        ON role_info.role_id = admin_role.role_id
+        WHERE admin_info.admin_id=#{value}
     </select>
 
     <update id="updateAdmin"
@@ -241,56 +244,12 @@
         WHERE admin_id=#{admin_id}
     </update>
 
-    <select id="findAllAdmin"
-            resultMap="admin_role_module">
-        SELECT
-        <include refid="adminSql"/>
-        ,
-        <include refid="roleSql"/>
-        ,
-        <include refid="moduleSql"/>
-        FROM admin_info
-        LEFT JOIN admin_role
-        ON admin_info.admin_id = admin_role.admin_id
-        LEFT JOIN role_info
-        ON role_info.role_id = admin_role.role_id
-        LEFT JOIN role_module
-        ON role_info.role_id = role_module.role_id
-        LEFT JOIN module_info
-        ON module_info.module_id = role_module.module_id
-    </select>
 
     <select id="findCountByCQ"
             parameterType="com.huawei.base.utils.PageBean"
             resultType="int">
         SELECT
         count(*)
-        FROM admin_info
-        LEFT JOIN admin_role
-        ON admin_info.admin_id = admin_role.admin_id
-        LEFT JOIN role_info
-        ON role_info.role_id = admin_role.role_id
-        LEFT JOIN role_module
-        ON role_info.role_id = role_module.role_id
-        LEFT JOIN module_info
-        ON module_info.module_id = role_module.module_id
-        <where>
-            1=1
-            <if test="id != -1">
-                AND module_info.module_id=#{id}
-            </if>
-            <if test="condition != null and condition.length() > 0">
-                AND role_info.name LIKE "%"#{condition}"%"
-            </if>
-        </where>
-    </select>
-
-    <select id="findAdminByCQ"
-            parameterType="com.huawei.base.utils.PageBean"
-            resultMap="admin_role_module">
-
-        SELECT
-        *
         FROM (
         SELECT
         <include refid="adminSql"/>
@@ -316,7 +275,54 @@
                 AND role_info.name LIKE "%"#{condition}"%"
             </if>
         </where>
-        ) admin_role_module limit #{pageSize} offset #{startIndex}
+        GROUP BY admin_info.admin_id
+        ) admin_role_module
+    </select>
+
+    <select id="findAdminByCQ"
+            parameterType="com.huawei.base.utils.PageBean"
+            resultMap="admin_role_module">
+
+        SELECT
+        <include refid="adminSql"/>
+        ,
+        <include refid="roleSql"/>
+        ,
+        <include refid="moduleSql"/>
+        FROM
+        (SELECT
+        admin_info.*
+        FROM
+        admin_info
+        LEFT JOIN admin_role
+        ON admin_info.admin_id = admin_role.admin_id
+        LEFT JOIN role_info
+        ON role_info.role_id = admin_role.role_id
+        LEFT JOIN role_module
+        ON role_info.role_id = role_module.role_id
+        LEFT JOIN module_info
+        ON module_info.module_id = role_module.module_id
+        <where>
+            1=1
+            <if test="id != -1">
+                AND module_info.module_id=#{id}
+            </if>
+            <if test="condition != null and condition.length() > 0">
+                AND role_info.name LIKE "%"#{condition}"%"
+            </if>
+        </where>
+        GROUP BY admin_info.admin_id
+        limit #{pageSize} offset #{startIndex}
+        )
+        admin_info
+        LEFT JOIN admin_role
+        ON admin_info.admin_id = admin_role.admin_id
+        LEFT JOIN role_info
+        ON role_info.role_id = admin_role.role_id
+        LEFT JOIN role_module
+        ON role_info.role_id = role_module.role_id
+        LEFT JOIN module_info
+        ON module_info.module_id = role_module.module_id
     </select>
 
     <update id="resetPwd"

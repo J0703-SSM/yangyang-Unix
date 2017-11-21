@@ -31,7 +31,7 @@ import java.util.Map;
 public class CostController {
     @Resource
     private CostService costService;
-    private int pageSize = 2;
+    private static final int PS = 3;
 
     /**
      * 查询所有cost条目
@@ -44,7 +44,7 @@ public class CostController {
         if (pageNum == null) {
             pageNum = 1;
         }
-        PageBean<Cost> pageBean = costService.findAll(pageNum, pageSize);
+        PageBean<Cost> pageBean = costService.findAll(pageNum, PS);
         model.addAttribute("pageBean", pageBean);
         return "cost/cost_list";
     }
@@ -65,7 +65,8 @@ public class CostController {
             pageNum = 1;
         }
         String condition = sort.split("_")[1];//截取出条件
-        PageBean<Cost> pageBean = costService.findByCostOrder(pageNum, pageSize, condition, column);
+        PageBean<Cost> pageBean = costService.findByCostOrder(pageNum, PS, condition, column);
+
         if (column.equals("base_cost")) {
             model.addAttribute("cost_sort", sort);
         } else {
@@ -97,9 +98,16 @@ public class CostController {
                 cost.setStatus("0");
                 cost.setCreatime(new Timestamp(new Date().getTime()));
                 int count = costService.save(cost);
-                ajaxResult.setSuccess(true);
+                if (count > 0) {
+                    ajaxResult.setMessage("添加成功");
+                    ajaxResult.setSuccess(true);
+                } else {
+                    ajaxResult.setMessage("添加失败");
+                    ajaxResult.setSuccess(false);
+                }
             } else {
-                ajaxResult.setSuccess(false);
+                ajaxResult.setMessage("保存失败，资费名称重复！");
+                ajaxResult.setErrorCode(2);
             }
         }
         return ajaxResult;
@@ -170,9 +178,10 @@ public class CostController {
      * @return
      */
     @RequestMapping("/costmodi")
-    public String modiCost(int cost_id, Model model) {
+    public String modiCost(int cost_id, Integer pageNum, Model model) {
         Cost cost = costService.findSingle(cost_id);
         model.addAttribute("cost", cost);
+        model.addAttribute("pageNum", pageNum);
         return "cost/cost_modi";
     }
 
@@ -193,9 +202,16 @@ public class CostController {
                 cost.setStatus("0");
                 cost.setCreatime(new Timestamp(new Date().getTime()));
                 int count = costService.updateCost(cost);
-                ajaxResult.setSuccess(true);
+                if (count > 0) {
+                    ajaxResult.setSuccess(true);
+                    ajaxResult.setMessage("修改成功");
+                } else {
+                    ajaxResult.setSuccess(false);
+                    ajaxResult.setMessage("修改失败");
+                }
             } else {
-                ajaxResult.setSuccess(false);
+                ajaxResult.setMessage("保存失败，资费名称重复！");
+                ajaxResult.setErrorCode(2);
             }
         }
         return ajaxResult;

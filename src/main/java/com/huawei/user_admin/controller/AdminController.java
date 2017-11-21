@@ -31,33 +31,34 @@ public class AdminController {
 
     @Resource
     private AdminService adminService;
-    private int pageSize = 2;
+    private static final int PS = 3;
+    private static final String INPWD = "123";
 
     /**
-     * 跳转
+     * 查询所有admin
      */
     @RequestMapping("/admin_list1")
     public String admin_list(Integer pageNum, Model model) {
         if (pageNum == null) {
             pageNum = 1;
         }
-        PageBean<Admin> pageBean = adminService.findAllAdminToInfo(pageNum, pageSize);
+        PageBean<Admin> pageBean = adminService.findAllAdminToInfo(pageNum, PS);
         model.addAttribute("pageBean", pageBean);
         return "admin/admin_list";
     }
 
     /**
-     * 跳转
+     * 跳转到role_add.jsp并将module结合保存到model中
      */
     @RequestMapping("/role_add")
     public String role_add(Model model) {
         List<Module> modules = adminService.findAllModule();
-        model.addAttribute("modules",modules);
+        model.addAttribute("modules", modules);
         return "role/role_add";
     }
 
     /**
-     * 查询所有role分页
+     * 分页查询所有role
      *
      * @param pageNum 当前页码数
      * @param model   驱动
@@ -67,13 +68,13 @@ public class AdminController {
         if (pageNum == null) {
             pageNum = 1;
         }
-        PageBean<Role> pageBean = adminService.findRoleToInfo(pageNum, pageSize);
+        PageBean<Role> pageBean = adminService.findRoleToInfo(pageNum, PS);
         model.addAttribute("pageBean", pageBean);
         return "role/role_list";
     }
 
     /**
-     * 添加role
+     * 添加role并向关系表中添加数据
      *
      * @param name    role的name
      * @param modules module集合
@@ -94,18 +95,21 @@ public class AdminController {
                 int count = adminService.addRule_module(module);
                 if (count > 0) {
                     ajaxResult.setSuccess(true);
+                    ajaxResult.setMessage("添加成功");
                 } else {
                     ajaxResult.setSuccess(false);
+                    ajaxResult.setMessage("添加失败");
                 }
             }
         } else {
             ajaxResult.setSuccess(false);
+            ajaxResult.setMessage("角色名称重复");
         }
         return ajaxResult;
     }
 
     /**
-     * 删除role
+     * 删除role并删除关系表中的数据
      *
      * @param role_id role id
      */
@@ -114,7 +118,7 @@ public class AdminController {
     public AjaxResult deleteRole(int role_id) {
         AjaxResult ajaxResult = new AjaxResult();
         int total = adminService.findAdmin_role(role_id);
-        if (total == 0){
+        if (total == 0) {
             int count = adminService.deleteRole(role_id);
             if (count > 0) {
                 ajaxResult.setSuccess(true);
@@ -123,7 +127,7 @@ public class AdminController {
                 ajaxResult.setSuccess(false);
                 ajaxResult.setMessage("删除失败");
             }
-        }else {
+        } else {
             ajaxResult.setSuccess(false);
             ajaxResult.setMessage("删除错误！该角色被使用，不能删除");
         }
@@ -131,22 +135,23 @@ public class AdminController {
     }
 
     /**
-     * 编辑role
+     * 编辑role并修改关系表中的数据
      *
      * @param role_id role id
      * @param model   驱动
      */
     @RequestMapping("/role_modi")
-    public String role_modi(int role_id, Model model) {
+    public String role_modi(int role_id, Integer pageNum, Model model) {
         Role role = adminService.findRoleById(role_id);
         List<Module> modules = adminService.findAllModule();
         model.addAttribute("role", role);
-        model.addAttribute("modules",modules);
+        model.addAttribute("modules", modules);
+        model.addAttribute("pageNum", pageNum);
         return "role/role_modi";
     }
 
     /**
-     * 删除role
+     * 删除role并删除关系表中的数据
      *
      * @param role_id role id
      * @param name    role name
@@ -178,7 +183,7 @@ public class AdminController {
     }
 
     /**
-     * 跳转
+     * 跳转到admin_add.jsp页面
      */
     @RequestMapping("/admin_add")
     public String admin_add(Model model) {
@@ -188,7 +193,7 @@ public class AdminController {
     }
 
     /**
-     * 添加管理员
+     * 添加管理员与关系表
      *
      * @param admin  管理员数据
      * @param result 校验
@@ -220,7 +225,7 @@ public class AdminController {
                 String[] role_ids = admin.getCbValue().split(",");
                 for (String role_id : role_ids) {
                     role.setRole_id(Integer.parseInt(role_id));
-                    int count = adminService.addAdmin_Rule(role);
+                    adminService.addAdmin_Rule(role);
                 }
                 ajaxResult.setSuccess(true);
             }
@@ -230,7 +235,7 @@ public class AdminController {
     }
 
     /**
-     * 删除管理员
+     * 删除管理员及其关联关系
      *
      * @param admin_id 管理员id
      * @return 结果集
@@ -241,7 +246,6 @@ public class AdminController {
         AjaxResult ajaxResult = new AjaxResult();
         int count = adminService.deleteAdmin(admin_id);
         if (count > 0) {
-            adminService.deleteAdmin_rule(admin_id);
             ajaxResult.setSuccess(true);
             ajaxResult.setMessage("删除成功!");
         } else {
@@ -252,22 +256,23 @@ public class AdminController {
     }
 
     /**
-     * 表单回显
+     * 编辑管理员表单回显
      *
      * @param admin_id 管理员id
      * @param model    驱动
      */
     @RequestMapping("/admin_modi")
-    public String admin_modi(int admin_id, Model model) {
+    public String admin_modi(int admin_id, Integer pageNum, Model model) {
         Admin admin = adminService.findAdminById(admin_id);
         List<Role> roles = adminService.findAllRole();
         model.addAttribute("admin", admin);
         model.addAttribute("roles", roles);
+        model.addAttribute("pageNum", pageNum);
         return "admin/admin_modi";
     }
 
     /**
-     * 更新admin
+     * 更新管理员及其级联关系
      *
      * @param admin  admin数据
      * @param result 校验
@@ -291,16 +296,17 @@ public class AdminController {
             String[] role_ids = admin.getCbValue().split(",");
             for (String role_id : role_ids) {
                 role.setRole_id(Integer.parseInt(role_id));
-                int count = adminService.addAdmin_Rule(role);
+                adminService.addAdmin_Rule(role);
             }
             ajaxResult.setSuccess(true);
+            ajaxResult.setMessage("修改成功");
         }
         ajaxResult.setMap(errors);
         return ajaxResult;
     }
 
     /**
-     * 条件查询
+     * 条件查询管理员
      *
      * @param module_id 模块id
      * @param role_name 角色名
@@ -322,16 +328,16 @@ public class AdminController {
         if (Integer.parseInt(module_id) == -1 && role_name.trim().length() == 0) {
             admin_list(pageNum, model);
         } else {
-            PageBean<Admin> pageBean = adminService.findAdminToInfoByCQ(pageNum, pageSize, Integer.parseInt(module_id), role_name);
+            PageBean<Admin> pageBean = adminService.findAdminToInfoByCQ(pageNum, PS, Integer.parseInt(module_id), role_name);
             model.addAttribute("pageBean", pageBean);
         }
         List<Module> modules = adminService.findAllModule();
-        model.addAttribute("modules",modules);
+        model.addAttribute("modules", modules);
         return "admin/admin_list";
     }
 
     /**
-     * 密码重置
+     * 对所选管理员的密码重置
      *
      * @param cbValue 要重置的管理员id集合
      * @return 结果集
@@ -340,10 +346,9 @@ public class AdminController {
     @RequestMapping("/admin_resetPwd")
     public AjaxResult resetPwd(String cbValue) {
         AjaxResult ajaxResult = new AjaxResult();
-        System.out.println(cbValue);
         String[] admin_ids = cbValue.split(",");
         Admin admin = new Admin();
-        admin.setPassword("123");
+        admin.setPassword(INPWD);
         for (String admin_id : admin_ids) {
             admin.setAdmin_id(Integer.parseInt(admin_id));
             int count = adminService.resetPwd(admin);

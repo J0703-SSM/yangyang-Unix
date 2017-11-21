@@ -8,7 +8,6 @@ import com.huawei.base.utils.PageBean;
  */
 public interface CostService {
 
-
     int save(Cost cost);
 
     int startCost(Cost cost);

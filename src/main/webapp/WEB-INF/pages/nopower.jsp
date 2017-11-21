@@ -5,9 +5,9 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title></title>
-        <link type="text/css" rel="stylesheet" media="all" href="/resource/styles/global.css" />
-        <link type="text/css" rel="stylesheet" media="all" href="/resource/styles/global_color.css" />
-        <script src="/resource/js/JQ3.2.1.js"></script>
+        <link type="text/css" rel="stylesheet" media="all" href="${pageContext.request.contextPath}/resource/styles/global.css"/>
+        <link type="text/css" rel="stylesheet" media="all" href="${pageContext.request.contextPath}/resource/styles/global_color.css"/>
+        <script src="${pageContext.request.contextPath}/resource/js/JQ3.2.1.js"></script>
         <script language="javascript" type="text/javascript">
             var timer;
             //启动跳转的定时器
@@ -23,7 +23,7 @@
                 }
                 else {
                     window.clearInterval(timer);
-                    location.href = "/index";
+                    location.href = "${pageContext.request.contextPath}/index";
                 }
             }
 
@@ -31,7 +31,7 @@
             function resetTimer() {
                 if (timer != null && timer != undefined) {
                     window.clearInterval(timer);
-                    location.href = "/index";
+                    location.href = "${pageContext.request.contextPath}/index";
                 }
             }
         </script> 

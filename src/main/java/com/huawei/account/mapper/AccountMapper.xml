@@ -225,4 +225,8 @@
         limit #{pageSize} offset #{startIndex}
     </select>
 
+    <delete id="deleteAcc_Ser"
+            parameterType="com.huawei.account.domain.Account">
+        DELETE FROM service WHERE account_id = #{account_id}
+    </delete>
 </mapper>

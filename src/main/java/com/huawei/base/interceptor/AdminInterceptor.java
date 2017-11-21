@@ -19,10 +19,10 @@ public class AdminInterceptor implements HandlerInterceptor {
             request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
         }
         String uri = request.getRequestURI();
-        if (uri.contains("user")){
+        if (uri.contains("user")) {
             return true;
         }
-        if (uri.contains("index")){
+        if (uri.contains("index")) {
             return true;
         }
 
@@ -48,10 +48,12 @@ public class AdminInterceptor implements HandlerInterceptor {
         if (uri.contains("report")) {
             module_id = 7;
         }
-        for (Role role : admin.getRoles()) {
-            for (Module module : role.getModules()) {
-                if (module.getModule_id() == module_id) {
-                    return true;
+        if (admin.getRoles().size() > 0) {
+            for (Role role : admin.getRoles()) {
+                for (Module module : role.getModules()) {
+                    if (module.getModule_id() == module_id) {
+                        return true;
+                    }
                 }
             }
         }

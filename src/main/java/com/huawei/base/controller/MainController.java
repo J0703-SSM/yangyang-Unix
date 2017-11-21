@@ -3,8 +3,7 @@ package com.huawei.base.controller;
 import com.huawei.base.utils.AjaxResult;
 import com.huawei.base.utils.VerifyCode;
 import com.huawei.user_admin.domain.Admin;
-import com.huawei.user_admin.domain.Module;
-import com.huawei.user_admin.domain.Role;
+
 import com.huawei.user_admin.service.AdminService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,8 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  * Created by dllo on 17/11/10.
@@ -42,7 +40,6 @@ public class MainController {
 
     /**
      * 登录
-     *
      * @param admin admin对象
      * @param model 驱动
      */
@@ -66,25 +63,6 @@ public class MainController {
                     model.addAttribute("userErr", "用户名或密码错误,请重试");
                 } else {
                     Admin admin2 = adminService.findAdminToInfo(admin1.getAdmin_id());
-                    List<Module> lists = new ArrayList<Module>();
-                    for (Role role : admin2.getRoles()) {
-                        List<Module> modules = role.getModules();
-                        lists.addAll(modules);
-                    }
-                    for (int i = 0; i < lists.size(); i++) {
-                        for (int j = lists.size() - 1; j > i; j--) {
-                            if (lists.get(j).getModule_id() == lists.get(i).getModule_id()) {
-                                lists.remove(j);
-                            }
-                        }
-                    }
-                    List<Role> roles = admin2.getRoles();
-                    if (roles.size() > 0) {
-                        for (int i = 0; i < roles.size(); i++) {
-                            roles.get(i).setModules(new ArrayList<Module>());
-                        }
-                        roles.get(1).setModules(lists);
-                    }
                     request.getServletContext().setAttribute("admin", admin2);
                     return "index";
                 }
@@ -96,7 +74,6 @@ public class MainController {
     /**
      * 获取验证码图片以及值
      *
-     * @throws IOException
      */
     @RequestMapping("/getVerifyCode")
     public void getVerifyCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -106,6 +83,9 @@ public class MainController {
         VerifyCode.output(image, response.getOutputStream());
     }
 
+    /**
+     * 校验用户名是否存在
+     */
     @ResponseBody
     @RequestMapping("/checkadmin")
     public AjaxResult checkadmin(String admin_code) {

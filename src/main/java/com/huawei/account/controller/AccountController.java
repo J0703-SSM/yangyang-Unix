@@ -24,7 +24,7 @@ import java.util.Date;
 public class AccountController {
     @Resource
     private AccountService accountService;
-    private int pageSize = 2;
+    private static final int PS = 3;
 
 
     /**
@@ -39,22 +39,20 @@ public class AccountController {
         if (account.getStatus() == null) {
             account.setStatus("-1");
         }
+        model.addAttribute("login_name", account.getLogin_name());
         model.addAttribute("idcard_no", account.getIdcard_no());
         model.addAttribute("real_name", account.getReal_name());
-        model.addAttribute("login_name", account.getLast_login_time());
         model.addAttribute("status", account.getStatus());
         if (pageNum == null) {
             pageNum = 1;
         }
-        PageBean<Account> pageBean = accountService.findAllAccount(pageNum, pageSize, account);
+        PageBean<Account> pageBean = accountService.findAllAccount(pageNum, PS, account);
         model.addAttribute("pageBean", pageBean);
         return "account/account_list";
     }
 
     /**
      * 跳转
-     *
-     * @return
      */
     @RequestMapping("/account_add")
     public String account_add() {
@@ -63,7 +61,6 @@ public class AccountController {
 
     /**
      * 开通暂停account
-     *
      * @param account account对象
      * @return 结果集
      */
@@ -94,9 +91,7 @@ public class AccountController {
 
     /**
      * 删除account
-     *
      * @param account 要删除的account
-     * @return
      */
     @ResponseBody
     @RequestMapping("/accountDelete")
@@ -115,9 +110,7 @@ public class AccountController {
 
     /**
      * 添加account
-     *
      * @param account
-     * @return
      */
     @ResponseBody
     @RequestMapping("/accountAdd")
@@ -149,15 +142,13 @@ public class AccountController {
         if (pageNum == null) {
             pageNum = 1;
         }
-        PageBean<Services> pageBean = accountService.findAllService(pageNum, pageSize);
+        PageBean<Services> pageBean = accountService.findAllService(pageNum, PS);
         model.addAttribute("pageBean", pageBean);
         return "service/service_list";
     }
 
     /**
      * 跳转
-     *
-     * @return
      */
     @RequestMapping("/service_add")
     public String service_add() {
@@ -166,17 +157,15 @@ public class AccountController {
 
     /**
      * 查询bill集合
-     *
      * @param pageNum 当前页数
      * @param model   驱动
-     * @return
      */
     @RequestMapping("/bill_list")
     public String bill_list(Integer pageNum, Model model) {
         if (pageNum == null) {
             pageNum = 1;
         }
-        PageBean<Bill> pageBean = accountService.findAllBill(pageNum, pageSize);
+        PageBean<Bill> pageBean = accountService.findAllBill(pageNum, PS);
         model.addAttribute("pageBean", pageBean);
         return "bill/bill_list";
     }
@@ -193,7 +182,7 @@ public class AccountController {
         if (pageNum == null){
             pageNum = 1;
         }
-        PageBean<Bill_Code> pageBean = accountService.findAllBill_code(pageNum,pageSize);
+        PageBean<Bill_Code> pageBean = accountService.findAllBill_code(pageNum, PS);
         model.addAttribute("pageBean",pageBean);
         return "report/report_list";
     }

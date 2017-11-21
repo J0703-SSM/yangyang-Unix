@@ -35,6 +35,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public int deleteAccount(Account account) {
+        accountMapper.deleteAcc_Ser(account);
         return accountMapper.deleteAccount(account);
     }
 

@@ -27,10 +27,10 @@ public class AdminTest {
     @Test
     public void test(){
         AdminMapper adminMapper = context.getBean(AdminMapper.class);
-        List<Admin> admins = adminMapper.findAll();
-        for (Admin admin : admins) {
-            System.out.println(admin);
-        }
+//        List<Admin> admins = adminMapper.findAll();
+//        for (Admin admin : admins) {
+//            System.out.println(admin);
+//        }
     }
 
     @Test

@@ -18,7 +18,7 @@
 
             $.ajax({
                 type: "get",
-                url: "/admin/admin_update",
+                url: "${pageContext.request.contextPath}/admin/admin_update",
                 data: {
                     admin_id: $("#admin_id").val(),
                     admin_code: $("#admin_code").val(),
@@ -34,8 +34,9 @@
                         $("#emailErr").html(result.map["email"]);
                         $("#moduleErr").html(result.map["cbValue"]);
                     } else {
-                        showResultDiv(result.success);
-                        window.setTimeout("showResultDiv(false);", 3000);
+                        showResultDiv(true);
+                        $("#save_result_info").html(result.message);
+                        window.setTimeout('location.href="/admin/admin_list"', 2000);
                     }
                 }
             });
@@ -48,78 +49,76 @@
                 divResult.style.display = "none";
         }
         function rollback() {
-            location.href = "/admin/admin_list"
+            location.href = "${pageContext.request.contextPath}/admin/admin_list"
         }
     </script>
 </head>
 <body>
 <!--Logo区域开始-->
 <div id="header">
-    <img src="/resource/images/logo.png" alt="logo" class="left"/>
-    <a href="/">[退出]</a>
+    <img src="${pageContext.request.contextPath}/resource/images/logo.png" alt="logo" class="left"/>
+    <a href="${pageContext.request.contextPath}/">[退出]</a>
 </div>
 <!--Logo区域结束-->
 <!--导航区域开始-->
 <div id="navi">
     <ul id="menu">
-        <li><a href="/index" class="index_off"></a></li>
+        <li><a href="${pageContext.request.contextPath}/index" class="index_off"></a></li>
         <c:forEach items="${applicationScope.admin.roles}" var="role">
             <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 1}">
-                    <li><a href="/admin/role_list" class="role_off"></a></li>
+                    <c:if test="${empty a1}">
+                        <li><a href="${pageContext.request.contextPath}/admin/role_list" class="role_off"></a></li>
+                        <c:set var="a1" value="1"/>
+                    </c:if>
+
                 </c:if>
-            </c:forEach>
-        </c:forEach>
-        <c:forEach items="${applicationScope.admin.roles}" var="role">
-            <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 2}">
-                    <li><a href="/admin/admin_list" class="admin_on"></a></li>
+                    <c:if test="${empty b1}">
+                        <li><a href="${pageContext.request.contextPath}/admin/admin_list" class="admin_on"></a></li>
+                        <c:set var="b1" value="2"/>
+                    </c:if>
                 </c:if>
-            </c:forEach>
-        </c:forEach>
-        <c:forEach items="${applicationScope.admin.roles}" var="role">
-            <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 3}">
-                    <li><a href="/cost/cost_list" class="fee_off"></a></li>
+                    <c:if test="${empty c1}">
+                        <li><a href="${pageContext.request.contextPath}/cost/cost_list" class="fee_off"></a></li>
+                        <c:set var="c1" value="3"/>
+                    </c:if>
                 </c:if>
-            </c:forEach>
-        </c:forEach>
-        <c:forEach items="${applicationScope.admin.roles}" var="role">
-            <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 4}">
-                    <li><a href="/account/account_list" class="account_off"></a></li>
+                    <c:if test="${empty d1}">
+                        <li><a href="${pageContext.request.contextPath}/account/account_list" class="account_off"></a></li>
+                        <c:set var="d1" value="4"/>
+                    </c:if>
                 </c:if>
-            </c:forEach>
-        </c:forEach>
-        <c:forEach items="${applicationScope.admin.roles}" var="role">
-            <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 5}">
-                    <li><a href="/account/service_list" class="service_off"></a></li>
+                    <c:if test="${empty e1}">
+                        <li><a href="${pageContext.request.contextPath}/account/service_list" class="service_off"></a></li>
+                        <c:set var="e1" value="5"/>
+                    </c:if>
                 </c:if>
-            </c:forEach>
-        </c:forEach>
-        <c:forEach items="${applicationScope.admin.roles}" var="role">
-            <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 6}">
-                    <li><a href="/account/bill_list" class="bill_off"></a></li>
+                    <c:if test="${empty f1}">
+                        <li><a href="${pageContext.request.contextPath}/account/bill_list" class="bill_off"></a></li>
+                        <c:set var="f1" value="6"/>
+                    </c:if>
                 </c:if>
-            </c:forEach>
-        </c:forEach>
-        <c:forEach items="${applicationScope.admin.roles}" var="role">
-            <c:forEach items="${role.modules}" var="module">
                 <c:if test="${module.module_id eq 7}">
-                    <li><a href="/account/report_list" class="report_off"></a></li>
+                    <c:if test="${empty g1}">
+                        <li><a href="${pageContext.request.contextPath}/account/report_list" class="report_off"></a></li>
+                        <c:set var="g1" value="7"/>
+                    </c:if>
                 </c:if>
             </c:forEach>
         </c:forEach>
-        <li><a href="/user_info" class="information_off"></a></li>
-        <li><a href="/user_modi_pwd" class="password_off"></a></li>
+        <li><a href="${pageContext.request.contextPath}/user_info" class="information_off"></a></li>
+        <li><a href="${pageContext.request.contextPath}/user_modi_pwd" class="password_off"></a></li>
     </ul>
 </div>
 <!--导航区域结束-->
 <!--主要区域开始-->
 <div id="main">
-    <div id="save_result_info" class="save_success">保存成功！
+    <div id="save_result_info" class="save_success">
         <img src="/resource/images/close.png" onclick="rollback()"/>
     </div>
     <form action="" method="" class="main_form">

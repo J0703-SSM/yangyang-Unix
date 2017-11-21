@@ -49,9 +49,6 @@ public interface AdminService {
 
     void updateAdmin(Admin admin);
 
-    List<Admin> findAllAdmin();
-
-
     PageBean<Admin> findAdminToInfoByCQ(Integer pageNum,int pageSize,int module_id, String role_name);
 
     int resetPwd(Admin admin);

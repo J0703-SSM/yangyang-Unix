@@ -5,13 +5,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
-    <link type="text/css" rel="stylesheet" media="all" href="/resource/styles/global.css"/>
-    <link type="text/css" rel="stylesheet" media="all" href="/resource/styles/global_color.css"/>
-    <script src="/resource/js/JQ3.2.1.js"></script>
+    <link type="text/css" rel="stylesheet" media="all" href="${pageContext.request.contextPath}/resource/styles/global.css"/>
+    <link type="text/css" rel="stylesheet" media="all" href="${pageContext.request.contextPath}/resource/styles/global_color.css"/>
+    <script src="${pageContext.request.contextPath}/resource/js/JQ3.2.1.js"></script>
 </head>
 <body class="index">
 <div class="login_box">
-    <form id="form1" action="/loginAdmin" method="post">
+    <form id="form1" action="${pageContext.request.contextPath}/loginAdmin" method="post">
         <table>
             <tr>
                 <td class="login_info">账号：</td>
@@ -26,13 +26,13 @@
             <tr>
                 <td class="login_info">验证码：</td>
                 <td class="width70"><input id="code" name="code" type="text" class="width70"/></td>
-                <td><img src="/getVerifyCode" alt="验证码" title="点击更换" id="verifyCodeImage"/></td>
+                <td><img src="${pageContext.request.contextPath}/getVerifyCode" alt="验证码" title="点击更换" id="verifyCodeImage"/></td>
                 <td><span id="codeErr" class="required">${codeErr}</span></td>
             </tr>
             <tr>
                 <td></td>
                 <td class="login_button" colspan="2">
-                    <a href="javascript:document:form1.submit()"><img src="/resource/images/login_btn.png"/></a>
+                    <a href="javascript:document:form1.submit()"><img src="${pageContext.request.contextPath}/resource/images/login_btn.png"/></a>
                 </td>
                 <td><span id="userErr" class="required">${userErr}</span></td>
             </tr>
@@ -45,7 +45,7 @@
         if ($("#admin_code").val().trim().length > 0){
             $.ajax({
                 type: "post",
-                url: "/checkadmin",
+                url: "${pageContext.request.contextPath}/checkadmin",
                 data: {
                     admin_code: $("#admin_code").val()
                 },
@@ -57,13 +57,8 @@
     });
 
     $("#verifyCodeImage").click(function () {
-        $("#verifyCodeImage").attr('src', '/getVerifyCode?timestamp=' + genTimestamp());
+        $("#verifyCodeImage").attr('src', '${pageContext.request.contextPath}/getVerifyCode?timestamp=' + new Date().getTime());
     });
-
-    function genTimestamp() {
-        var time = new Date();
-        return time.getTime();
-    }
 
 </script>
 </body>

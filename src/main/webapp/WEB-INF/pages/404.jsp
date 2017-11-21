@@ -1,19 +1,21 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" %>
 <html>
 <head>
 
-    <link rel="stylesheet" href="/resource/css/main.css" type="text/css" media="screen, projection"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resource/css/main.css" type="text/css" media="screen, projection"/>
     <!-- main stylesheet -->
-    <link rel="stylesheet" type="text/css" media="all" href="/resource/css/tipsy.css"/> <!-- Tipsy implementation -->
+    <link rel="stylesheet" type="text/css" media="all" href="${pageContext.request.contextPath}/resource/css/tipsy.css"/> <!-- Tipsy implementation -->
 
     <!--[if lt IE 9]>
-    <link rel="stylesheet" type="text/css" href="/resource/css/ie8.css"/>
+
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resource/css/ie8.css"/>
     <![endif]-->
 
-    <script type="text/javascript" src="/resource/scripts/jquery-1.7.2.min.js"></script> <!-- uiToTop implementation -->
-    <script type="text/javascript" src="/resource/scripts/custom-scripts.js"></script>
-    <script type="text/javascript" src="/resource/scripts/jquery.tipsy.js"></script> <!-- Tipsy -->
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/scripts/jquery-1.7.2.min.js"></script> <!-- uiToTop implementation -->
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/scripts/custom-scripts.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/scripts/jquery.tipsy.js"></script> <!-- Tipsy -->
 
     <script type="text/javascript">
 
@@ -48,7 +50,7 @@
 <!-- Universal preloader -->
 <div id="universal-preloader">
     <div class="preloader">
-        <img src="/resource/images/universal-preloader.gif" alt="universal-preloader"
+        <img src="${pageContext.request.contextPath}/resource/images/universal-preloader.gif" alt="universal-preloader"
              class="universal-preloader-preloader"/>
     </div>
 </div>
@@ -66,7 +68,7 @@
 
     <!-- search form -->
     <div class="search">
-        <a href="/index" class="with-tooltip" title="Return to the home page">点击返回</a>
+        <a href="${pageContext.request.contextPath}/index" class="with-tooltip" title="Return to the home page">点击返回</a>
     </div>
     <!-- search form -->
 
@@ -101,7 +103,7 @@
                 确定不要返回吗?
             </p>
             <p class="dog-bubble">
-                真的真的确定不要返回吗?<br/><img style="margin-top:8px" src="/resource/images/cookie.png" alt="cookie"/>
+                真的真的确定不要返回吗?<br/><img style="margin-top:8px" src="${pageContext.request.contextPath}/resource/images/cookie.png" alt="cookie"/>
             </p>
             <p class="dog-bubble">
                 <br/>
@@ -119,7 +121,7 @@
                 真的真的确定不要返回吗?
             </p>
             <p class="dog-bubble">
-                好吧.还是随便你要不要真的确定返回吧 <br/><img style="margin-top:8px" src="/resource/images/cat.png" alt="cat"/>
+                好吧.还是随便你要不要真的确定返回吧 <br/><img style="margin-top:8px" src="${pageContext.request.contextPath}/resource/images/cat.png" alt="cat"/>
             </p>
             <p class="dog-bubble">
                 正在联系火星总部查找您所需要的页面.请返回等待信息..
