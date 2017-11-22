@@ -27,10 +27,10 @@ public class AdminInterceptor implements HandlerInterceptor {
         }
 
         int module_id = 0;
-        if (uri.contains("role")) {
+        if (uri.contains("admin/role")) {
             module_id = 1;
         }
-        if (uri.contains("admin")) {
+        if (uri.contains("admin/admin")) {
             module_id = 2;
         }
         if (uri.contains("cost")) {

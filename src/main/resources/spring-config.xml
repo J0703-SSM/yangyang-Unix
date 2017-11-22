@@ -112,5 +112,5 @@
     </mvc:interceptors>
 
     <!-- 全局异常捕获, 跳转到错误页面 -->
-    <!--<bean class="com.huawei.base.exception.CustomExceptionResolver"/>-->
+    <bean class="com.huawei.base.exception.CustomExceptionResolver"/>
 </beans>
